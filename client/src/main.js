@@ -24,9 +24,16 @@ const render = Render.create({
         pixelRatio: 'auto',
         showCollisions: true,
         showAxes: true,
-        showIds: true
+        showIds: true,
+        hasBounds: true
     }
 });
+
+const cameraScale = 0.5;
+Events.on(render, 'beforeRender', () => Render.lookAt(render, player.body.position, {
+    x: document.body.clientWidth * cameraScale,
+    y: document.body.clientHeight * cameraScale
+}));
 
 Render.run(render);
 

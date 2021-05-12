@@ -62,6 +62,7 @@ export class Game {
         World.add(this.engine.world, [this.box, this.ground]);
         this.players = [];
         this.runner = Runner.create();
+        this.render = null;
     }
 
     setup() {
@@ -93,8 +94,12 @@ export class Game {
         World.remove(this.engine.world, player.body);
     }
 
-    update() {
+    setRender(render) {
+        this.render = render;
+    }
 
+    update() {
+        
     }
     preUpdate() {
 
