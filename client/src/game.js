@@ -1,4 +1,4 @@
-import { Engine, Render, World, Events, Bodies, Body, Vector } from 'matter-js';
+import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
 
 
 function getUpVector(body) {
@@ -20,6 +20,10 @@ export class Player {
     constructor(spawnPos) {
         this.body = Bodies.trapezoid(spawnPos.x, spawnPos.y, 40, 40, 1);
         this.keys = [];
+    }
+
+    updatePhysics() {
+
     }
 
     update() {
@@ -57,6 +61,12 @@ export class Game {
         this.ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
         World.add(this.engine.world, [this.box, this.ground]);
         this.players = [];
+        this.runner = Runner.create();
+    }
+
+    setup() {
+        Events.on(this.engine, 'beforeUpdate', this.preUpdate.bind(this));
+        Events.on(this.runner, 'tick', this.update.bind(this));
     }
 
     load(data) {
@@ -71,7 +81,8 @@ export class Game {
 
     addPlayer(player) {
         World.add(this.engine.world, player.body);
-        // Events.on(this.engine.world, 'tick', player.update.bind(player));
+        Events.on(this.engine, 'beforeUpdate', player.updatePhysics.bind(player));
+        Events.on(this.runner, 'tick', player.update.bind(player));
         this.players.push(player);
     }
 
@@ -83,15 +94,13 @@ export class Game {
     }
 
     update() {
-        // console.log(this.engine.world.bodies);
-        // Events.trigger(this.engine, 'tick');
-        
-        const deltaTime = this.engine.timing.lastElapsed;
 
-        for (const player of this.players) {
-            player.update(deltaTime);
-        }
-        
-        Engine.update(this.engine);
+    }
+    preUpdate() {
+
+    }
+
+    run() {
+        Runner.run(this.runner, this.engine);
     }
 }
