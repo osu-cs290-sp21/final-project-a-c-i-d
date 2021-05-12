@@ -4,10 +4,18 @@ import { Player, Game } from './game';
 
 const gameInstance = new Game();
 
-
+// https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
 const render = Render.create({
     element: document.body,
-    engine: gameInstance.engine
+    engine: gameInstance.engine,
+    options: {
+        height: document.body.clientHeight,
+        width: document.body.clientWidth,
+        pixelRatio: 'auto',
+        showCollisions: true,
+        showAxes: true,
+        showIds: true
+    }
 });
 
 const keys = [...new Array(256)].map(e => false);
