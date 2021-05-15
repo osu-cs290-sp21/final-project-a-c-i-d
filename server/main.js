@@ -1,1 +1,1 @@
-console.log("Test merge")
+console.log("Another test")
