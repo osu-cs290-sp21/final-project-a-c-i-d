@@ -1,0 +1,14 @@
+html {
+    width: 100%;
+    height: 100%;
+    background: #FF7777;
+    -webkit-font-smoothing: antialiased;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.85em;
+    margin: 0;
+    padding: 0;
+}
+body {
+    margin: 0;
+}
