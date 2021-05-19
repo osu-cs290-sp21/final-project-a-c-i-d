@@ -10,6 +10,9 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 
 ![FF ELEMENTS SPRITES 2](https://user-images.githubusercontent.com/29801241/118744097-8bd25a80-b808-11eb-9da6-d8065e0bd058.jpg)
 
+![FF DARK SPRITE](https://user-images.githubusercontent.com/29801241/118755619-0e194980-b81e-11eb-873f-8546ef25e302.jpg)
+
+
 ## How to Install and Use
 
 Dev Mode:
