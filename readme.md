@@ -8,9 +8,6 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 
 ## Screenshots and Art
 
-![Image of FirstBird]
-(/images/FFsprite_draft.jpg?raw=true)
-
 ## How to install and use
 ## hess pls help
 ```haskell
