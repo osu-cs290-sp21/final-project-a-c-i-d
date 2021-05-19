@@ -17,7 +17,7 @@ Dev Mode:
 2. You may have to `npm install webpack webpack-cli --save-dev` if you haven't before.
 3. In your command line or terminal, `cd client`
 4. `npm run dev`
-5. Now the game should be loaded at localhost/9000
+5. Now the game should be loaded at `localhost/9000`
 6. Party! 🥳
 
 ## hess pls help
