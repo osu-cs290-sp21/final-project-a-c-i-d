@@ -1,5 +1,6 @@
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT } from 'matter-js';
 
+const playerSpriteUrl = 'http://localhost:9000/sprites/player.png';
 
 function getUpVector(body) {
     return {
@@ -53,7 +54,13 @@ export class Player {
     */
 
     constructor(spawnPos) {
-        this.body = Bodies.trapezoid(spawnPos.x, spawnPos.y, 40, 40, 1);
+        this.body = Bodies.trapezoid(spawnPos.x, spawnPos.y, 40, 40, 1, {
+            render: {
+                sprite: {
+                    texture: playerSpriteUrl
+                }
+            }
+        });
         this.body.label = 'gamer';
         this.jumping = false;
     }

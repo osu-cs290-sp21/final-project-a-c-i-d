@@ -23,7 +23,8 @@ const render = Render.create({
         showCollisions: true,
         showAxes: true,
         showIds: true,
-        hasBounds: true
+        hasBounds: true,
+        wireframes: false
     }
 });
 
