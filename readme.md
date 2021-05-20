@@ -8,9 +8,9 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 
 ## Screenshots and Art
 
-<img src="https://user-images.githubusercontent.com/29801241/118744097-8bd25a80-b808-11eb-9da6-d8065e0bd058.jpg" width="48">
+<img src="https://user-images.githubusercontent.com/29801241/118744097-8bd25a80-b808-11eb-9da6-d8065e0bd058.jpg" width="480">
 
-<img src="https://user-images.githubusercontent.com/29801241/118755619-0e194980-b81e-11eb-873f-8546ef25e302.jpg" width="48">
+<img src="https://user-images.githubusercontent.com/29801241/118755619-0e194980-b81e-11eb-873f-8546ef25e302.jpg" width="480">
 
 ![day-sprite-1](https://user-images.githubusercontent.com/29801241/119047974-7299ed00-b973-11eb-9fd2-c9d5e619d971.png)
 ![night-sprite-1](https://user-images.githubusercontent.com/29801241/119047992-77f73780-b973-11eb-8357-6635c0470fcd.png)
