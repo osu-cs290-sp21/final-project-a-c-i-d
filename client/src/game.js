@@ -1,4 +1,4 @@
-import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
+import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT } from 'matter-js';
 
 
 function getUpVector(body) {
@@ -31,6 +31,12 @@ export const BigBen = {
     }
 };
 
+function jump(body, magnitude) {
+    const up = getUpVector(body);
+    const velocity = Vector.add(body.velocity, Vector.mult(up, magnitude));
+    Body.setVelocity(body, velocity);
+}
+
 // Global manager for the key presses.
 export const Input = {
     keys: [...new Array(256)].map(e => false), // Array of 256 false values.
@@ -48,6 +54,8 @@ export class Player {
 
     constructor(spawnPos) {
         this.body = Bodies.trapezoid(spawnPos.x, spawnPos.y, 40, 40, 1);
+        this.body.label = 'gamer';
+        this.jumping = false;
     }
 
     updatePhysics() {
@@ -60,7 +68,11 @@ export class Player {
         }
         // Jump
         if (Input.upArrow) {
-            body.force = Vector.mult(getUpVector(body), 0.07 * dt);
+            // body.force = Vector.mult(getUpVector(body), 0.07 * dt);
+            if (!this.jumping) {
+                this.jumping = true;
+                jump(body, 10);
+            }
         }
         // Spin left and right
         if (Input.leftArrow && body.angularVelocity > -0.2) {
@@ -74,6 +86,39 @@ export class Player {
 
     update() {
 
+    }
+    collision(other) {
+        if (other.label === 'ground') {
+            this.jumping = false;
+        }
+    }
+}
+
+export class CollisionController {
+    constructor(/*engine*/) {
+        this.callbacks = {
+            'initial': new Map(),
+            'continuous': new Map(),
+        };
+        // Events.on(engine, 'collisionStart', this.engine);
+    }
+    register(body, handler, type) {
+        this.callbacks[type].set(body.label, handler);
+    }
+    initialCollision(collisionEvent) { return this.onCollision(collisionEvent, 'initial'); }
+    continuousCollision(collisionEvent) { return this.onCollision(collisionEvent, 'continuous'); }
+
+    onCollision(collisionEvent, type) {
+        const getPair = collision => [collision.bodyA, collision.bodyB];
+        const collisionTable = collisionEvent.source.pairs.table;
+        const map = this.callbacks[type];
+
+        for (const name in collisionTable) {
+            const [a, b] = getPair(collisionTable[name]);
+            console.log([a,b]);
+            if (map.has(a.label)) map.get(a.label)(b);
+            if (map.has(b.label)) map.get(b.label)(a);
+        }
     }
 }
 
@@ -94,6 +139,7 @@ export class Game {
     constructor() {
         this.engine = Engine.create();
         this.runner = Runner.create();
+        this.collisionController = new CollisionController();
 
         this.players = [];
         this.setup();
@@ -104,13 +150,17 @@ export class Game {
         // Sets up some sort of scene
         this.box = Bodies.rectangle(450, 50, 80, 80);
         this.ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+        this.ground.label = 'ground';
 
         // Adds the bodies into the world
-        World.add(this.engine.world, [this.box, this.ground]);
+        // World.add(this.engine.world, [this.box, this.ground]);
+        World.add(this.engine.world, [this.ground]);
 
         // Registers the update functions for each update.
         Events.on(this.engine, 'beforeUpdate', this.preUpdate.bind(this));
         Events.on(this.runner, 'tick', this.update.bind(this));
+
+        Events.on(this.engine, 'collisionStart', this.collisionController.initialCollision.bind(this.collisionController));
     }
 
     // Adds a player into the game, as well as the players array.
@@ -124,6 +174,8 @@ export class Game {
 
         // Adds the player to the array.
         this.players.push(player);
+
+        this.collisionController.register(player.body, player.collision.bind(player), 'initial');
     }
 
     // Called every time a new frame is rendered.
@@ -148,4 +200,3 @@ export class Game {
         Runner.stop(this.runner);
     }
 }
-

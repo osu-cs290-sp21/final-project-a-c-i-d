@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
   entry: './src/main.js',
   watchOptions: {
     ignored: /node_modules/
@@ -17,6 +18,12 @@ module.exports = {
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],
   },
+  optimization: {
+    minimize: false,
+    moduleIds: 'named',
+    chunkIds: 'named'
+  },
+
 //   module: {
 //     rules: [
 //       {
