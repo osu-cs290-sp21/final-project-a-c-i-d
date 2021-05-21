@@ -38,6 +38,12 @@ function jump(body, magnitude) {
     Body.setVelocity(body, velocity);
 }
 
+function horizontalMovement(body, magnitude) {
+    const right = getRightVector(body);
+    const velocity = Vector.add(body.velocity, Vector.mult(right, magnitude));
+    Body.setVelocity(body, velocity);
+}
+
 // Global manager for the key presses.
 export const Input = {
     keys: [...new Array(256)].map(e => false), // Array of 256 false values.
@@ -46,6 +52,10 @@ export const Input = {
     get leftArrow() { return Input.keys[37]; },
     get downArrow() { return Input.keys[40]; }
 };
+
+function safeMag(vector) {
+    return Math.max(Vector.magnitude(vector), 0.000000001);
+}
 
 export class Player {
 
@@ -62,32 +72,40 @@ export class Player {
             }
         });
         this.body.label = 'gamer';
-        this.jumping = false;
+        this.isGrounded = false;
+
+        Body.setInertia(this.body, Infinity);
+
     }
 
     updatePhysics() {
         const dt = BigBen.deltaTime;
         const body = this.body;
 
-        // Reset position
-        if (Input.downArrow) {
-            body.position = { x: 200, y: 200 };
-        }
         // Jump
         if (Input.upArrow) {
             // body.force = Vector.mult(getUpVector(body), 0.07 * dt);
-            if (!this.jumping) {
-                this.jumping = true;
+            if (this.isGrounded) {
+                this.isGrounded = false;
                 jump(body, 10);
             }
         }
         // Spin left and right
-        if (Input.leftArrow && body.angularVelocity > -0.2) {
-            this.body.torque = -0.03 * dt;
+        if (Input.leftArrow) {
+            // this.body.torque = -0.03 * dt;
+            // body.force = Vector.mult(getRightVector(body), -0.07 * dt * (1.0/safeMag(body.velocity)));
+            horizontalMovement(body, -3.0 * dt);
+            body.friction = 0;
+            body.frictionStatic = 0;
+        } else if (Input.rightArrow) {
+            // body.torque = 0.03 * dt;
+            // body.force = Vector.mult(getRightVector(body), 0.07 * dt * (1.0/safeMag(body.velocity)));
+            horizontalMovement(body, 3.0 * dt);
+            body.friction = 0;
+            body.frictionStatic = 0;
         } else {
-            if (Input.rightArrow && body.angularVelocity < 0.2) {
-                body.torque = 0.03 * dt;
-            }
+            body.friction = 1;
+            body.frictionStatic = 1;
         }
     }
 
@@ -96,7 +114,7 @@ export class Player {
     }
     collision(other) {
         if (other.label === 'ground') {
-            this.jumping = false;
+            this.isGrounded = true;
         }
     }
 }
@@ -119,7 +137,7 @@ export class CollisionController {
         const getPair = collision => [collision.bodyA, collision.bodyB];
         const collisionTable = collisionEvent.source.pairs.table;
         const map = this.callbacks[type];
-
+console.log('hello')
         for (const name in collisionTable) {
             const [a, b] = getPair(collisionTable[name]);
             console.log([a,b]);
@@ -156,8 +174,10 @@ export class Game {
     setup() {
         // Sets up some sort of scene
         this.box = Bodies.rectangle(450, 50, 80, 80);
-        this.ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+        this.ground = Bodies.rectangle(400, 610, 10000, 60, { isStatic: true });
         this.ground.label = 'ground';
+        this.friction = 1;
+        this.frictionStatic = 0;
 
         // Adds the bodies into the world
         // World.add(this.engine.world, [this.box, this.ground]);
