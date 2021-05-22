@@ -1,5 +1,8 @@
 import * as iainsDivineSVGLibrary from './svg'
 
+export const webSource = 'http://localhost:9000';
+
+export const asset = name => [webSource, name].join('/');
 
 // God help us. I'm creating singletons like there is no tomorrow.
 export const AssetManager = {

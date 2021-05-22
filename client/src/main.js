@@ -12,6 +12,7 @@ function makeRenderer({ element, engine, follows }) {
         element: element,
         engine: engine,
         options: {
+            background: 'transparent',
             height: document.body.clientHeight,
             width: document.body.clientWidth,
             pixelRatio: 'auto',

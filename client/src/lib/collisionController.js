@@ -1,3 +1,10 @@
+
+export const getPair = collision => [collision.bodyA, collision.bodyB];
+export const otherBody = collision => getPair(collision)[1];
+export const otherLabel = collision => otherBody(collision).label;
+
+export const collision = { getPair, otherBody, otherLabel };
+
 export class CollisionController {
     constructor() {
         this.callbacks = {
@@ -14,7 +21,7 @@ export class CollisionController {
     finaleCollision(collisionEvent) { return this.onCollision(collisionEvent, 'finale'); }
 
     onCollision(collisionEvent, type) {
-        const getPair = collision => [collision.bodyA, collision.bodyB];
+        // const getPair = collision => [collision.bodyA, collision.bodyB];
         const collisionTable = collisionEvent.source.pairs.table;
         const map = this.callbacks[type];
         

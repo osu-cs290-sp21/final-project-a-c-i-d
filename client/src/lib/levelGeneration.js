@@ -2,6 +2,8 @@ import { Bodies, Body } from 'matter-js';
 
 // export const vector = ([x,y]) => ({ x: x, y: y });
 
+const platforms = ['dirt-platform'];
+
 const platformOptions = {
     // isStatic: true,
     friction: 0,
