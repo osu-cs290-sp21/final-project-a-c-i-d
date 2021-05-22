@@ -2,7 +2,10 @@ import Thread from 'async-threading';
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
 import { Player, Game, Input } from './game';
 import { AssetManager } from './lib/assetManager';
+import { range } from './lib/levelGeneration';
+window.range = range;
 
+const debug = false;
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
     // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
@@ -14,18 +17,19 @@ function makeRenderer({ element, engine, follows }) {
             height: document.body.clientHeight,
             width: document.body.clientWidth,
             pixelRatio: 'auto',
-            showCollisions: true,
-            showAxes: true,
-            showIds: true,
+            showCollisions: debug,
+            showAxes: debug,
+            showIds: debug,
             hasBounds: true,
             wireframes: false, // This needs to be false for sprites to show up.
-            showVelocity: true,
-            showAngleIndicator: false,
-            showInternalEdges: true,
-            showPositions: true,
-            showBounds: true,
-            showBroadphase: true,
-            showDebug: true,
+            showVelocity: debug,
+            showAngleIndicator: debug,
+            showVertexNumbers: debug,
+            showInternalEdges: debug,
+            showPositions: debug,
+            showBounds: debug,
+            showBroadphase: debug,
+            showDebug: debug,
         }
     });
 

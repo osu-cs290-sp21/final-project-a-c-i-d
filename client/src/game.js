@@ -1,7 +1,8 @@
 import Thread from 'async-threading';
-import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT } from 'matter-js';
+import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT, Composite } from 'matter-js';
 import { AssetManager } from './lib/assetManager';
 import { CollisionController } from './lib/collisionController';
+import { generateTerrain, vector } from './lib/levelGeneration';
 
 function sprite(name, flipped = false) {
     return 'http://localhost:9000/sprites/svg/' + name + (flipped ? '-flip' : '') + '.svg';
@@ -65,6 +66,8 @@ function safeMag(vector) {
     return Math.max(Vector.magnitude(vector), 0.000000001);
 }
 
+function bint(b) { return b ? 1 : 0; }
+
 export class Player {
 
     /*
@@ -72,6 +75,7 @@ export class Player {
     */
 
     constructor(spawnPos) {
+        this.spawnPos = spawnPos
         const {x, y} = spawnPos;
         const options = {
             render: {
@@ -110,7 +114,8 @@ export class Player {
             // body.force = Vector.mult(getUpVector(body), 0.07 * dt);
             if (this.isGrounded) {
                 this.isGrounded = false;
-                jump(body, 10);
+                const hops = 12;
+                jump(body, hops);
             }
         }
 
@@ -120,9 +125,12 @@ export class Player {
             if (this.orientation < 0) this.flip();
         }
 
-        const speed = 100;
         if (Input.leftArrow || Input.rightArrow) {
-            horizontalMovement(body, speed * dt * this.orientation);
+            const speed = 100;
+            const groundSpeedBoost = 50;
+            const zoom = speed + (this.isGrounded ? groundSpeedBoost : 0);
+            // horizontalMovement(body, speed * dt * this.orientation);
+            horizontalMovement(body, zoom * dt * this.orientation);
         } else if (this.isGrounded) {
             Body.setVelocity(body, { x: 0, y: 0 });
         }
@@ -144,6 +152,12 @@ export class Player {
         // Body.setAngle(this.body, 0);
         // Body.setAngularVelocity(this.body, 0);
         // Body.setInertia(this.body, Infinity);
+        const hasFallen = this.body.position.y > 1000;
+
+        if (hasFallen) {
+            Body.setPosition(this.body, this.spawnPos);
+        }
+        this.orient();
     }
 
     orient() {
@@ -157,10 +171,10 @@ export class Player {
             this.isGrounded = true;
         } else if (other.label === 'boing') {
             const bounciness = 10;
-            this.isGrounded = false;
+            this.isGrounded = false; // This needs to happen on `onEndCollision()`
             jump(this.body, bounciness);
         }
-        this.orient();
+        // this.orient();
     }
 }
 
@@ -188,14 +202,25 @@ export class Game {
     // Setup the game controller.
     setup() {
         // Sets up some sort of scene
-        this.box = Bodies.rectangle(200, 200, 80, 80);
-        this.ground = Bodies.rectangle(400, 610, 10000, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
+        this.box = Bodies.rectangle(400, 200, 80, 5);
+        this.ground = Bodies.rectangle(400, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
         this.ground.label = 'ground';
         this.box.label = 'boing';
 
         // Adds the bodies into the world
         // World.add(this.engine.world, [this.box, this.ground]);
         World.add(this.engine.world, [this.ground, this.box]);
+
+        this.terrain = generateTerrain([400, 610], 10);
+        this.terrain.map(platform => {
+            platform.label = 'ground';
+        });
+        // console.log(this.terrain);
+        // for (const t of this.terrain) {
+        //     console.log(t);
+        //     World.add(this.engine.world, t);
+        // }
+        World.add(this.engine.world, this.terrain);
 
         // Registers the update functions for each update.
         Events.on(this.engine, 'beforeUpdate', this.preUpdate.bind(this));
