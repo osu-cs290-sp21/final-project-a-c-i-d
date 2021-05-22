@@ -26,6 +26,7 @@ export const AssetManager = {
         const unsuccessfullyLoaded = this.queue;
 
         if (unsuccessfullyLoaded.length) throw unsuccessfullyLoaded;
+        this.initialized = true;
         return successfullyLoaded;
     }
 };

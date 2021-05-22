@@ -3,9 +3,11 @@ import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'mat
 import { Player, Game, Input } from './game';
 import { AssetManager } from './lib/assetManager';
 
+const debug = false;
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
     // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
+    // https://github.com/liabru/matter-js/wiki/Rendering
     const render = Render.create({
         element: element,
         engine: engine,
@@ -13,11 +15,19 @@ function makeRenderer({ element, engine, follows }) {
             height: document.body.clientHeight,
             width: document.body.clientWidth,
             pixelRatio: 'auto',
-            showCollisions: true,
-            showAxes: true,
-            showIds: true,
+            showCollisions: debug,
+            showAxes: debug,
+            showIds: debug,
             hasBounds: true,
-            wireframes: false
+            wireframes: false, // This needs to be false for sprites to show up.
+            showVelocity: debug,
+            showAngleIndicator: debug,
+            showVertexNumbers: debug,
+            showInternalEdges: debug,
+            showPositions: debug,
+            showBounds: debug,
+            showBroadphase: debug,
+            showDebug: debug,
         }
     });
 
@@ -39,7 +49,7 @@ AssetManager.init() // Loads the assets in that are required for game setup.
     .then(() => {
         // Creates a new game and player
         const gameInstance = new Game();
-        const player = new Player({ x: 200, y: 200 });
+        const player = new Player({ x: 200, y: 100 });
         gameInstance.addPlayer(player);
 
         // Makes the renderer
@@ -49,9 +59,14 @@ AssetManager.init() // Loads the assets in that are required for game setup.
             follows: player.body.position
         });
 
-        Render.run(render); // Starts the renderer.
         gameInstance.setup();
         gameInstance.run(); // Starts the game and physics. 
+        Render.run(render); // Starts the renderer.
+
+        window.capture = () => {
+            console.table(Object.entries(player.body));
+        }
+
     })
     .then(() => {
         // Connects the Input manager to the DOM, once the game is running.
