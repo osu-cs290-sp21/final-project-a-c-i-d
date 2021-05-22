@@ -23,7 +23,8 @@ const render = Render.create({
         showCollisions: true,
         showAxes: true,
         showIds: true,
-        hasBounds: true
+        hasBounds: true,
+        wireframes: false
     }
 });
 
@@ -40,4 +41,4 @@ Render.run(render);
 // Starts the game logic and physics
 gameInstance.run();
 
-setTimeout( () => gameInstance.stop(), 20000); // Stops game after 20 seconds bc laptop gets hot.
+// setTimeout( () => gameInstance.stop(), 20000); // Stops game after 20 seconds bc laptop gets hot.

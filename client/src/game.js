@@ -1,5 +1,6 @@
-import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
+import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT } from 'matter-js';
 
+const playerSpriteUrl = 'http://localhost:9000/sprites/player.png';
 
 function getUpVector(body) {
     return {
@@ -31,6 +32,18 @@ export const BigBen = {
     }
 };
 
+function jump(body, magnitude) {
+    const up = getUpVector(body);
+    const velocity = Vector.add(body.velocity, Vector.mult(up, magnitude));
+    Body.setVelocity(body, velocity);
+}
+
+function horizontalMovement(body, magnitude) {
+    const right = getRightVector(body);
+    const velocity = Vector.add(body.velocity, Vector.mult(right, magnitude));
+    Body.setVelocity(body, velocity);
+}
+
 // Global manager for the key presses.
 export const Input = {
     keys: [...new Array(256)].map(e => false), // Array of 256 false values.
@@ -40,6 +53,10 @@ export const Input = {
     get downArrow() { return Input.keys[40]; }
 };
 
+function safeMag(vector) {
+    return Math.max(Vector.magnitude(vector), 0.000000001);
+}
+
 export class Player {
 
     /*
@@ -47,33 +64,86 @@ export class Player {
     */
 
     constructor(spawnPos) {
-        this.body = Bodies.trapezoid(spawnPos.x, spawnPos.y, 40, 40, 1);
+        this.body = Bodies.trapezoid(spawnPos.x, spawnPos.y, 40, 40, 1, {
+            render: {
+                sprite: {
+                    texture: playerSpriteUrl
+                }
+            }
+        });
+        this.body.label = 'gamer';
+        this.isGrounded = false;
+
+        Body.setInertia(this.body, Infinity);
+
     }
 
     updatePhysics() {
         const dt = BigBen.deltaTime;
         const body = this.body;
 
-        // Reset position
-        if (Input.downArrow) {
-            body.position = { x: 200, y: 200 };
-        }
         // Jump
         if (Input.upArrow) {
-            body.force = Vector.mult(getUpVector(body), 0.07 * dt);
+            // body.force = Vector.mult(getUpVector(body), 0.07 * dt);
+            if (this.isGrounded) {
+                this.isGrounded = false;
+                jump(body, 10);
+            }
         }
         // Spin left and right
-        if (Input.leftArrow && body.angularVelocity > -0.2) {
-            this.body.torque = -0.03 * dt;
+        if (Input.leftArrow) {
+            // this.body.torque = -0.03 * dt;
+            // body.force = Vector.mult(getRightVector(body), -0.07 * dt * (1.0/safeMag(body.velocity)));
+            horizontalMovement(body, -3.0 * dt);
+            body.friction = 0;
+            body.frictionStatic = 0;
+        } else if (Input.rightArrow) {
+            // body.torque = 0.03 * dt;
+            // body.force = Vector.mult(getRightVector(body), 0.07 * dt * (1.0/safeMag(body.velocity)));
+            horizontalMovement(body, 3.0 * dt);
+            body.friction = 0;
+            body.frictionStatic = 0;
         } else {
-            if (Input.rightArrow && body.angularVelocity < 0.2) {
-                body.torque = 0.03 * dt;
-            }
+            body.friction = 1;
+            body.frictionStatic = 1;
         }
     }
 
     update() {
 
+    }
+    collision(other) {
+        if (other.label === 'ground') {
+            this.isGrounded = true;
+        }
+    }
+}
+
+export class CollisionController {
+    constructor(/*engine*/) {
+        this.callbacks = {
+            'initial': new Map(),
+            'continuous': new Map(),
+        };
+        // Events.on(engine, 'collisionStart', this.engine);
+    }
+    register(body, handler, type) {
+        this.callbacks[type].set(body.label, handler);
+    }
+    initialCollision(collisionEvent) { return this.onCollision(collisionEvent, 'initial'); }
+    continuousCollision(collisionEvent) { return this.onCollision(collisionEvent, 'continuous'); }
+
+    onCollision(collisionEvent, type) {
+        const getPair = collision => [collision.bodyA, collision.bodyB];
+        const collisionTable = collisionEvent.source.pairs.table;
+        const map = this.callbacks[type];
+console.log('hello')
+        for (const name in collisionTable) {
+            const [a, b] = getPair(collisionTable[name]);
+            console.log([a,b]);
+            if (map.has(a.label)) map.get(a.label)(b);
+            if (map.has(b.label)) map.get(b.label)(a);
+        }
     }
 }
 
@@ -94,6 +164,7 @@ export class Game {
     constructor() {
         this.engine = Engine.create();
         this.runner = Runner.create();
+        this.collisionController = new CollisionController();
 
         this.players = [];
         this.setup();
@@ -103,14 +174,20 @@ export class Game {
     setup() {
         // Sets up some sort of scene
         this.box = Bodies.rectangle(450, 50, 80, 80);
-        this.ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+        this.ground = Bodies.rectangle(400, 610, 10000, 60, { isStatic: true });
+        this.ground.label = 'ground';
+        this.friction = 1;
+        this.frictionStatic = 0;
 
         // Adds the bodies into the world
-        World.add(this.engine.world, [this.box, this.ground]);
+        // World.add(this.engine.world, [this.box, this.ground]);
+        World.add(this.engine.world, [this.ground]);
 
         // Registers the update functions for each update.
         Events.on(this.engine, 'beforeUpdate', this.preUpdate.bind(this));
         Events.on(this.runner, 'tick', this.update.bind(this));
+
+        Events.on(this.engine, 'collisionStart', this.collisionController.initialCollision.bind(this.collisionController));
     }
 
     // Adds a player into the game, as well as the players array.
@@ -124,6 +201,8 @@ export class Game {
 
         // Adds the player to the array.
         this.players.push(player);
+
+        this.collisionController.register(player.body, player.collision.bind(player), 'initial');
     }
 
     // Called every time a new frame is rendered.
@@ -148,4 +227,3 @@ export class Game {
         Runner.stop(this.runner);
     }
 }
-
