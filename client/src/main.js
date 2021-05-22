@@ -3,7 +3,7 @@ import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'mat
 import { Player, Game, Input } from './game';
 import { AssetManager } from './lib/assetManager';
 
-const debug = false;
+const debug = true;
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
     // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66

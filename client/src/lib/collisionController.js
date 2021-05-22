@@ -3,6 +3,7 @@ export class CollisionController {
         this.callbacks = {
             'initial': new Map(),
             'continuous': new Map(),
+            'finale': new Map(),
         };
     }
     register(body, handler, type) {
@@ -10,6 +11,7 @@ export class CollisionController {
     }
     initialCollision(collisionEvent) { return this.onCollision(collisionEvent, 'initial'); }
     continuousCollision(collisionEvent) { return this.onCollision(collisionEvent, 'continuous'); }
+    finaleCollision(collisionEvent) { return this.onCollision(collisionEvent, 'finale'); }
 
     onCollision(collisionEvent, type) {
         const getPair = collision => [collision.bodyA, collision.bodyB];
