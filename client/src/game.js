@@ -144,9 +144,10 @@ export class Player {
         this.orientation *= -1;
         Body.setAngle(this.body, 0);
         Body.scale(this.body, this.orientation, 1);
-        this.body.render.sprite.texture = sprite(this.skin, this.orientation > 0);
+        this.updateSprite();
         this.body.render.sprite.xOffset += 0.2 * this.orientation;
     }
+    updateSprite() { this.body.render.sprite.texture = sprite(this.skin, this.orientation > 0); }
 
     updatePhysics() {
 
@@ -179,10 +180,8 @@ export class Player {
                 const bounciness = 10;
                 this.isGrounded = false;
                 jump(this.body, bounciness);
-                const skin = birdNames[Math.floor(Math.random() * birdNames.length)];
-                console.log(skin);
-                this.skin = skin;
-                // this.body.render.sprite.texture = skin;
+                this.skin = birdNames[Math.floor(Math.random() * birdNames.length)];
+                this.updateSprite();
             }
         };
         cases[other.label]?.call();
