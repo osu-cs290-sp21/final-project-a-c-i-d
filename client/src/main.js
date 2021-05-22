@@ -2,8 +2,6 @@ import Thread from 'async-threading';
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
 import { Player, Game, Input } from './game';
 import { AssetManager } from './lib/assetManager';
-import { range } from './lib/levelGeneration';
-window.range = range;
 
 const debug = false;
 function makeRenderer({ element, engine, follows }) {

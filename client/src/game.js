@@ -2,7 +2,7 @@ import Thread from 'async-threading';
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT, Composite } from 'matter-js';
 import { AssetManager } from './lib/assetManager';
 import { CollisionController } from './lib/collisionController';
-import { generateTerrain, vector } from './lib/levelGeneration';
+import { generateTerrain } from './lib/levelGeneration';
 
 function sprite(name, flipped = false) {
     return 'http://localhost:9000/sprites/svg/' + name + (flipped ? '-flip' : '') + '.svg';
@@ -66,8 +66,6 @@ function safeMag(vector) {
     return Math.max(Vector.magnitude(vector), 0.000000001);
 }
 
-function bint(b) { return b ? 1 : 0; }
-
 export class Player {
 
     /*
@@ -111,7 +109,6 @@ export class Player {
 
         // Jump
         if (Input.upArrow) {
-            // body.force = Vector.mult(getUpVector(body), 0.07 * dt);
             if (this.isGrounded) {
                 this.isGrounded = false;
                 const hops = 12;
@@ -215,11 +212,6 @@ export class Game {
         this.terrain.map(platform => {
             platform.label = 'ground';
         });
-        // console.log(this.terrain);
-        // for (const t of this.terrain) {
-        //     console.log(t);
-        //     World.add(this.engine.world, t);
-        // }
         World.add(this.engine.world, this.terrain);
 
         // Registers the update functions for each update.
