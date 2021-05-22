@@ -1,8 +1,11 @@
 import Thread from 'async-threading';
-import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT, Composite } from 'matter-js';
+import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT, Composite, use } from 'matter-js';
+import { MatterCollisionEvents } from './lib/matter-collision-events';
 import { AssetManager } from './lib/assetManager';
 import { CollisionController } from './lib/collisionController';
 import { generateTerrain } from './lib/levelGeneration';
+
+use(MatterCollisionEvents);
 
 function sprite(name, flipped = false) {
     return 'http://localhost:9000/sprites/svg/' + name + (flipped ? '-flip' : '') + '.svg';
@@ -231,9 +234,12 @@ export class Game {
         this.ground.label = 'ground';
         this.box.label = 'boing';
 
+        const ball = Bodies.circle(550, 200, 30);
+        ball.onCollide(pair => console.log('ball collided'));
+
         // Adds the bodies into the world
         // World.add(this.engine.world, [this.box, this.ground]);
-        World.add(this.engine.world, [this.ground, this.box]);
+        World.add(this.engine.world, [this.ground, this.box, ball]);
 
         this.terrain = generateTerrain([400, 610], 10);
         this.terrain.map(platform => {
