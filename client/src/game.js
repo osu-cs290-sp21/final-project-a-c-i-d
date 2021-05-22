@@ -1,35 +1,13 @@
 import Thread from 'async-threading';
-import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT, Composite } from 'matter-js';
-import { AssetManager } from './lib/assetManager';
-import { CollisionController } from './lib/collisionController';
+import { Engine,Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin } from 'matter-js';
+import { choose } from 'matter-js/src/core/Common';
+import { MatterCollisionEvents } from './lib/matter-collision-events';
+import { collision } from './lib/collisionController';
 import { generateTerrain } from './lib/levelGeneration';
+import { Axes, jump, horizontalMovement, varith, setBodyLabel } from './lib/physics';
+import { webSource, asset } from './lib/assetManager';
 
-function sprite(name, flipped = false) {
-    return 'http://localhost:9000/sprites/svg/' + name + (flipped ? '-flip' : '') + '.svg';
-}
-
-const birdNames = ['angry-nohat', ...['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'].map(name => name + '-day')];
-const randomBird = () => birdNames[Math.floor(Math.random() * birdNames.length)];
-
-
-function getUpVector(body) {
-    return {
-        x: Math.cos(body.angle - (Math.PI / 2.0)),
-        y: Math.sin(body.angle - (Math.PI / 2.0))
-    };
-}
-
-function getRightVector(body) {
-    return {
-        x: Math.cos(body.angle),
-        y: Math.sin(body.angle)
-    };
-}
-
-const Axes = {
-    get x() { return {x: 1, y: 0 }; },
-    get y() { return {x: 0, y: -1 }; }
-};
+useMatterPlugin(MatterCollisionEvents);
 
 
 // This is just a global variable for the game time.
@@ -48,16 +26,6 @@ export const BigBen = {
     }
 };
 
-function jump(body, magnitude) {
-    const velocity = { x: body.velocity.x, y: -magnitude };
-    Body.setVelocity(body, velocity);
-}
-
-function horizontalMovement(body, magnitude) {
-    const velocity = { x: magnitude, y: body.velocity.y };
-    Body.setVelocity(body, velocity);
-}
-
 // Global manager for the key presses.
 export const Input = {
     keys: [...new Array(256)].map(e => false), // Array of 256 false values.
@@ -67,46 +35,49 @@ export const Input = {
     get downArrow() { return Input.keys[40]; }
 };
 
-function safeMag(vector) {
-    return Math.max(Vector.magnitude(vector), 0.000000001);
-}
+// Some bird functions
+const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
+const birdNames = ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'];
+const birdAssetNames = ['angry-nohat', ...birdNames.map(name => name + '-day')];
+const randomBird = () => choose(birdAssetNames);
 
 export class Player {
 
-    /*
-        body: Matter.Body;
-    */
-
-    constructor(spawnPos) {
-        this.spawnPos = spawnPos
-        const {x, y} = spawnPos;
+    constructor(spawn) {
+        this.spawn = spawn;
+        const {x, y} = spawn;
         this.skin = randomBird();
+        this.isGrounded = false;
+        this.orientation = 1; // Bird looking right
+
         const options = {
             render: {
                 sprite: {
-                    texture: sprite(this.skin, true), // sprite('angry-nohat', true),
+                    texture: sprite(this.skin, true),
                     xScale: 1/3,
                     yScale: 1/3,
                     xOffset: 0.2,
+                    yOffset: 0.06,
                 }
             },
             friction: 0,
             frictionStatic: 0,
             frictionAir: 0,
             inertia: Infinity,
-
+            angle: 0,
+            mass: 1,
         };
 
         // this.body = Bodies.rectangle(spawnPos.x, spawnPos.y, 64, 64, options);
-        this.body = Bodies.polygon(spawnPos.x, spawnPos.y, 8, 50, options);
+        this.body = Bodies.polygon(x, y, 8, 50, options);
         this.body.label = 'gamer';
-        this.isGrounded = false;
-        this.orientation = 1; // Bird looking right
 
-        Body.setInertia(this.body, Infinity);
-        Body.setAngle(this.body, 0);
-        Body.setMass(this.body, 1);
+        // Body.setInertia(this.body, Infinity);
+        // Body.setAngle(this.body, 0);
+        // Body.setMass(this.body, 1);
 
+        this.body.onCollide(this.initialCollision.bind(this));
+        this.body.onCollideEnd(this.finaleCollision.bind(this));
     }
 
     update() {
@@ -129,7 +100,7 @@ export class Player {
         }
 
         if (Input.leftArrow || Input.rightArrow) {
-            const speed = 100;
+            const speed = 200;
             const groundSpeedBoost = 50;
             const zoom = speed + (this.isGrounded ? groundSpeedBoost : 0);
             // horizontalMovement(body, speed * dt * this.orientation);
@@ -147,20 +118,13 @@ export class Player {
         this.updateSprite();
         this.body.render.sprite.xOffset += 0.2 * this.orientation;
     }
+
     updateSprite() { this.body.render.sprite.texture = sprite(this.skin, this.orientation > 0); }
 
-    updatePhysics() {
-
-    }
-
     sparseUpdate() {
-        // Body.setAngle(this.body, 0);
-        // Body.setAngularVelocity(this.body, 0);
-        // Body.setInertia(this.body, Infinity);
         const hasFallen = this.body.position.y > 1000;
-
         if (hasFallen) {
-            Body.setPosition(this.body, this.spawnPos);
+            Body.setPosition(this.body, this.spawn);
         }
         this.orient();
     }
@@ -171,7 +135,7 @@ export class Player {
         Body.setInertia(this.body, Infinity);
     }
 
-    initialCollision(other) {
+    initialCollision(pair) {
         const cases = {
             'ground': () => {
                 this.isGrounded = true;
@@ -180,13 +144,14 @@ export class Player {
                 const bounciness = 10;
                 this.isGrounded = false;
                 jump(this.body, bounciness);
-                this.skin = birdNames[Math.floor(Math.random() * birdNames.length)];
+                this.skin = randomBird();
                 this.updateSprite();
             }
         };
+        const other = collision.otherBody(pair);
         cases[other.label]?.call();
     }
-    finaleCollision(other) {
+    finaleCollision(pair) {
         const cases = {
             'ground': () => {
                 this.isGrounded = false;
@@ -195,29 +160,18 @@ export class Player {
                 this.isGrounded = false;
             }
         };
+        const other = collision.otherBody(pair);
         cases[other.label]?.call();
-        this.orient();
 
+        this.orient();
     }
 }
 
 export class Game {
 
-    /*
-        engine: Matter.Engine;
-        runner: Matter.Runner;
-
-        players: Player[];
-
-        box: Matter.Body;
-        ground: Matter.Ground;
-
-    */
-
     constructor() {
         this.engine = Engine.create();
         this.runner = Runner.create();
-        this.collisionController = new CollisionController();
 
         this.players = [];
     }
@@ -230,24 +184,30 @@ export class Game {
         this.ground.label = 'ground';
         this.box.label = 'boing';
 
+        const ball = Bodies.circle(550, 200, 30);
+        ball.onCollide(pair => console.log(collision.otherBody(pair)));
+
         // Adds the bodies into the world
         // World.add(this.engine.world, [this.box, this.ground]);
-        World.add(this.engine.world, [this.ground, this.box]);
-
-        this.terrain = generateTerrain([400, 610], 10);
-        this.terrain.map(platform => {
-            platform.label = 'ground';
-        });
+        World.add(this.engine.world, [this.ground, this.box, ball]);
+        
+        this.terrain = generateTerrain([400, 610], 10)
+            .map(platform => {
+                Body.set(platform, 'label', 'ground');
+                const options = {
+                    texture: asset('img/level-objects/dirt-platform.svg'),
+                    xScale: 1/5, // 1514
+                    yScale: 1/4, // 127
+                    visible: true,
+                };
+                [...Object.entries(options)].map(([key,val]) => { platform.render.sprite[key] = val; });
+                return platform;
+            });
         World.add(this.engine.world, this.terrain);
 
         // Registers the update functions for each update.
         Events.on(this.engine, 'beforeUpdate', this.preUpdate.bind(this));
         Events.on(this.runner, 'tick', this.update.bind(this));
-
-        Events.on(this.engine, 'collisionStart', this.collisionController.initialCollision.bind(this.collisionController));
-        Events.on(this.engine, 'collisionActive', this.collisionController.continuousCollision.bind(this.collisionController));
-        Events.on(this.engine, 'collisionEnd', this.collisionController.finaleCollision.bind(this.collisionController));
-
     }
 
     // Adds a player into the game, as well as the players array.
@@ -256,14 +216,12 @@ export class Game {
         World.add(this.engine.world, player.body);
 
         // Registers the player's functions to be called when an update happens.
-        Events.on(this.engine, 'beforeUpdate', player.updatePhysics.bind(player));
+        // Events.on(this.engine, 'beforeUpdate', player.updatePhysics.bind(player));
         Events.on(this.runner, 'tick', player.update.bind(player));
 
         // Adds the player to the array.
         this.players.push(player);
 
-        this.collisionController.register(player.body, player.initialCollision.bind(player), 'initial');
-        this.collisionController.register(player.body, player.finaleCollision.bind(player), 'finale');
     }
 
     // Called every time a new frame is rendered.
