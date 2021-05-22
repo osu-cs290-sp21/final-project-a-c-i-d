@@ -17,12 +17,6 @@ body {
     margin: 0;
 }
 
-.game-window {
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-}
-
 .button-container {
     bottom: 0;
     overflow: hidden;
@@ -61,6 +55,7 @@ body {
     transform: scale(0.9);
 }
 
+
 /*===== Rules button =====*/
 #rules-button {
     height: 1.7em;
@@ -87,3 +82,72 @@ body {
     top: 11px;
 }
 
+/*===== MODALS =====*/
+.hidden {
+    display: none;
+}
+#modal-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.50);
+}
+.modal-header {
+    position: relative;
+    padding: 10px 20px;
+    text-align: center;
+}
+.modal-header h3 {
+    margin: 0;
+    font-size: 28px;
+}
+.modal-close-button {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 24px;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+.modal-body {
+    padding: 20px;
+    font-size: 24px;
+  }
+
+/*===== Leaderboard Modal =====*/
+#leaderboard-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.leaderboard-dialog {
+    width: auto;
+    max-width: 600px;
+    min-width: 350px;
+    min-height: 300px;
+    margin: 40px auto;
+    background-color: rgba(9, 184, 228, 1);
+    border-radius: 15px;
+}
+
+/*===== Rules Modal =====*/
+#rules-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.rules-dialog {
+    width: auto;
+    max-width: 600px;
+    min-width: 350px;
+    min-height: 300px;
+    margin: 40px auto;
+    background-color: goldenrod;
+    border-radius: 15px;
+}
