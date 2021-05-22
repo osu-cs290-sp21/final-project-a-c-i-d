@@ -7,6 +7,11 @@ import { generateTerrain } from './lib/levelGeneration';
 function sprite(name, flipped = false) {
     return 'http://localhost:9000/sprites/svg/' + name + (flipped ? '-flip' : '') + '.svg';
 }
+
+const birdNames = ['angry-nohat', ...['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'].map(name => name + '-day')];
+const randomBird = () => birdNames[Math.floor(Math.random() * birdNames.length)];
+
+
 function getUpVector(body) {
     return {
         x: Math.cos(body.angle - (Math.PI / 2.0)),
@@ -75,12 +80,14 @@ export class Player {
     constructor(spawnPos) {
         this.spawnPos = spawnPos
         const {x, y} = spawnPos;
+        this.skin = randomBird();
         const options = {
             render: {
                 sprite: {
-                    texture: sprite('angry-nohat', true),
+                    texture: sprite(this.skin, true), // sprite('angry-nohat', true),
                     xScale: 1/3,
                     yScale: 1/3,
+                    xOffset: 0.2,
                 }
             },
             friction: 0,
@@ -89,10 +96,9 @@ export class Player {
             inertia: Infinity,
 
         };
-        const bodyVertices = AssetManager.asset('angry-nohat');
-        console.log(bodyVertices)
 
-        this.body = Bodies.rectangle(spawnPos.x, spawnPos.y, 64, 64, options);
+        // this.body = Bodies.rectangle(spawnPos.x, spawnPos.y, 64, 64, options);
+        this.body = Bodies.polygon(spawnPos.x, spawnPos.y, 8, 50, options);
         this.body.label = 'gamer';
         this.isGrounded = false;
         this.orientation = 1; // Bird looking right
@@ -138,7 +144,8 @@ export class Player {
         this.orientation *= -1;
         Body.setAngle(this.body, 0);
         Body.scale(this.body, this.orientation, 1);
-        this.body.render.sprite.texture = sprite('angry-nohat', this.orientation > 0);
+        this.body.render.sprite.texture = sprite(this.skin, this.orientation > 0);
+        this.body.render.sprite.xOffset += 0.2 * this.orientation;
     }
 
     updatePhysics() {
@@ -163,15 +170,35 @@ export class Player {
         Body.setInertia(this.body, Infinity);
     }
 
-    collision(other) {
-        if (other.label === 'ground') {
-            this.isGrounded = true;
-        } else if (other.label === 'boing') {
-            const bounciness = 10;
-            this.isGrounded = false; // This needs to happen on `onEndCollision()`
-            jump(this.body, bounciness);
-        }
-        // this.orient();
+    initialCollision(other) {
+        const cases = {
+            'ground': () => {
+                this.isGrounded = true;
+            },
+            'boing': () => {
+                const bounciness = 10;
+                this.isGrounded = false;
+                jump(this.body, bounciness);
+                const skin = birdNames[Math.floor(Math.random() * birdNames.length)];
+                console.log(skin);
+                this.skin = skin;
+                // this.body.render.sprite.texture = skin;
+            }
+        };
+        cases[other.label]?.call();
+    }
+    finaleCollision(other) {
+        const cases = {
+            'ground': () => {
+                this.isGrounded = false;
+            },
+            'boing': () => {
+                this.isGrounded = false;
+            }
+        };
+        cases[other.label]?.call();
+        this.orient();
+
     }
 }
 
@@ -219,6 +246,9 @@ export class Game {
         Events.on(this.runner, 'tick', this.update.bind(this));
 
         Events.on(this.engine, 'collisionStart', this.collisionController.initialCollision.bind(this.collisionController));
+        Events.on(this.engine, 'collisionActive', this.collisionController.continuousCollision.bind(this.collisionController));
+        Events.on(this.engine, 'collisionEnd', this.collisionController.finaleCollision.bind(this.collisionController));
+
     }
 
     // Adds a player into the game, as well as the players array.
@@ -233,7 +263,8 @@ export class Game {
         // Adds the player to the array.
         this.players.push(player);
 
-        this.collisionController.register(player.body, player.collision.bind(player), 'initial');
+        this.collisionController.register(player.body, player.initialCollision.bind(player), 'initial');
+        this.collisionController.register(player.body, player.finaleCollision.bind(player), 'finale');
     }
 
     // Called every time a new frame is rendered.
@@ -256,7 +287,7 @@ export class Game {
         BigBen.begin();
         // Starts the Matter.js physics
         Runner.run(this.runner, this.engine);
-        const sparseTime = 50; // ms
+        const sparseTime = 1000/30; // ms
         this.sparseUpdaterThread = new Thread(this.sparseUpdate.bind(this), sparseTime, true);
     }
 
