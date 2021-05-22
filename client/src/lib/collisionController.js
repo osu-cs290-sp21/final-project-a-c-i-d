@@ -18,7 +18,7 @@ export class CollisionController {
         
         for (const name in collisionTable) {
             const [a, b] = getPair(collisionTable[name]);
-            console.log([a,b]);
+            // console.log([a.label,b.label]);
             if (map.has(a.label)) map.get(a.label)(b);
             if (map.has(b.label)) map.get(b.label)(a);
         }
