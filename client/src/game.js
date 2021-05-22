@@ -1,5 +1,5 @@
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector, SAT } from 'matter-js';
-
+import { CollisionController } from './lib/collisionController';
 
 function sprite(name, flipped = false) {
     return 'http://localhost:9000/sprites/svg/' + name + (flipped ? '-flip' : '') + '.svg';
@@ -127,37 +127,11 @@ export class Player {
         if (other.label === 'ground') {
             this.isGrounded = true;
         }
-    }
-}
-
-export class CollisionController {
-    constructor(/*engine*/) {
-        this.callbacks = {
-            'initial': new Map(),
-            'continuous': new Map(),
-        };
-        // Events.on(engine, 'collisionStart', this.engine);
-    }
-    register(body, handler, type) {
-        this.callbacks[type].set(body.label, handler);
-    }
-    initialCollision(collisionEvent) { return this.onCollision(collisionEvent, 'initial'); }
-    continuousCollision(collisionEvent) { return this.onCollision(collisionEvent, 'continuous'); }
-
-    onCollision(collisionEvent, type) {
-        const getPair = collision => [collision.bodyA, collision.bodyB];
-        const collisionTable = collisionEvent.source.pairs.table;
-        const map = this.callbacks[type];
-console.log('hello')
-        for (const name in collisionTable) {
-            const [a, b] = getPair(collisionTable[name]);
-            console.log([a,b]);
-            if (map.has(a.label)) map.get(a.label)(b);
-            if (map.has(b.label)) map.get(b.label)(a);
+        if (other.label === 'boing') {
+            jump(this.body, 30);
         }
     }
 }
-
 
 export class Game {
 
@@ -178,21 +152,19 @@ export class Game {
         this.collisionController = new CollisionController();
 
         this.players = [];
-        this.setup();
     }
 
     // Setup the game controller.
     setup() {
         // Sets up some sort of scene
         this.box = Bodies.rectangle(450, 50, 80, 80);
-        this.ground = Bodies.rectangle(400, 610, 10000, 60, { isStatic: true });
+        this.ground = Bodies.rectangle(400, 610, 10000, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
         this.ground.label = 'ground';
-        this.friction = 0;
-        this.frictionStatic = 0;
+        this.box.label = 'boing';
 
         // Adds the bodies into the world
         // World.add(this.engine.world, [this.box, this.ground]);
-        World.add(this.engine.world, [this.ground]);
+        World.add(this.engine.world, [this.ground, this.box]);
 
         // Registers the update functions for each update.
         Events.on(this.engine, 'beforeUpdate', this.preUpdate.bind(this));
