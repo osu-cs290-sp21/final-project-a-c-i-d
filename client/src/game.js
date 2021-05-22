@@ -1,39 +1,18 @@
 import Thread from 'async-threading';
-import { Engine,Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin } from 'matter-js';
+import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin } from 'matter-js';
 import { choose } from 'matter-js/src/core/Common';
 import { MatterCollisionEvents } from './lib/matter-collision-events';
 import { collision } from './lib/collisionController';
 import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump, horizontalMovement, varith, setBodyLabel } from './lib/physics';
 import { webSource, asset } from './lib/assetManager';
+import { Input, BigBen } from './lib/stateControllers';
 
+// Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents);
 
-
-// This is just a global variable for the game time.
-// This method is more efficient.
-export const BigBen = {
-    delta: 0.0,
-    start: null,
-    set deltaTime(delta) {
-        this.delta = delta/1000.0;
-    },
-    get deltaTime() {
-        return this.delta;
-    },
-    begin() {
-        this.start = new Date();
-    }
-};
-
-// Global manager for the key presses.
-export const Input = {
-    keys: [...new Array(256)].map(e => false), // Array of 256 false values.
-    get upArrow() { return Input.keys[38]; },
-    get rightArrow() { return Input.keys[39]; },
-    get leftArrow() { return Input.keys[37]; },
-    get downArrow() { return Input.keys[40]; }
-};
+// Iain read this
+// https://github.com/liabru/matter-js/wiki/Creating-plugins
 
 // Some bird functions
 const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
@@ -44,8 +23,8 @@ const randomBird = () => choose(birdAssetNames);
 export class Player {
 
     constructor(spawn) {
-        this.spawn = spawn;
-        const {x, y} = spawn;
+        const { x, y } = spawn;
+        this.spawn = { x, y };
         this.skin = randomBird();
         this.isGrounded = false;
         this.orientation = 1; // Bird looking right
@@ -54,8 +33,8 @@ export class Player {
             render: {
                 sprite: {
                     texture: sprite(this.skin, true),
-                    xScale: 1/3,
-                    yScale: 1/3,
+                    xScale: 1 / 3,
+                    yScale: 1 / 3,
                     xOffset: 0.2,
                     yOffset: 0.06,
                 }
@@ -68,16 +47,38 @@ export class Player {
             mass: 1,
         };
 
-        // this.body = Bodies.rectangle(spawnPos.x, spawnPos.y, 64, 64, options);
+        // Makes an octagon for the player collider.
         this.body = Bodies.polygon(x, y, 8, 50, options);
         this.body.label = 'gamer';
+    }
 
-        // Body.setInertia(this.body, Infinity);
-        // Body.setAngle(this.body, 0);
-        // Body.setMass(this.body, 1);
+    setup() {
+        const onCollisionBegin = pair => {
+            const cases = {
+                'ground': () => { this.isGrounded = true; },
+                'boing': () => {
+                    const bounciness = 10;
+                    this.isGrounded = false;
+                    jump(this.body, bounciness);
+                    this.skin = randomBird();
+                    this.updateSprite();
+                }
+            };
+            const other = collision.otherBody(pair);
+            cases[other.label]?.call();
+        };
+        const onCollisionEnd = pair => {
+            const cases = {
+                'ground': () => { this.isGrounded = false; },
+                'boing': () => { this.isGrounded = false; }
+            };
+            const other = collision.otherBody(pair);
+            cases[other.label]?.call();
+            this.orient();
+        };
 
-        this.body.onCollide(this.initialCollision.bind(this));
-        this.body.onCollideEnd(this.finaleCollision.bind(this));
+        this.body.onCollide(onCollisionBegin);
+        this.body.onCollideEnd(onCollisionEnd);
     }
 
     update() {
@@ -101,14 +102,12 @@ export class Player {
 
         if (Input.leftArrow || Input.rightArrow) {
             const speed = 200;
-            const groundSpeedBoost = 50;
+            const groundSpeedBoost = 50; // This is because of friction
             const zoom = speed + (this.isGrounded ? groundSpeedBoost : 0);
-            // horizontalMovement(body, speed * dt * this.orientation);
             horizontalMovement(body, zoom * dt * this.orientation);
         } else if (this.isGrounded) {
             Body.setVelocity(body, { x: 0, y: 0 });
         }
-
     }
 
     flip() {
@@ -134,37 +133,6 @@ export class Player {
         Body.setAngularVelocity(this.body, 0);
         Body.setInertia(this.body, Infinity);
     }
-
-    initialCollision(pair) {
-        const cases = {
-            'ground': () => {
-                this.isGrounded = true;
-            },
-            'boing': () => {
-                const bounciness = 10;
-                this.isGrounded = false;
-                jump(this.body, bounciness);
-                this.skin = randomBird();
-                this.updateSprite();
-            }
-        };
-        const other = collision.otherBody(pair);
-        cases[other.label]?.call();
-    }
-    finaleCollision(pair) {
-        const cases = {
-            'ground': () => {
-                this.isGrounded = false;
-            },
-            'boing': () => {
-                this.isGrounded = false;
-            }
-        };
-        const other = collision.otherBody(pair);
-        cases[other.label]?.call();
-
-        this.orient();
-    }
 }
 
 export class Game {
@@ -179,72 +147,56 @@ export class Game {
     // Setup the game controller.
     setup() {
         // Sets up some sort of scene
-        this.box = Bodies.rectangle(400, 200, 80, 5);
-        this.ground = Bodies.rectangle(400, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
-        this.ground.label = 'ground';
-        this.box.label = 'boing';
+        const bouncer = Bodies.rectangle(400, 200, 80, 5);
+        const ground = Bodies.rectangle(400, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
+        const terrain = generateTerrain([400, 610], 10);
 
-        const ball = Bodies.circle(550, 200, 30);
-        ball.onCollide(pair => console.log(collision.otherBody(pair)));
+        Body.set(ground, 'label', 'ground');
+        Body.set(bouncer, 'label', 'boing');
 
-        // Adds the bodies into the world
-        // World.add(this.engine.world, [this.box, this.ground]);
-        World.add(this.engine.world, [this.ground, this.box, ball]);
-        
-        this.terrain = generateTerrain([400, 610], 10)
-            .map(platform => {
-                Body.set(platform, 'label', 'ground');
-                const options = {
-                    texture: asset('img/level-objects/dirt-platform.svg'),
-                    xScale: 1/5, // 1514
-                    yScale: 1/4, // 127
-                    visible: true,
-                };
-                [...Object.entries(options)].map(([key,val]) => { platform.render.sprite[key] = val; });
-                return platform;
-            });
-        World.add(this.engine.world, this.terrain);
+        for (const platform of terrain) {
+            Body.set(platform, 'label', 'ground');
+            const options = {
+                texture: asset('img/level-objects/dirt-platform.svg'),
+                xScale: 1 / 5, // 1514
+                yScale: 1 / 4, // 127
+                visible: true,
+            };
+            [...Object.entries(options)].map(([key, val]) => { platform.render.sprite[key] = val; });
+        }
 
-        // Registers the update functions for each update.
-        Events.on(this.engine, 'beforeUpdate', this.preUpdate.bind(this));
-        Events.on(this.runner, 'tick', this.update.bind(this));
+        World.add(this.engine.world, [ground, bouncer]);
+        World.add(this.engine.world, terrain);
+        Events.on(this.runner, 'tick', this.update.bind(this)); // Registers the update functions for each update.
+
+        for (const player of this.players) player.setup();
     }
 
     // Adds a player into the game, as well as the players array.
     addPlayer(player) {
-        // Adds the player's physics body into the world.
-        World.add(this.engine.world, player.body);
+        World.add(this.engine.world, player.body); // Adds the player's physics body into the world.
+        Events.on(this.runner, 'tick', player.update.bind(player)); // Registers the player's functions to be called when an update happens.
 
-        // Registers the player's functions to be called when an update happens.
-        // Events.on(this.engine, 'beforeUpdate', player.updatePhysics.bind(player));
-        Events.on(this.runner, 'tick', player.update.bind(player));
-
-        // Adds the player to the array.
-        this.players.push(player);
-
+        this.players.push(player); // Adds the player to the array.
     }
 
     // Called every time a new frame is rendered.
     update() {
-        // Updates the global time variable.
-        BigBen.deltaTime = this.runner.delta;
+        BigBen.deltaTime = this.runner.delta; // Updates the global time variable.
     }
+    
     sparseUpdate() {
         for (const player of this.players) {
             player.sparseUpdate();
         }
     }
 
-    // Just called before anything else in the game, every frame.
-    preUpdate() {}
-
     // Runs the game. This is not control blocking.
     run() {
-        // Starts Big Ben
-        BigBen.begin();
-        // Starts the Matter.js physics
-        Runner.run(this.runner, this.engine);
-        const sparseTime = 1000/30; // ms
+        BigBen.begin(); // Starts Big Ben
+        Runner.run(this.runner, this.engine); // Starts the Matter.js physics
+
+        const sparseTime = 1000 / 30; // Thirty times a second. 
         this.sparseUpdaterThread = new Thread(this.sparseUpdate.bind(this), sparseTime, true);
     }
 

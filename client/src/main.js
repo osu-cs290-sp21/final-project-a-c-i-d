@@ -1,6 +1,7 @@
 import Thread from 'async-threading';
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
-import { Player, Game, Input } from './game';
+import { Player, Game } from './game';
+import { Input } from './lib/stateControllers';
 import { AssetManager } from './lib/assetManager';
 
 const debug = false;
