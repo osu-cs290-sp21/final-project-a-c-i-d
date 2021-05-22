@@ -88,6 +88,7 @@ export class Player {
                     xScale: 1/3,
                     yScale: 1/3,
                     xOffset: 0.2,
+                    yOffset: 0.06,
                 }
             },
             friction: 0,
@@ -129,7 +130,7 @@ export class Player {
         }
 
         if (Input.leftArrow || Input.rightArrow) {
-            const speed = 100;
+            const speed = 200;
             const groundSpeedBoost = 50;
             const zoom = speed + (this.isGrounded ? groundSpeedBoost : 0);
             // horizontalMovement(body, speed * dt * this.orientation);
