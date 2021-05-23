@@ -2,6 +2,7 @@ import Thread from 'async-threading';
 import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin } from 'matter-js';
 import { choose } from 'matter-js/src/core/Common';
 import { MatterCollisionEvents } from './lib/matter-collision-events';
+import { MatterSparseUpdateEvents } from './lib/matter-sparse-update-events';
 import { collision } from './lib/collisionController';
 import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump, horizontalMovement, varith, setBodyLabel } from './lib/physics';
@@ -10,6 +11,7 @@ import { Input, BigBen } from './lib/stateControllers';
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents);
+useMatterPlugin(MatterSparseUpdateEvents);
 
 // Iain read this
 // https://github.com/liabru/matter-js/wiki/Creating-plugins
@@ -154,6 +156,8 @@ export class Game {
         Body.set(ground, 'label', 'ground');
         Body.set(bouncer, 'label', 'boing');
 
+        const player = this.players[0];
+
         for (const platform of terrain) {
             Body.set(platform, 'label', 'ground');
             const options = {
@@ -163,6 +167,12 @@ export class Game {
                 visible: true,
             };
             [...Object.entries(options)].map(([key, val]) => { platform.render.sprite[key] = val; });
+            platform.collisionFilter.ground = -1;
+            platform.onCollideEnd(() =>  {
+                if (platform.position.y > player.body.position.y) {
+                    platform.collisionFilter.group = 1;
+                }
+            });
         }
 
         World.add(this.engine.world, [ground, bouncer]);
