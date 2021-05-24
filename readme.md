@@ -18,11 +18,13 @@ Dev Mode:
 
 ## Screenshots and Art
 
-*Sprites*
+*Sprites*<br/>
+
 <img src="https://user-images.githubusercontent.com/29801241/119047974-7299ed00-b973-11eb-9fd2-c9d5e619d971.png" width="800">
 <img src="https://user-images.githubusercontent.com/29801241/119047992-77f73780-b973-11eb-8357-6635c0470fcd.png" width="800">
 
-*Levels*
+*Levels*<br/>
+
 <img src="https://user-images.githubusercontent.com/29801241/119048001-7b8abe80-b973-11eb-87d5-ce85db327de7.png" width="800">
 
 ## hess pls help
@@ -33,10 +35,14 @@ poggers = (>>=)
 
 ## Contributors
 
-David Korotky
+**David Korotky**, *Penguin*<br/>
+<img src="https://user-images.githubusercontent.com/29801241/119321019-0c41f280-bc31-11eb-85c9-ad12cce40a11.png" width="300"><br/>
 
-Iain Moncrief
+**Iain Moncrief**, *Shama Thrush*<br/>
+<img src="https://user-images.githubusercontent.com/29801241/119321060-17951e00-bc31-11eb-83f0-ddf1478320e4.png" width="300"><br/>
 
-Cole Theodore
+**Cole Theodore**, *Kakapo*<br/>
+<img src="https://user-images.githubusercontent.com/29801241/119321111-24b20d00-bc31-11eb-8cda-716b0aa12bbd.png" width="300"><br/>
 
-Andrea Tongsak
+**Andrea Tongsak**, *Bluebird*<br/>
+<img src="https://user-images.githubusercontent.com/29801241/119321140-2c71b180-bc31-11eb-9d73-423ce75f9f1d.png" width="300"><br/>
