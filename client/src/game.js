@@ -55,7 +55,7 @@ export class Player {
     }
 
     setup() {
-        const onCollisionBegin = pair => {
+        const onCollisionBegin = (col) => {
             const cases = {
                 'ground': () => { this.isGrounded = true; },
                 'boing': () => {
@@ -66,21 +66,36 @@ export class Player {
                     this.updateSprite();
                 }
             };
-            const other = collision.otherBody(pair);
+            const other = col.other;
             cases[other.label]?.call();
+            console.log('start');
         };
-        const onCollisionEnd = pair => {
+        const onCollisionEnd = (col) => {
             const cases = {
                 'ground': () => { this.isGrounded = false; },
                 'boing': () => { this.isGrounded = false; }
             };
-            const other = collision.otherBody(pair);
+            const other = col.other;
             cases[other.label]?.call();
             this.orient();
+            console.log('end');
+        };
+        const onSparseUpdate = () => {
+            let hasFallen = this.body.position.y > 1000;
+            if (hasFallen) {
+                Body.setPosition(this.body, this.spawn);
+            }
+            this.orient();
+            // console.log('sparse');
         };
 
-        this.body.onCollide(onCollisionBegin);
-        this.body.onCollideEnd(onCollisionEnd);
+        Events.on(this.body, 'onCollide', onCollisionBegin);
+        Events.on(this.body, 'onCollideEnd', onCollisionEnd);
+
+        const sparseTime = 1000/15; // 15 fps
+        this.body.sparseUpdateEvery(sparseTime);
+        Events.on(this.body, 'sparseUpdate', onSparseUpdate);
+        // Events.on(this.body, 'sparseUpdate', this.sparseUpdate.bind(this));
     }
 
     update() {
@@ -128,6 +143,7 @@ export class Player {
             Body.setPosition(this.body, this.spawn);
         }
         this.orient();
+        console.log('called');
     }
 
     orient() {
@@ -205,14 +221,14 @@ export class Game {
     run() {
         BigBen.begin(); // Starts Big Ben
         Runner.run(this.runner, this.engine); // Starts the Matter.js physics
-
+        this.players.map(player => { Events.trigger(player.body, 'awake', {self: player.body}); })
         const sparseTime = 1000 / 30; // Thirty times a second. 
-        this.sparseUpdaterThread = new Thread(this.sparseUpdate.bind(this), sparseTime, true);
+        // this.sparseUpdaterThread = new Thread(this.sparseUpdate.bind(this), sparseTime, true);
     }
 
     // Stops the game.
     stop() {
         Runner.stop(this.runner);
-        this.sparseUpdaterThread.kill();
+        // this.sparseUpdaterThread.kill();
     }
 }

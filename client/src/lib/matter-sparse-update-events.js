@@ -9,9 +9,9 @@ export const MatterSparseUpdateEvents = {
 
         const bodyCreate = matter.Body.create;
         matter.Body.create = function () {
-            const body = bodyCreate.apply(null, arguments);
-            body.onSparseUpdate = function (sparseUpdateCallback, deltaTime) {
-                body._sparseUpdateCallback = sparseUpdateCallback;
+            let body = bodyCreate.apply(null, arguments);
+            body.sparseUpdateEvery = function (deltaTime) {
+                // body._sparseUpdateCallback = sparseUpdateCallback;
                 body._sparseUpdateDeltaTime = deltaTime;
             };
             return body;
@@ -19,22 +19,23 @@ export const MatterSparseUpdateEvents = {
 
         const runnerRun = matter.Runner.run;
         matter.Runner.run = function () {
-            const runner = runnerRun.apply(null, arguments);
+            let runner = runnerRun.apply(null, arguments);
             runner._engine = arguments[1];
             console.log(runner._engine);
             matter.Events.trigger(runner, 'awake', { source: runner, self: runner });
         }
 
         matter.after('Body.create', function () {
-            matter.Events.on(this, 'sparseUpdate', function (body) {
-                body._sparseUpdateCallback();
-            });
+            // matter.Events.on(this, 'sparseUpdate', function (body) {
+            //     body._sparseUpdateCallback();
+            // });
             matter.Events.on(this, 'awake', function (event) {
-                const body = event.self;
-                if (body._sparseUpdateCallback && body._sparseUpdateDeltaTime) {
-                    const caller = () => matter.Events.trigger(body, 'sparseUpdate', body);
-                    body._sparseUpdateThread = new Thread(caller, body._sparseUpdateDeltaTime, false);
-                    body._sparseUpdateThread.start();
+                if (event.self._sparseUpdateDeltaTime > 0 && event.self._sparseUpdateThread == undefined) {
+                    let body = event.self;
+                    // const caller = function () { matter.Events.trigger(body, 'sparseUpdate', body); };
+                    body._sparseUpdateThread = setInterval(function () { matter.Events.trigger(body, 'sparseUpdate', body); }, body._sparseUpdateDeltaTime);
+                    // body._sparseUpdateThread.main();
+                    console.warn('set sparse');
                 }
             });
         });
@@ -54,9 +55,6 @@ export const MatterSparseUpdateEvents = {
             matter.Events.on(this, 'awake', function (event) {
                 matter.Events.trigger(event.self._engine, 'awake', { source: event.self, self: event.self._engine });
             });
-        });
-        matter.after('Runner.run', function () {
-            // matter.Events.trigger(this, 'awake', { source: this, self: this });
         });
     },
 };

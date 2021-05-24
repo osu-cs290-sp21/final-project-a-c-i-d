@@ -4,7 +4,7 @@ import { Player, Game } from './game';
 import { Input } from './lib/stateControllers';
 import { AssetManager } from './lib/assetManager';
 
-const debug = false;
+const debug = true;
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
     // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
@@ -35,10 +35,12 @@ function makeRenderer({ element, engine, follows }) {
 
     // Centers renderer on the player before every update
     const cameraScale = 0.5;
-    Events.on(render, 'beforeRender', () => Render.lookAt(render, follows, {
-        x: document.body.clientWidth * cameraScale,
-        y: document.body.clientHeight * cameraScale
-    }));
+    Events.on(render, 'beforeRender', function (event) {
+        Render.lookAt(event.source, follows, {
+            x: document.body.clientWidth * cameraScale,
+            y: document.body.clientHeight * cameraScale
+        });
+    });
 
     return render;
 }
