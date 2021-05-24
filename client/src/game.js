@@ -2,6 +2,7 @@ import Thread from 'async-threading';
 import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin } from 'matter-js';
 import { choose } from 'matter-js/src/core/Common';
 import { MatterCollisionEvents } from './lib/matter-collision-events';
+import { MatterSparseUpdateEvents } from './lib/matter-sparse-update-events';
 import { collision } from './lib/collisionController';
 import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump, horizontalMovement, varith, setBodyLabel } from './lib/physics';
@@ -10,6 +11,7 @@ import { Input, BigBen } from './lib/stateControllers';
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents);
+useMatterPlugin(MatterSparseUpdateEvents);
 
 // Iain read this
 // https://github.com/liabru/matter-js/wiki/Creating-plugins
@@ -53,32 +55,44 @@ export class Player {
     }
 
     setup() {
-        const onCollisionBegin = pair => {
+        const onCollisionBegin = (col) => {
             const cases = {
                 'ground': () => { this.isGrounded = true; },
                 'boing': () => {
-                    const bounciness = 10;
+                    const bounciness = 16;
                     this.isGrounded = false;
                     jump(this.body, bounciness);
                     this.skin = randomBird();
                     this.updateSprite();
                 }
             };
-            const other = collision.otherBody(pair);
+            const other = col.other;
             cases[other.label]?.call();
         };
-        const onCollisionEnd = pair => {
+        const onCollisionEnd = (col) => {
             const cases = {
                 'ground': () => { this.isGrounded = false; },
                 'boing': () => { this.isGrounded = false; }
             };
-            const other = collision.otherBody(pair);
+            const other = col.other;
             cases[other.label]?.call();
             this.orient();
         };
+        const onSparseUpdate = () => {
+            let hasFallen = this.body.position.y > 1000;
+            if (hasFallen) {
+                Body.setPosition(this.body, this.spawn);
+            }
+            this.orient();
+            // console.log('sparse');
+        };
 
-        this.body.onCollide(onCollisionBegin);
-        this.body.onCollideEnd(onCollisionEnd);
+        Events.on(this.body, 'onCollide', onCollisionBegin);
+        Events.on(this.body, 'onCollideEnd', onCollisionEnd);
+
+        const sparseTime = 1000/15; // 15 fps
+        this.body.sparseUpdateEvery(sparseTime);
+        Events.on(this.body, 'sparseUpdate', onSparseUpdate);
     }
 
     update() {
@@ -120,14 +134,6 @@ export class Player {
 
     updateSprite() { this.body.render.sprite.texture = sprite(this.skin, this.orientation > 0); }
 
-    sparseUpdate() {
-        const hasFallen = this.body.position.y > 1000;
-        if (hasFallen) {
-            Body.setPosition(this.body, this.spawn);
-        }
-        this.orient();
-    }
-
     orient() {
         Body.setAngle(this.body, 0);
         Body.setAngularVelocity(this.body, 0);
@@ -149,24 +155,66 @@ export class Game {
         // Sets up some sort of scene
         const bouncer = Bodies.rectangle(400, 200, 80, 5);
         const ground = Bodies.rectangle(400, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
-        const terrain = generateTerrain([400, 610], 10);
+        const terrain = generateTerrain([400, 610], 10).concat(generateTerrain([500, 410], 10));
 
         Body.set(ground, 'label', 'ground');
         Body.set(bouncer, 'label', 'boing');
 
+        const player = this.players[0];
+
+        const passthrough = body => {
+            body.collisionFilter.group = -1;
+            body.collisionFilter.category = 0;
+        };
+        const pauliExclusion = body => {
+            body.collisionFilter.group = 1;
+            body.collisionFilter.category = 1;
+        }
+        pauliExclusion(player.body);
+
         for (const platform of terrain) {
+            
             Body.set(platform, 'label', 'ground');
-            const options = {
-                texture: asset('img/level-objects/dirt-platform.svg'),
-                xScale: 1 / 5, // 1514
-                yScale: 1 / 4, // 127
-                visible: true,
-            };
-            [...Object.entries(options)].map(([key, val]) => { platform.render.sprite[key] = val; });
+            Body.set(platform, 'hard', false);
+
+            // const options = {
+            //     texture: asset('img/level-objects/dirt-platform.svg'),
+            //     xScale: 1, // 1514
+            //     yScale: 1 / 4, // 127
+            //     visible: true,
+            // };
+            // [...Object.entries(options)].map(([key, val]) => { platform.render.sprite[key] = val; });
+
+            const {x, y} = platform.position;
+            const sensor = Bodies.fromVertices(x, y, platform.vertices, {
+                isSensor: true,
+                isStatic: true,
+                render: {
+                    fillStyle: 'transparent'
+                }
+            });
+
+            Events.on(sensor, 'onCollide', pair => {
+                if (pair.other.label !== 'gamer') return;
+                if (platform.position.y > pair.other.position.y) {
+                    pauliExclusion(platform);
+                    platform.hard = true;
+                } else {
+                    passthrough(platform);
+                    platform.false = true;
+                }
+            });
+
+            passthrough(platform);
+            pauliExclusion(sensor);
+            
+            Composite.add(this.engine.world, sensor);
         }
 
-        World.add(this.engine.world, [ground, bouncer]);
-        World.add(this.engine.world, terrain);
+
+        Composite.add(this.engine.world, [ground, bouncer]);
+        Composite.add(this.engine.world, terrain);
+
         Events.on(this.runner, 'tick', this.update.bind(this)); // Registers the update functions for each update.
 
         for (const player of this.players) player.setup();
@@ -184,25 +232,16 @@ export class Game {
     update() {
         BigBen.deltaTime = this.runner.delta; // Updates the global time variable.
     }
-    
-    sparseUpdate() {
-        for (const player of this.players) {
-            player.sparseUpdate();
-        }
-    }
 
     // Runs the game. This is not control blocking.
     run() {
         BigBen.begin(); // Starts Big Ben
         Runner.run(this.runner, this.engine); // Starts the Matter.js physics
-
-        const sparseTime = 1000 / 30; // Thirty times a second. 
-        this.sparseUpdaterThread = new Thread(this.sparseUpdate.bind(this), sparseTime, true);
+        this.players.map(player => { Events.trigger(player.body, 'awake', {self: player.body}); });
     }
 
     // Stops the game.
     stop() {
         Runner.stop(this.runner);
-        this.sparseUpdaterThread.kill();
     }
 }
