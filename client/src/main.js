@@ -4,7 +4,7 @@ import { Player, Game } from './game';
 import { Input } from './lib/stateControllers';
 import { AssetManager } from './lib/assetManager';
 
-const debug = true;
+const debug = false;
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
     // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
@@ -70,7 +70,8 @@ AssetManager.init() // Loads the assets in that are required for game setup.
         window.capture = () => {
             console.table(Object.entries(player.body));
         }
-
+        document.body.addEventListener('keydown', event => { if (event.code=='KeyC') { gameInstance.stop(); } });
+        // setTimeout( () => gameInstance.stop(), 40000 );
     })
     .then(() => {
         // Connects the Input manager to the DOM, once the game is running.

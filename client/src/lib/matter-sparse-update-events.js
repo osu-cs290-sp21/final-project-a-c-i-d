@@ -21,7 +21,6 @@ export const MatterSparseUpdateEvents = {
         matter.Runner.run = function () {
             let runner = runnerRun.apply(null, arguments);
             runner._engine = arguments[1];
-            console.log(runner._engine);
             matter.Events.trigger(runner, 'awake', { source: runner, self: runner });
         }
 
@@ -35,7 +34,6 @@ export const MatterSparseUpdateEvents = {
                     // const caller = function () { matter.Events.trigger(body, 'sparseUpdate', body); };
                     body._sparseUpdateThread = setInterval(function () { matter.Events.trigger(body, 'sparseUpdate', body); }, body._sparseUpdateDeltaTime);
                     // body._sparseUpdateThread.main();
-                    console.warn('set sparse');
                 }
             });
         });

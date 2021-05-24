@@ -59,7 +59,7 @@ export class Player {
             const cases = {
                 'ground': () => { this.isGrounded = true; },
                 'boing': () => {
-                    const bounciness = 10;
+                    const bounciness = 16;
                     this.isGrounded = false;
                     jump(this.body, bounciness);
                     this.skin = randomBird();
@@ -68,7 +68,6 @@ export class Player {
             };
             const other = col.other;
             cases[other.label]?.call();
-            console.log('start');
         };
         const onCollisionEnd = (col) => {
             const cases = {
@@ -78,7 +77,6 @@ export class Player {
             const other = col.other;
             cases[other.label]?.call();
             this.orient();
-            console.log('end');
         };
         const onSparseUpdate = () => {
             let hasFallen = this.body.position.y > 1000;
@@ -95,7 +93,6 @@ export class Player {
         const sparseTime = 1000/15; // 15 fps
         this.body.sparseUpdateEvery(sparseTime);
         Events.on(this.body, 'sparseUpdate', onSparseUpdate);
-        // Events.on(this.body, 'sparseUpdate', this.sparseUpdate.bind(this));
     }
 
     update() {
@@ -137,15 +134,6 @@ export class Player {
 
     updateSprite() { this.body.render.sprite.texture = sprite(this.skin, this.orientation > 0); }
 
-    sparseUpdate() {
-        const hasFallen = this.body.position.y > 1000;
-        if (hasFallen) {
-            Body.setPosition(this.body, this.spawn);
-        }
-        this.orient();
-        console.log('called');
-    }
-
     orient() {
         Body.setAngle(this.body, 0);
         Body.setAngularVelocity(this.body, 0);
@@ -167,32 +155,66 @@ export class Game {
         // Sets up some sort of scene
         const bouncer = Bodies.rectangle(400, 200, 80, 5);
         const ground = Bodies.rectangle(400, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
-        const terrain = generateTerrain([400, 610], 10);
+        const terrain = generateTerrain([400, 610], 10).concat(generateTerrain([500, 410], 10));
 
         Body.set(ground, 'label', 'ground');
         Body.set(bouncer, 'label', 'boing');
 
         const player = this.players[0];
 
+        const passthrough = body => {
+            body.collisionFilter.group = -1;
+            body.collisionFilter.category = 0;
+        };
+        const pauliExclusion = body => {
+            body.collisionFilter.group = 1;
+            body.collisionFilter.category = 1;
+        }
+        pauliExclusion(player.body);
+
         for (const platform of terrain) {
+            
             Body.set(platform, 'label', 'ground');
-            const options = {
-                texture: asset('img/level-objects/dirt-platform.svg'),
-                xScale: 1 / 5, // 1514
-                yScale: 1 / 4, // 127
-                visible: true,
-            };
-            [...Object.entries(options)].map(([key, val]) => { platform.render.sprite[key] = val; });
-            platform.collisionFilter.ground = -1;
-            platform.onCollideEnd(() =>  {
-                if (platform.position.y > player.body.position.y) {
-                    platform.collisionFilter.group = 1;
+            Body.set(platform, 'hard', false);
+
+            // const options = {
+            //     texture: asset('img/level-objects/dirt-platform.svg'),
+            //     xScale: 1, // 1514
+            //     yScale: 1 / 4, // 127
+            //     visible: true,
+            // };
+            // [...Object.entries(options)].map(([key, val]) => { platform.render.sprite[key] = val; });
+
+            const {x, y} = platform.position;
+            const sensor = Bodies.fromVertices(x, y, platform.vertices, {
+                isSensor: true,
+                isStatic: true,
+                render: {
+                    fillStyle: 'transparent'
                 }
             });
+
+            Events.on(sensor, 'onCollide', pair => {
+                if (pair.other.label !== 'gamer') return;
+                if (platform.position.y > pair.other.position.y) {
+                    pauliExclusion(platform);
+                    platform.hard = true;
+                } else {
+                    passthrough(platform);
+                    platform.false = true;
+                }
+            });
+
+            passthrough(platform);
+            pauliExclusion(sensor);
+            
+            Composite.add(this.engine.world, sensor);
         }
 
-        World.add(this.engine.world, [ground, bouncer]);
-        World.add(this.engine.world, terrain);
+
+        Composite.add(this.engine.world, [ground, bouncer]);
+        Composite.add(this.engine.world, terrain);
+
         Events.on(this.runner, 'tick', this.update.bind(this)); // Registers the update functions for each update.
 
         for (const player of this.players) player.setup();
@@ -210,25 +232,16 @@ export class Game {
     update() {
         BigBen.deltaTime = this.runner.delta; // Updates the global time variable.
     }
-    
-    sparseUpdate() {
-        for (const player of this.players) {
-            player.sparseUpdate();
-        }
-    }
 
     // Runs the game. This is not control blocking.
     run() {
         BigBen.begin(); // Starts Big Ben
         Runner.run(this.runner, this.engine); // Starts the Matter.js physics
-        this.players.map(player => { Events.trigger(player.body, 'awake', {self: player.body}); })
-        const sparseTime = 1000 / 30; // Thirty times a second. 
-        // this.sparseUpdaterThread = new Thread(this.sparseUpdate.bind(this), sparseTime, true);
+        this.players.map(player => { Events.trigger(player.body, 'awake', {self: player.body}); });
     }
 
     // Stops the game.
     stop() {
         Runner.stop(this.runner);
-        // this.sparseUpdaterThread.kill();
     }
 }
