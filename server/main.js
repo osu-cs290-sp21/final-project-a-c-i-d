@@ -1,6 +1,3 @@
-
-const db = require('./db');
-
 /**
  * Server side tasks: 
  * - Leaderboard
@@ -9,13 +6,14 @@ const db = require('./db');
  */
 
 /* Variables and constants */
-var path = require('path');
-var express = require('express');
-var exphbs = require('express-handlebars');
-const MongoClient = require('mongodb').MongoClient;
-var app = express();
+const db = require('./db');
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const exphbs = require('express-handlebars');
+const app = express();
 
-var portnumber = process.env.PORT || 3000;
+var portnumber = process.env.PORT || 9000;
 
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -28,17 +26,29 @@ app.route('/postScore', (req,res) => {
   hashmap[req.params.name] = req.params.score;
 })
 
-async function main() {
-    const database = await MongoClient.connect(url);
+//async function main() {
+
+    app.use(express.static(path.join(__dirname, '/../client/dist')));
+
+    
+
+
+    // GET / - this would normally get the home page
+    app.get('/', (req, res, next) => {
+      res.send("Hello from the express server!")
+    })
+
+    app.get('*', (req, res, next) => {
+      console.log("== 404!!")
+      
+    })
+
 
     // Start the server
-    app.listen(portnumber, function() {
-        console.log("Server running on port " + portnumber)
+    app.listen(portnumber, () => {
+      console.log("== Server running on port " + portnumber)
     })
 
-    // GET / - this would normally get the index.html
-    app.get('/', function(req, res, next) {
+//}
 
-
-    })
-}
+//main();
