@@ -20,8 +20,9 @@ useMatterPlugin(MatterSparseUpdateEvents);
 
 // Some bird functions
 const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
-const birdNames = ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'];
-const birdAssetNames = ['angry-nohat', ...birdNames.map(name => name + '-day')];
+const birdNames = [];   // ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'];
+const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-shamathrush'];
+const birdAssetNames = [...ogBirds, ...birdNames.map(name => name + '-day')];
 const randomBird = () => choose(birdAssetNames);
 
 export class Player {
@@ -166,8 +167,8 @@ export class Game {
     setup() {
         // Sets up some sort of scene
         const bouncer = Bodies.rectangle(0,0, 80, 5);
-        const ground = Bodies.rectangle(400, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
-        const terrain = generateTerrain([400, 610], 10).concat(generateTerrain([500, 410], 10)).concat(generateTerrain([300, 210], 10));
+        const ground = Bodies.rectangle(550, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
+        const terrain = generateTerrain([400, 610], 30).concat(generateTerrain([500, 410], 30)).concat(generateTerrain([600, 210], 10)).concat(generateTerrain([700, 10], 30));
 
         Body.set(ground, 'label', 'ground');
         Body.set(bouncer, 'label', 'boing');
@@ -185,7 +186,20 @@ export class Game {
         pauliExclusion(player.body);
 
         for (const platform of terrain) {
-
+            if (Math.random() < 0.2) {
+                const {x, y} = platform.position;
+                const sensor = Bodies.fromVertices(x, y, platform.vertices, {
+                    isSensor: true,
+                    isStatic: true,
+                    render: {
+                        fillStyle: 'transparent'
+                    }
+                });
+                Body.set(sensor, 'label', 'boing');
+                Composite.add(this.engine.world, sensor);
+                passthrough(platform);
+                continue;
+            }
             Body.set(platform, 'label', 'ground');
             // Body.set(platform, 'hard', false);
 
@@ -214,7 +228,6 @@ export class Game {
                     }
                 }
             });
-
             Events.on(sensor, 'onCollide', pair => {
                 if (pair.other.label === 'gamer') {
                     if (platform.position.y > pair.other.position.y) {
@@ -264,6 +277,71 @@ export class Game {
     }
 
     // Stops the game.
+    stop() {
+        Runner.stop(this.runner);
+    }
+}
+
+export class ShowoffScene {
+    constructor() {
+
+        this.engine = Engine.create();
+        this.runner = Runner.create();
+
+        const birds = ogBirds.map(name => {
+
+            const options = {
+                render: {
+                    sprite: {
+                        texture: sprite(name, true),
+                        xScale: 1 / 3,
+                        yScale: 1 / 3,
+                        xOffset: 0.2,
+                        yOffset: 0.06,
+                    }
+                },
+                friction: 0,
+                frictionStatic: 0,
+                frictionAir: 0,
+                inertia: Infinity,
+                angle: 0,
+                mass: 1,
+            };
+
+            const idx = ogBirds.indexOf(name);
+            const bird = Bodies.rectangle(idx * 200, 0, 50, 50, options);
+
+            const onCollide = col => {
+                if (col.other.label === 'ground') {
+                    const hops = 10 * Math.random() + 1;
+                    jump(bird, hops);
+                }
+            }
+
+            Events.on(bird, 'onCollide', onCollide);
+            bird.sparseUpdateEvery(1000/4);
+            Events.on(bird, 'sparseUpdate', () => {
+                if (Math.random() < 0.2) {
+                    bird.render.sprite.texture = sprite(name, !bird.orientation);
+                    bird.orientation = !bird.orientation;
+                }
+            })
+            return bird;
+        });
+        Composite.add(this.engine.world, birds);
+        this.birds = birds;
+
+        const ground = Bodies.rectangle(200, 300, 1000, 10, { isStatic: true, friction: 0, frictionStatic: 0 });
+        Body.set(ground, 'label', 'ground');
+        Composite.add(this.engine.world, ground);
+        this.ground = ground;
+
+    }
+
+    run() {
+        Runner.run(this.runner, this.engine);
+        for (const bird of this.birds) Events.trigger(bird, 'awake', { self: bird });
+    }
     stop() {
         Runner.stop(this.runner);
     }
