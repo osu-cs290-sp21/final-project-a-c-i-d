@@ -50,7 +50,7 @@ export class Player {
         };
 
         // Makes an octagon for the player collider.
-        this.body = Bodies.polygon(x, y, 8, 50, options);
+        this.body = Bodies.polygon(x, y, 4, 50, options);
         this.body.label = 'gamer';
     }
 
@@ -153,9 +153,9 @@ export class Game {
     // Setup the game controller.
     setup() {
         // Sets up some sort of scene
-        const bouncer = Bodies.rectangle(400, 200, 80, 5);
+        const bouncer = Bodies.rectangle(0,0, 80, 5);
         const ground = Bodies.rectangle(400, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
-        const terrain = generateTerrain([400, 610], 10).concat(generateTerrain([500, 410], 10));
+        const terrain = generateTerrain([400, 610], 10).concat(generateTerrain([500, 410], 10)).concat(generateTerrain([300, 210], 10));
 
         Body.set(ground, 'label', 'ground');
         Body.set(bouncer, 'label', 'boing');
@@ -173,7 +173,7 @@ export class Game {
         pauliExclusion(player.body);
 
         for (const platform of terrain) {
-            
+
             Body.set(platform, 'label', 'ground');
             Body.set(platform, 'hard', false);
 
@@ -195,24 +195,25 @@ export class Game {
             });
 
             Events.on(sensor, 'onCollide', pair => {
-                if (pair.other.label !== 'gamer') return;
-                if (platform.position.y > pair.other.position.y) {
-                    pauliExclusion(platform);
-                    platform.hard = true;
-                } else {
-                    passthrough(platform);
-                    platform.false = true;
+                if (pair.other.label === 'gamer') {
+                    if (platform.position.y > pair.other.position.y) {
+                        pauliExclusion(platform);
+                        platform.hard = true;
+                    } else {
+                        passthrough(platform);
+                        platform.false = true;
+                    }
                 }
             });
 
-            passthrough(platform);
+            pauliExclusion(platform);
             pauliExclusion(sensor);
             
             Composite.add(this.engine.world, sensor);
         }
+        Body.set(bouncer, 'isStatic',true);
 
-
-        Composite.add(this.engine.world, [ground, bouncer]);
+        Composite.add(this.engine.world, bouncer);
         Composite.add(this.engine.world, terrain);
 
         Events.on(this.runner, 'tick', this.update.bind(this)); // Registers the update functions for each update.
@@ -222,7 +223,7 @@ export class Game {
 
     // Adds a player into the game, as well as the players array.
     addPlayer(player) {
-        World.add(this.engine.world, player.body); // Adds the player's physics body into the world.
+        Composite.add(this.engine.world, player.body); // Adds the player's physics body into the world.
         Events.on(this.runner, 'tick', player.update.bind(player)); // Registers the player's functions to be called when an update happens.
 
         this.players.push(player); // Adds the player to the array.
