@@ -1,8 +1,9 @@
 import Thread from 'async-threading';
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
-import { Player, Game } from './game';
+import { Player, Game, ShowoffScene } from './game';
 import { Input } from './lib/stateControllers';
 import { AssetManager } from './lib/assetManager';
+import { initializeUI } from './ui/webpage';
 
 const debug = false;
 function makeRenderer({ element, engine, follows }) {
@@ -34,13 +35,16 @@ function makeRenderer({ element, engine, follows }) {
     });
 
     // Centers renderer on the player before every update
-    const cameraScale = 0.5;
-    Events.on(render, 'beforeRender', function (event) {
-        Render.lookAt(event.source, follows, {
-            x: document.body.clientWidth * cameraScale,
-            y: document.body.clientHeight * cameraScale
+    if (follows) {
+        const cameraScale = 0.5;
+        Events.on(render, 'beforeRender', function (event) {
+            Render.lookAt(event.source, follows, {
+                x: document.body.clientWidth * cameraScale,
+                y: document.body.clientHeight * cameraScale
+            });
         });
-    });
+    }
+
 
     return render;
 }
@@ -51,33 +55,61 @@ AssetManager.register(['angry-nohat', 'sprites/svg/angry-nohat.svg']);
 
 AssetManager.init() // Loads the assets in that are required for game setup.
     .then(() => {
-        // Creates a new game and player
-        const gameInstance = new Game();
-        const player = new Player({ x: 200, y: 100 });
-        gameInstance.addPlayer(player);
+        const showOGBirdies = true;
 
-        // Makes the renderer
-        const render = makeRenderer({
-            element: document.body,
-            engine: gameInstance.engine,
-            follows: player.body.position
-        });
+        if (showOGBirdies) {
+            // Creates a new game and player
+            const soScene = new ShowoffScene();
+            // Makes the renderer
+            const render = makeRenderer({
+                element: document.body,
+                engine: soScene.engine,
+                // follows: soScene.ground.position,
+            });
+            Render.run(render); // Starts the renderer.
+            document.body.addEventListener('keydown', event => { if (event.code=='KeyC') { gameInstance.stop(); } });
+            soScene.run();
+            const cameraScale = 0.5;
+            Render.lookAt(render, {x: 250, y: 100}, {
+                x: document.body.clientWidth * cameraScale,
+                y: document.body.clientHeight * cameraScale
+            })
+        } else {
+            // Creates a new game and player
+            const gameInstance = new Game();
+            const player = new Player({ x: 300, y: 100 });
+            gameInstance.addPlayer(player);
 
-        gameInstance.setup();
-        gameInstance.run(); // Starts the game and physics. 
-        Render.run(render); // Starts the renderer.
+            // Makes the renderer
+            const render = makeRenderer({
+                element: document.body,
+                engine: gameInstance.engine,
+                follows: player.body.position
+            });
 
-        window.capture = () => {
-            console.table(Object.entries(player.body));
+            gameInstance.setup();
+            gameInstance.run(); // Starts the game and physics. 
+            Render.run(render); // Starts the renderer.
+
+            window.capture = () => {
+                console.table(Object.entries(player.body));
+            }
+            document.body.addEventListener('keydown', event => { if (event.code=='KeyC') { gameInstance.stop(); } });
+            const altitudeHeader = document.getElementById('altitude');
+            Events.on(player.body, 'sparseUpdate', () => {
+                altitudeHeader.innerText = `Altitude: ${-Math.floor(player.body.position.y * 0.01)} bds (birdies)`;
+            });
         }
-        document.body.addEventListener('keydown', event => { if (event.code=='KeyC') { gameInstance.stop(); } });
-        // setTimeout( () => gameInstance.stop(), 40000 );
     })
     .then(() => {
         // Connects the Input manager to the DOM, once the game is running.
         document.body.addEventListener('keydown', event => { Input.keys[event.keyCode] = true; });
         document.body.addEventListener('keyup', event => { Input.keys[event.keyCode] = false; });
-    });
+    })
+    .then(() => setTimeout(() => {
+        
+        const audio = document.getElementById('player');
+        // audio.play();
+    }, 3000));
 
-
-
+initializeUI()

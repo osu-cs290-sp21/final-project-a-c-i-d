@@ -20,26 +20,13 @@ export const MatterCollisionEvents = {
                 event.pairs.map(function (pair) {
                     matter.Events.trigger(pair.bodyA, 'onCollide', { pair: pair, other: pair.bodyB });
                     matter.Events.trigger(pair.bodyB, 'onCollide', { pair: pair, other: pair.bodyA });
-                    // pair.bodyA._mceOC && pair.bodyA._mceOC(pair);
-                    // pair.bodyB._mceOC && pair.bodyB._mceOC(pair);
                 });
             });
-
-            // matter.Events.on(this, 'collisionActive', function (event) {
-            //     event.pairs.map(function (pair) {
-            //         matter.Events.trigger(pair.bodyA, 'onCollideActive', { pair: pair, other: pair.bodyB });
-            //         matter.Events.trigger(pair.bodyB, 'onCollideActive', { pair: pair, other: pair.bodyA });
-            //         // pair.bodyA._mceOCA && pair.bodyA._mceOCA(pair);
-            //         // pair.bodyB._mceOCA && pair.bodyB._mceOCA(pair);
-            //     });
-            // });
 
             matter.Events.on(this, 'collisionEnd', function (event) {
                 event.pairs.map(function (pair) {
                     matter.Events.trigger(pair.bodyA, 'onCollideEnd', { pair: pair, other: pair.bodyB });
                     matter.Events.trigger(pair.bodyB, 'onCollideEnd', { pair: pair, other: pair.bodyA });
-                    // pair.bodyA._mceOCE && pair.bodyA._mceOCE(pair);
-                    // pair.bodyB._mceOCE && pair.bodyB._mceOCE(pair);
                 });
             });
         });
