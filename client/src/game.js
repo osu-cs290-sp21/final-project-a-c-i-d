@@ -9,6 +9,8 @@ import { Axes, jump, horizontalMovement, varith, setBodyLabel } from './lib/phys
 import { webSource, asset } from './lib/assetManager';
 import { Input, BigBen } from './lib/stateControllers';
 
+const chungus = 'https://purepng.com/public/uploads/large/big-chungus-jkg.png';
+
 // Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents);
 useMatterPlugin(MatterSparseUpdateEvents);
@@ -50,7 +52,9 @@ export class Player {
         };
 
         // Makes an octagon for the player collider.
-        this.body = Bodies.polygon(x, y, 4, 50, options);
+        // this.body = Bodies.trapezoid(x, y, 100, 100, 1/3, options);
+        this.body = Bodies.polygon(x, y, 16, 50, options);
+
         this.body.label = 'gamer';
     }
 
@@ -132,7 +136,9 @@ export class Player {
         this.body.render.sprite.xOffset += 0.2 * this.orientation;
     }
 
-    updateSprite() { this.body.render.sprite.texture = sprite(this.skin, this.orientation > 0); }
+    updateSprite() {
+        this.body.render.sprite.texture = Math.random() * 100 < 2 ? chungus : sprite(this.skin, this.orientation > 0);
+    }
 
     orient() {
         Body.setAngle(this.body, 0);
@@ -201,12 +207,12 @@ export class Game {
                         platform.hard = true;
                     } else {
                         passthrough(platform);
-                        platform.false = true;
+                        platform.hard = false;
                     }
                 }
             });
 
-            pauliExclusion(platform);
+            passthrough(platform);
             pauliExclusion(sensor);
             
             Composite.add(this.engine.world, sensor);
