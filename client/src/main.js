@@ -4,7 +4,7 @@ import { Player, Game } from './game';
 import { Input } from './lib/stateControllers';
 import { AssetManager } from './lib/assetManager';
 
-const debug = false;
+const debug = true;
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
     // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
@@ -53,7 +53,7 @@ AssetManager.init() // Loads the assets in that are required for game setup.
     .then(() => {
         // Creates a new game and player
         const gameInstance = new Game();
-        const player = new Player({ x: 200, y: 100 });
+        const player = new Player({ x: 300, y: 100 });
         gameInstance.addPlayer(player);
 
         // Makes the renderer
