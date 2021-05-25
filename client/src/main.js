@@ -78,6 +78,11 @@ AssetManager.init() // Loads the assets in that are required for game setup.
         // Connects the Input manager to the DOM, once the game is running.
         document.body.addEventListener('keydown', event => { Input.keys[event.keyCode] = true; });
         document.body.addEventListener('keyup', event => { Input.keys[event.keyCode] = false; });
-    });
+    })
+    .then(() => setTimeout(() => {
+        
+        const audio = document.getElementById('player');
+        audio.play();
+    }, 3000));
 
 initializeUI()

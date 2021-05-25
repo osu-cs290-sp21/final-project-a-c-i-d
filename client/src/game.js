@@ -85,7 +85,7 @@ export class Player {
         const onSparseUpdate = () => {
             let hasFallen = this.body.position.y > 1000;
             if (hasFallen) {
-                Body.setPosition(this.body, this.spawn);
+                this.died();
             }
             this.orient();
             // console.log('sparse');
@@ -126,6 +126,12 @@ export class Player {
         } else if (this.isGrounded) {
             Body.setVelocity(body, { x: 0, y: 0 });
         }
+    }
+
+    died() {
+        Body.setPosition(this.body, this.spawn);
+        this.skin = randomBird();
+        this.updateSprite();
     }
 
     flip() {
@@ -181,7 +187,7 @@ export class Game {
         for (const platform of terrain) {
 
             Body.set(platform, 'label', 'ground');
-            Body.set(platform, 'hard', false);
+            // Body.set(platform, 'hard', false);
 
             // const options = {
             //     texture: asset('img/level-objects/dirt-platform.svg'),
@@ -200,6 +206,15 @@ export class Game {
                 }
             });
 
+            Events.on(sensor, 'onCollideEnd', pair => {
+                if (pair.other.label === 'gamer') {
+                    if (platform.position.y > pair.other.position.y && platform.hard) {
+                        passthrough(platform);
+                        platform.hard = false;
+                    }
+                }
+            });
+
             Events.on(sensor, 'onCollide', pair => {
                 if (pair.other.label === 'gamer') {
                     if (platform.position.y > pair.other.position.y) {
@@ -213,6 +228,7 @@ export class Game {
             });
 
             passthrough(platform);
+            platform.hard = false;
             pauliExclusion(sensor);
             
             Composite.add(this.engine.world, sensor);
