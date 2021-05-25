@@ -8,6 +8,7 @@ const platformOptions = {
     // isStatic: true,
     friction: 0,
     frictionStatic: 0,
+    restitution: 1
 };
 
 export const makePlatform = ([x, y], [width, height]) => Bodies.rectangle(x, y, width, height, platformOptions);
