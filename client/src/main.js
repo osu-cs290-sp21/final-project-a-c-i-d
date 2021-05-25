@@ -35,10 +35,12 @@ function makeRenderer({ element, engine, follows }) {
 
     // Centers renderer on the player before every update
     const cameraScale = 0.5;
-    Events.on(render, 'beforeRender', () => Render.lookAt(render, follows, {
-        x: document.body.clientWidth * cameraScale,
-        y: document.body.clientHeight * cameraScale
-    }));
+    Events.on(render, 'beforeRender', function (event) {
+        Render.lookAt(event.source, follows, {
+            x: document.body.clientWidth * cameraScale,
+            y: document.body.clientHeight * cameraScale
+        });
+    });
 
     return render;
 }
@@ -68,7 +70,8 @@ AssetManager.init() // Loads the assets in that are required for game setup.
         window.capture = () => {
             console.table(Object.entries(player.body));
         }
-
+        document.body.addEventListener('keydown', event => { if (event.code=='KeyC') { gameInstance.stop(); } });
+        // setTimeout( () => gameInstance.stop(), 40000 );
     })
     .then(() => {
         // Connects the Input manager to the DOM, once the game is running.
