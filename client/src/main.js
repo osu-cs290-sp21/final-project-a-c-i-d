@@ -2,6 +2,7 @@ import Thread from 'async-threading';
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
 import { Player, Game, Input } from './game';
 import { AssetManager } from './lib/assetManager';
+import { initializeUI } from './ui/webpage';
 
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
@@ -59,5 +60,4 @@ AssetManager.init() // Loads the assets in that are required for game setup.
         document.body.addEventListener('keyup', event => { Input.keys[event.keyCode] = false; });
     });
 
-
-
+initializeUI()
