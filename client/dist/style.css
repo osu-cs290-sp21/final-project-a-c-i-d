@@ -15,7 +15,7 @@ html {
 body {
     font-family: 'Roboto Mono', Roboto, sans-serif;
     margin: 0;
-    background: url('http://localhost:9000/img/backdrop.png') no-repeat center fixed;
+    background: url('http://localhost:9000/img/backdrop-day.png') no-repeat center fixed;
     background-size: cover;
 }
 
