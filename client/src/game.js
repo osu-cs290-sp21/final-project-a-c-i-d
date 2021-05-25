@@ -85,7 +85,7 @@ export class Player {
         const onSparseUpdate = () => {
             let hasFallen = this.body.position.y > 1000;
             if (hasFallen) {
-                Body.setPosition(this.body, this.spawn);
+                this.died();
             }
             this.orient();
             // console.log('sparse');
@@ -126,6 +126,12 @@ export class Player {
         } else if (this.isGrounded) {
             Body.setVelocity(body, { x: 0, y: 0 });
         }
+    }
+
+    died() {
+        Body.setPosition(this.body, this.spawn);
+        this.skin = randomBird();
+        this.updateSprite();
     }
 
     flip() {
