@@ -3,6 +3,7 @@ import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'mat
 import { Player, Game } from './game';
 import { Input } from './lib/stateControllers';
 import { AssetManager } from './lib/assetManager';
+import { initializeUI } from './ui/webpage';
 
 const debug = false;
 function makeRenderer({ element, engine, follows }) {
@@ -79,5 +80,4 @@ AssetManager.init() // Loads the assets in that are required for game setup.
         document.body.addEventListener('keyup', event => { Input.keys[event.keyCode] = false; });
     });
 
-
-
+initializeUI()
