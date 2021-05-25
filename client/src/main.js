@@ -4,7 +4,7 @@ import { Player, Game } from './game';
 import { Input } from './lib/stateControllers';
 import { AssetManager } from './lib/assetManager';
 
-const debug = true;
+const debug = false;
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
     // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66

@@ -207,12 +207,12 @@ export class Game {
                         platform.hard = true;
                     } else {
                         passthrough(platform);
-                        platform.hard = true;
+                        platform.hard = false;
                     }
                 }
             });
 
-            pauliExclusion(platform);
+            passthrough(platform);
             pauliExclusion(sensor);
             
             Composite.add(this.engine.world, sensor);
