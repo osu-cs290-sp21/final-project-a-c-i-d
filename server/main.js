@@ -13,7 +13,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const app = express();
 
-var portnumber = process.env.PORT || 9000;
+var portnumber = process.env.PORT || 8000;
 
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -30,19 +30,12 @@ app.route('/postScore', (req,res) => {
 
     app.use(express.static(path.join(__dirname, '/../client/dist')));
 
-    
 
 
     // GET / - this would normally get the home page
     app.get('/', (req, res, next) => {
       res.send("Hello from the express server!")
     })
-
-    app.get('*', (req, res, next) => {
-      console.log("== 404!!")
-      
-    })
-
 
     // Start the server
     app.listen(portnumber, () => {
