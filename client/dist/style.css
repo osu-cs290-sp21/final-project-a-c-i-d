@@ -30,6 +30,13 @@ body {
     justify-content: center;
 }
 
+#altitude {
+    position: fixed;
+    top: 20px;
+    left: 24px;
+    font-size: 32px;
+}
+
 /*===== Leaderboard button =====*/
 #leaderboard-button {
     height: 1.7em;
