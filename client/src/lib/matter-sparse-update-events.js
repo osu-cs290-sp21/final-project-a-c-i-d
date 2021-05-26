@@ -14,14 +14,25 @@ export const MatterSparseUpdateEvents = {
                 // body._sparseUpdateCallback = sparseUpdateCallback;
                 body._sparseUpdateDeltaTime = deltaTime;
             };
+            body.states = {};
             return body;
         }
 
         const runnerRun = matter.Runner.run;
         matter.Runner.run = function () {
-            let runner = runnerRun.apply(null, arguments);
-            runner._engine = arguments[1];
+            let [runner, engine] = arguments;
+            let ret = runnerRun.apply(null, arguments);
+            runner._engine = engine;
             matter.Events.trigger(runner, 'awake', { source: runner, self: runner });
+            return runner;
+        }
+
+        const runnerStop = matter.Runner.stop;
+        matter.Runner.stop = function () {
+            let [runner] = arguments;
+            let ret = runnerStop.apply(null, arguments);
+            runner._engine.world.bodies.map(body => clearInterval(body._sparseUpdateThread));
+            return ret;
         }
 
         matter.after('Body.create', function () {
