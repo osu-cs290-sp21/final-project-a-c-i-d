@@ -130,15 +130,18 @@ export class Player {
         }
 
         if (!this.isGrounded && Input.downArrow) {
-            this.rotationSpeed = 10;
+            this.rotationSpeed = 12;
         }
         if (this.rotationSpeed > 0) {
+
             const rotation = this.rotationSpeed * dt;
             this.rotationIntegral += rotation;
             Body.setAngle(body, rotation + body.angle);
+
             if (this.rotationIntegral >= 2 * Math.PI) {
                 this.rotationSpeed = 0;
                 this.rotationIntegral = 0;
+                Body.setAngle(this.body, 0);
             }
         }
     }
@@ -165,11 +168,6 @@ export class Player {
         if (this.rotationSpeed <= 0) { Body.setAngle(this.body, 0); }
         Body.setAngularVelocity(this.body, 0);
         Body.setInertia(this.body, Infinity);
-    }
-
-    stopFlip() {
-        this.rotationSpeed = 0;
-        Body.setAngle(this.body, 0);
     }
 }
 
