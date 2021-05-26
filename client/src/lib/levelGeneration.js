@@ -1,9 +1,6 @@
 import { Bodies, Body } from 'matter-js';
 
-const platforms = ['dirt-platform'];
-
 const platformOptions = {
-    // isStatic: true,
     friction: 0,
     frictionStatic: 0,
     restitution: 1
