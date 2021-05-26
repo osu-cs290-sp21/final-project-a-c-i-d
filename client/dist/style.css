@@ -30,6 +30,13 @@ body {
     justify-content: center;
 }
 
+#altitude {
+    position: fixed;
+    top: 20px;
+    left: 24px;
+    font-size: 32px;
+}
+
 /*===== Leaderboard button =====*/
 #leaderboard-button {
     height: 1.7em;
@@ -105,10 +112,6 @@ body {
     margin: 0;
     font-size: 28px;
 }
-.modal-body {
-    padding: 20px;
-    font-size: 24px;
-  }
 
 /*===== Leaderboard Modal =====*/
 #leaderboard-modal {
@@ -116,6 +119,15 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+.leaderboard-modal-body {
+    padding: 20px;
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+}
+.high-score {
+    display: flex;
 }
 .leaderboard-dialog {
     width: auto;
@@ -137,12 +149,22 @@ body {
     cursor: pointer;
 }
 
+.player-bird {  /* Not yet used -- to-be the selector for the bird svg*/
+    width: 16px;
+}
+
+
+
 /*===== Rules Modal =====*/
 #rules-modal {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+.rules-modal-body {
+    padding: 20px;
+    font-size: 24px;
 }
 .rules-dialog {
     width: auto;
@@ -162,4 +184,8 @@ body {
     background: none;
     padding: 0;
     cursor: pointer;
+}
+
+#altitude {
+    position: fixed;
 }

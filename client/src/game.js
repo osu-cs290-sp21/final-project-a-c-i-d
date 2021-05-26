@@ -33,7 +33,8 @@ export class Player {
         this.skin = randomBird();
         this.isGrounded = false;
         this.orientation = 1; // Bird looking right
-
+        this.rotationSpeed = 0;
+        this.rotationIntegral = 0;
         const options = {
             render: {
                 sprite: {
@@ -108,7 +109,7 @@ export class Player {
         if (Input.upArrow) {
             if (this.isGrounded) {
                 this.isGrounded = false;
-                const hops = 12;
+                const hops = 20;
                 jump(body, hops);
             }
         }
@@ -126,6 +127,22 @@ export class Player {
             horizontalMovement(body, zoom * dt * this.orientation);
         } else if (this.isGrounded) {
             Body.setVelocity(body, { x: 0, y: 0 });
+        }
+
+        if (!this.isGrounded && Input.downArrow) {
+            this.rotationSpeed = 12;
+        }
+        if (this.rotationSpeed > 0) {
+
+            const rotation = this.rotationSpeed * dt;
+            this.rotationIntegral += rotation;
+            Body.setAngle(body, rotation + body.angle);
+
+            if (this.rotationIntegral >= 2 * Math.PI) {
+                this.rotationSpeed = 0;
+                this.rotationIntegral = 0;
+                Body.setAngle(this.body, 0);
+            }
         }
     }
 
@@ -148,7 +165,7 @@ export class Player {
     }
 
     orient() {
-        Body.setAngle(this.body, 0);
+        if (this.rotationSpeed <= 0) { Body.setAngle(this.body, 0); }
         Body.setAngularVelocity(this.body, 0);
         Body.setInertia(this.body, Infinity);
     }
