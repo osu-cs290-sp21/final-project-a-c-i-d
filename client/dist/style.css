@@ -163,3 +163,7 @@ body {
     padding: 0;
     cursor: pointer;
 }
+
+#altitude {
+    position: fixed;
+}

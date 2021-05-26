@@ -55,7 +55,7 @@ AssetManager.register(['angry-nohat', 'sprites/svg/angry-nohat.svg']);
 
 AssetManager.init() // Loads the assets in that are required for game setup.
     .then(() => {
-        const showOGBirdies = true;
+        const showOGBirdies = false;
 
         if (showOGBirdies) {
             // Creates a new game and player
@@ -67,13 +67,14 @@ AssetManager.init() // Loads the assets in that are required for game setup.
                 // follows: soScene.ground.position,
             });
             Render.run(render); // Starts the renderer.
-            document.body.addEventListener('keydown', event => { if (event.code=='KeyC') { gameInstance.stop(); } });
+            document.body.addEventListener('keydown', event => { if (event.code=='KeyC') { soScene.stop(); } });
             soScene.run();
             const cameraScale = 0.5;
             Render.lookAt(render, {x: 250, y: 100}, {
                 x: document.body.clientWidth * cameraScale,
                 y: document.body.clientHeight * cameraScale
-            })
+            });
+
         } else {
             // Creates a new game and player
             const gameInstance = new Game();
