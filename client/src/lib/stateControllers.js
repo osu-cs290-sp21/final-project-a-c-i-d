@@ -19,10 +19,10 @@ export const BigBen = {
 // Global manager for the key presses.
 export const Input = {
     keys: [...new Array(256)].map(e => false), // Array of 256 false values.
-    get upArrow() { return Input.keys[87]; },
+    get upArrow()    { return Input.keys[82]; },
     get rightArrow() { return Input.keys[68]; },
-    get leftArrow() { return Input.keys[65]; },
-    get downArrow() { return Input.keys[83]; }
+    get leftArrow()  { return Input.keys[65]; },
+    get downArrow()  { return Input.keys[83]; }
 };
 
 export const GameStats = {
