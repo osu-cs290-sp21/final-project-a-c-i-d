@@ -1,6 +1,7 @@
 import Thread from 'async-threading';
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
-import { Player, Game, ShowoffScene } from './game';
+import { Game, ShowoffScene } from './game';
+import { Player } from './player';
 import { Input } from './lib/stateControllers';
 import { AssetManager } from './lib/assetManager';
 import { initializeUI } from './ui/webpage';
