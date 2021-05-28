@@ -15,6 +15,3 @@ export const awakenRickAstley = () => {
     const audio = document.getElementById('finale-audio');
     [video, audio].map(e => e.play());
 }
-
-
-console.log('my commit')
