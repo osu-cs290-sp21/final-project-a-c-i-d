@@ -11,6 +11,17 @@
         <h2 id="altitude">Altitude: </h2>
 
         <div class="button-container">
+            
+            <div id="birds-button" class="user-button">
+                <div class="birds-content">
+                    <div class="birds-icon">
+                        <img class="button-bird" src="./img/sprites/svg/andy-bluebird-flip.svg"></svg>
+                    </div>
+                    <div class="birds-text">
+                        <p>Birds</p>
+                    </div>
+                </div>  
+            </div>
 
             <div id="leaderboard-button" class="user-button">
                 <div class="leaderboard-content">
@@ -33,10 +44,63 @@
                     </div>
                 </div>  
             </div>
+
+            
         </div>
   
         <!-- Modals for Leaderboard and Rules buttons -->
         <div id="modal-backdrop" class="hidden"></div>
+
+        <div id="birds-modal" > <!-- Birds modal -->
+            <div class="birds-dialog">
+                <div class="modal-header">
+                    <h3>Pick your bird!</h3>
+                    <button type="button" class="birds-close-button">&times;</button>
+                </div>
+                <div class="birds-modal-body">
+                    <div class="bird-select">
+                        <img class="player-bird" src="img/sprites/svg/andy-bluebird-flip.svg">
+                        <p class="bird-name">Andy</p>
+                    </div>
+                    <div class="bird-select">
+                        <img class="player-bird" src="img/sprites/svg/cole-kakapo-flip.svg">
+                        <p class="bird-name">Cole</p>
+                    </div>
+                    <div class="bird-select">
+                        <img class="player-bird" src="img/sprites/svg/david-penguin-flip.svg">
+                        <p class="bird-name">David</p>
+                    </div>
+                    <div class="bird-select">
+                        <img class="player-bird" src="img/sprites/svg/harry-day-flip.svg">
+                        <p class="bird-name">Harry</p>
+                    </div>
+                    <div class="bird-select">
+                        <img class="player-bird" src="img/sprites/svg/iain-shamathrush-flip.svg">
+                        <p class="bird-name">Iain</p>
+                    </div>
+                    <div class="bird-select">
+                        <img class="player-bird" src="img/sprites/svg/olive-day-flip.svg">
+                        <p class="bird-name">Olive</p>
+                    </div>
+                    <div class="bird-select">
+                        <img class="player-bird" src="img/sprites/svg/perry-day-flip.svg">
+                        <p class="bird-name">Perry</p>
+                    </div>
+                    <div class="bird-select">
+                        <img class="player-bird" src="img/sprites/svg/sahana-day-flip.svg">
+                        <p class="bird-name">Sahana</p>
+                    </div>
+                    <div class="bird-select">
+                        <img class="player-bird" src="img/sprites/svg/todd-day-flip.svg">
+                        <p class="bird-name">Todd</p>
+                    </div>
+
+                </div>
+            </div>
+            
+
+        </div>
+
         <div id="leaderboard-modal" class="hidden"> <!-- Leaderboard modal-->
             <div class="leaderboard-dialog">
 
@@ -44,26 +108,26 @@
                     <h3>Leaderboard</h3>
                     <button type="button" class="lb-close-button">&times;</button>
                 </div>
-
-                <div class="leaderboard-modal-body">
-                    <div class="high-score">
-                        <img class="player-bird" src="./img/sprites/svg/cole-kakapo-flip.svg"></svg>
+                        <!-- Leaderboard positions -->
+                <div class="leaderboard-modal-body">        
+                    <div class="high-score">            <!-- Leaderboard position 1 -->
+                        <img class="player-bird" src="./img/sprites/svg/cole-kakapo-flip.svg"></img>
                         <p class="player-score">&ensp;298312 -&ensp;</p>
                         <p class="player-name">Sirocco the Kakapo</p>
                         
                     </div>
-                    <div class="high-score">
-                        <img class="player-bird" src="./img/sprites/svg/bella-day-flip.svg"></svg>
+                    <div class="high-score">            <!-- Leaderboard position 2 -->
+                        <img class="player-bird" src="./img/sprites/svg/bella-day-flip.svg"></img>
                         <p class="player-score">&ensp;6123 -&ensp;</p>
                         <p class="player-name">Parakeet207</p>
                     </div>
-                    <div class="high-score">
-                        <img class="player-bird" src="./img/sprites/svg/perry-day-flip.svg"></svg>                        
+                    <div class="high-score">            <!-- Leaderboard position 3 -->
+                        <img class="player-bird" src="./img/sprites/svg/perry-day-flip.svg"></img>                        
                         <p class="player-score">&ensp;3214 -&ensp;</p>
                         <p class="player-name">PogBird711</p>
                     </div>
-                    <div class="high-score">
-                        <img class="player-bird" src="./img/sprites/svg/sahana-day-flip.svg"></svg>                        
+                    <div class="high-score">            <!-- Leaderboard position 4 -->
+                        <img class="player-bird" src="./img/sprites/svg/sahana-day-flip.svg"></img>                        
                         <p class="player-score">&ensp;12 -&ensp;</p>
                         <p class="player-name">BrownChicken04</p>
                     </div>
@@ -89,7 +153,7 @@
         </div>
 
         <script src="./build.js" defer></script>
-        <!-- kdkdkd-->
+        
         <audio id="player" style="display: none;">
             <source src="./sounds/birdiehypemusic.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
