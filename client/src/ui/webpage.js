@@ -35,21 +35,21 @@ export function initializeUI() {
 
     //===== Closing Modals =====
     const closeLeaderboard = document.getElementsByClassName('lb-close-button')[0]
-    const leaderboardClose = () => {
+    const leaderboardClose = () => {        //Close leaderboard
         modalFade.classList.add('hidden')
         leaderboardModal.classList.add('hidden')
     } 
     closeLeaderboard.addEventListener('click', leaderboardClose)
 
     const closeRules = document.getElementsByClassName('rules-close-button')[0]
-    const rulesClose = () => {
+    const rulesClose = () => {              //Close rules
         modalFade.classList.add('hidden')
         rulesModal.classList.add('hidden')
     } 
     closeRules.addEventListener('click', rulesClose)
 
     const closeBirds = document.getElementsByClassName('birds-close-button')[0]
-    const birdsClose = () => {
+    const birdsClose = () => {              //Close birds
         modalFade.classList.add('hidden')
         birdModal.classList.add('hidden')
     }

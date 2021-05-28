@@ -165,7 +165,6 @@ body {
     padding: 0;
     cursor: pointer;
 }
-
 .bird-select:hover {
     background-color: rgba(0, 0, 0, 0.20);
 }
@@ -185,8 +184,43 @@ body {
     width: 72px;
     cursor: pointer;
 }
-.button-bird {  /*Bird on the button*/
+.show-bird {  /*Bird on the button*/
     width: 64px;
+}
+/*Input portion*/
+.name-input-element {
+    padding: 6px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+#player-name-input {
+    padding: 4px;
+    margin: 0px 24px;
+    background-color: lightgray;
+    border-radius: 4px;
+    font-size: 24px;
+}
+/* .confirm {
+    max-width: 25%;
+    margin: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+} */
+#ok-button {
+    position: relative;
+    top: 20px;
+    transform: scale(3);
+    border: none;
+    background: none;
+    
+}
+.ok-text {
+    font-size: 32px;
 }
 
 /*===== Leaderboard Modal =====*/
