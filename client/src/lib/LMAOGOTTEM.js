@@ -13,5 +13,5 @@ export const awakenRickAstley = () => {
     video.classList.remove('gone');
     video.classList.add('fill-display');
     const audio = document.getElementById('finale-audio');
-    [video, audio].map(e => e.play());
+   // [video, audio].map(e => e.play());
 }
