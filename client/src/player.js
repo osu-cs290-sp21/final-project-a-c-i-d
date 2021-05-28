@@ -6,6 +6,7 @@ import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump, horizontalMovement } from './lib/physics';
 import { webSource, asset } from './lib/assetManager';
 import { Input, BigBen } from './lib/stateControllers';
+import * as _ from 'lodash';
 
 const chungus = 'https://purepng.com/public/uploads/large/big-chungus-jkg.png';
 
@@ -22,6 +23,11 @@ const birdNames = [];   // ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'
 const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-shamathrush'];
 const birdAssetNames = [...ogBirds, ...birdNames.map(name => name + '-day')];
 const randomBird = () => choose(birdAssetNames);
+
+export function newPlayer() {
+    const p = add(copy(bluePrint), jumpComponent());
+}
+
 
 export class Player {
 
@@ -109,7 +115,7 @@ export class Player {
                 this.isGrounded = false;
                 const hops = 20;
                 jump(body, hops);
-                if (Math.random() < 0.2) {
+                if (Math.random() > 0.2) {
                     this.rotationSpeed = 20;
                 }
             }

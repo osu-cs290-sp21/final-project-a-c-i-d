@@ -56,7 +56,7 @@ AssetManager.register(['angry-nohat', 'sprites/svg/angry-nohat.svg']);
 
 AssetManager.init() // Loads the assets in that are required for game setup.
     .then(() => {
-        const showOGBirdies = false;
+        const showOGBirdies = true;
 
         if (showOGBirdies) {
             // Creates a new game and player
@@ -88,6 +88,8 @@ AssetManager.init() // Loads the assets in that are required for game setup.
                 engine: gameInstance.engine,
                 follows: player.body.position
             });
+
+            window.myVar = undefined;
 
             gameInstance.setup();
             gameInstance.run(); // Starts the game and physics. 
