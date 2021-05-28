@@ -144,7 +144,7 @@ body {
     font-size: 24px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-around;
 }
 .birds-dialog {
     width: auto;
@@ -166,10 +166,16 @@ body {
     cursor: pointer;
 }
 
+.bird-select:hover {
+    background-color: rgba(0, 0, 0, 0.20);
+}
 .bird-select {
+    width: 100px;
+    height: 100px;
     text-align: center;
-    margin: 0px 20px;
+    padding: 10px;
     cursor: pointer;
+    border-radius: 50%;
 }
 .bird-name {        
     position: relative;
