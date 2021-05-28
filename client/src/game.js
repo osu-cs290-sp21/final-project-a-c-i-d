@@ -4,10 +4,17 @@ import { MatterSparseUpdateEvents } from './lib/matter-sparse-update-events';
 import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump } from './lib/physics';
 import { Input, BigBen } from './lib/stateControllers';
+import { webSource, asset } from './lib/assetManager';
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents);
 useMatterPlugin(MatterSparseUpdateEvents);
+
+const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
+const birdNames = [];   // ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'];
+const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-shamathrush'];
+const birdAssetNames = [...ogBirds, ...birdNames.map(name => name + '-day')];
+const randomBird = () => choose(birdAssetNames);
 
 export class Game {
 
@@ -201,3 +208,46 @@ export class ShowoffScene {
         Runner.stop(this.runner);
     }
 }
+
+// import game from './game';
+
+// function main() {
+//     const sc = new SceneController();
+
+//     add('game', {
+//         initScene: game.setup,
+//         startScene: game.start,
+//         updateScene: game.update
+//     });
+// }
+
+
+// David and Iain's meeting. here you go
+
+// export class StateController {
+//     constructor(table) {
+//         this.table = table;
+//     }
+//     canTransitionTo(requestedState) {
+//         // 
+
+//     }
+//     transition(newState) {
+
+//     }
+// }
+
+// export function transition(currentState, next) {
+
+// }
+
+// class SceneController {
+//     constructor() {
+//         this.transitionTable = [
+            
+//         ]
+//     }
+
+//     add(sceneName, { initScene, startScene, updateScene, stopScene })
+// }
+
