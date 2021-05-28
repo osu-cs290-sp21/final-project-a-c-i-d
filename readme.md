@@ -23,9 +23,7 @@ Dev Mode:
 <img src="https://user-images.githubusercontent.com/29801241/119047974-7299ed00-b973-11eb-9fd2-c9d5e619d971.png" width="800">
 <img src="https://user-images.githubusercontent.com/29801241/119047992-77f73780-b973-11eb-8357-6635c0470fcd.png" width="800">
 
-*Levels*<br/>
-
-<img src="https://user-images.githubusercontent.com/29801241/119048001-7b8abe80-b973-11eb-87d5-ce85db327de7.png" width="800">
+*Screenshots*<br/>
 
 ## hess pls help
 ```haskell
