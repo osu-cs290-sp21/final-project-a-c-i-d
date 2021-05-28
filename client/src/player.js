@@ -7,6 +7,7 @@ import { Axes, jump, horizontalMovement } from './lib/physics';
 import { webSource, asset } from './lib/assetManager';
 import { Input, BigBen } from './lib/stateControllers';
 import * as _ from 'lodash';
+import { awakenRickAstley } from './lib/LMAOGOTTEM';
 
 const chungus = 'https://purepng.com/public/uploads/large/big-chungus-jkg.png';
 
@@ -20,7 +21,7 @@ useMatterPlugin(MatterSparseUpdateEvents);
 // Some bird functions
 const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
 const birdNames = [];   // ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'];
-const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-shamathrush'];
+const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-shamathrush', 'monad'];
 const birdAssetNames = [...ogBirds, ...birdNames.map(name => name + '-day')];
 const randomBird = () => choose(birdAssetNames);
 
@@ -157,6 +158,7 @@ export class Player {
         Body.setPosition(this.body, this.spawn);
         this.skin = randomBird();
         this.updateSprite();
+        awakenRickAstley();
     }
 
     flip() {

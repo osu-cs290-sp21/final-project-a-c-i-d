@@ -12,7 +12,7 @@ useMatterPlugin(MatterSparseUpdateEvents);
 
 const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
 const birdNames = [];   // ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'];
-const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-shamathrush'];
+const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-shamathrush', 'monad'];
 const birdAssetNames = [...ogBirds, ...birdNames.map(name => name + '-day')];
 const randomBird = () => choose(birdAssetNames);
 
