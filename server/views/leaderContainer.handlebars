@@ -1,0 +1,14 @@
+<main class="leader-container">
+
+    {{#unless single}}
+        {{#each leaderArray}}
+            {{> leaderTemplate}}
+        {{/each}}
+
+        </main>
+
+    {{else}}
+        {{> leaderTemplate leaderArray}}
+        </main>
+
+    {{/unless}}
