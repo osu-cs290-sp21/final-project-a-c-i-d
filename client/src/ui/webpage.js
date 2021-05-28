@@ -3,42 +3,56 @@ export function initializeUI() {
     //===== Leaderboard and Rules =====
     //Modals
     const modalFade = document.getElementById('modal-backdrop')
-    const lbModal = document.getElementById('leaderboard-modal')
-    const rModal = document.getElementById('rules-modal')
+    const leaderboardModal = document.getElementById('leaderboard-modal')
+    const rulesModal = document.getElementById('rules-modal')
+    const birdModal = document.getElementById('birds-modal')
     //Buttons
-    const lbButton = document.getElementById('leaderboard-button')
-    const rButton = document.getElementById('rules-button')
-    console.log(modalFade, lbModal, rModal, lbButton, rButton)
+    const leaderboardButton = document.getElementById('leaderboard-button')
+    const rulesButton = document.getElementById('rules-button')
+    const birdButton = document.getElementById('birds-button')
+    
 
     //===== Opening Modals =====
     const showLeaderboard = () => { //Leaderboard modal
-        console.log("== showing leaderboard")
+        // console.log("== showing leaderboard")
         modalFade.classList.remove('hidden')
-        lbModal.classList.remove('hidden')
+        leaderboardModal.classList.remove('hidden')
     } 
-    lbButton.addEventListener('click', showLeaderboard)
+    leaderboardButton.addEventListener('click', showLeaderboard)
 
-    const showRules = () => { //Rules modal
-        console.log("== showing rules")
+    const showRules = () => {       //Rules modal
+        // console.log("== showing rules")
         modalFade.classList.remove('hidden')
-        rModal.classList.remove('hidden')
+        rulesModal.classList.remove('hidden')
     } 
-    rButton.addEventListener('click', showRules)
+    rulesButton.addEventListener('click', showRules)
+
+    const showBirds = () => {       //Birds modal
+        modalFade.classList.remove('hidden')
+        birdModal.classList.remove('hidden')
+    }
+    birdButton.addEventListener('click', showBirds)
 
     //===== Closing Modals =====
     const closeLeaderboard = document.getElementsByClassName('lb-close-button')[0]
     const leaderboardClose = () => {
         modalFade.classList.add('hidden')
-        lbModal.classList.add('hidden')
+        leaderboardModal.classList.add('hidden')
     } 
     closeLeaderboard.addEventListener('click', leaderboardClose)
 
     const closeRules = document.getElementsByClassName('rules-close-button')[0]
     const rulesClose = () => {
         modalFade.classList.add('hidden')
-        rModal.classList.add('hidden')
+        rulesModal.classList.add('hidden')
     } 
     closeRules.addEventListener('click', rulesClose)
-    
+
+    const closeBirds = document.getElementsByClassName('birds-close-button')[0]
+    const birdsClose = () => {
+        modalFade.classList.add('hidden')
+        birdModal.classList.add('hidden')
+    }
+    closeBirds.addEventListener('click', birdsClose)
 }
 
