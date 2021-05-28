@@ -28,12 +28,21 @@ app.route("/leaderboard", (req, res) => {
 
 // Use handlebars to serve leaderboard
 
-// Add avatar choice update
-
 // GET / - this would normally get the home page
 app.get("/", (req, res, next) => {
   res.send("Hello from the express server!");
 });
+
+/* Serve the index.html from handlebar layout */
+app.get('/', function(req, res, next) {
+  res.status(200).render('leaderContainer', {single: false, leaderArray: leaderboardData})
+});
+
+app.get('/index.html', function(req, res, next) {
+  res.status(200).render('leaderContainer', {single: false, leaderArray: leaderboardData})
+});
+
+// Serve the path to only the player's score
 
 // Start the server
 app.listen(portnumber, () => {
