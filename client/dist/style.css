@@ -150,7 +150,7 @@ body {
 }
 
 .player-bird {  /* Not yet used -- to-be the selector for the bird svg*/
-    width: 16px;
+    width: 64px;
 }
 
 
@@ -188,4 +188,14 @@ body {
 
 #altitude {
     position: fixed;
+}
+
+.gone {
+    display: none;
+}
+
+.fill-display {
+    width: 100%;
+    height: 100%;
+    margin: 0;
 }

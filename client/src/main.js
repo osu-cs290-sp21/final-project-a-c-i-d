@@ -1,6 +1,7 @@
 import Thread from 'async-threading';
 import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
-import { Player, Game, ShowoffScene } from './game';
+import { Game, ShowoffScene } from './game';
+import { Player } from './player';
 import { Input } from './lib/stateControllers';
 import { AssetManager } from './lib/assetManager';
 import { initializeUI } from './ui/webpage';
@@ -87,6 +88,8 @@ AssetManager.init() // Loads the assets in that are required for game setup.
                 engine: gameInstance.engine,
                 follows: player.body.position
             });
+
+            window.myVar = undefined;
 
             gameInstance.setup();
             gameInstance.run(); // Starts the game and physics. 

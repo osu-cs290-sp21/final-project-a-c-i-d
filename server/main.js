@@ -44,7 +44,6 @@ app.get('/index.html', function(req, res, next) {
 
 // Serve the path to only the player's score
 
-
 // Start the server
 app.listen(portnumber, () => {
   console.log("== Server running on port " + portnumber);
