@@ -24,6 +24,8 @@ Dev Mode:
 <img src="https://user-images.githubusercontent.com/29801241/119047992-77f73780-b973-11eb-8357-6635c0470fcd.png" width="800">
 
 *Screenshots*<br/>
+<img src="https://user-images.githubusercontent.com/29801241/120048083-0b131b80-bfcb-11eb-9928-4bd8cd5af2f1.png" width="800">
+
 
 ## hess pls help
 ```haskell
