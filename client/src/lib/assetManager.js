@@ -1,4 +1,4 @@
-import * as iainsDivineSVGLibrary from './svg'
+// import * as iainsDivineSVGLibrary from './svg'
 
 export const webSource = 'http://localhost:9000';
 
@@ -19,16 +19,16 @@ export const AssetManager = {
         const queue = this.queue;
         const threads = [];
         for (const [name, url] of queue) {
-            const thread = iainsDivineSVGLibrary.loadVertexFromSVG(url)
-                .then(vertices => this.store.set(name, vertices))
-                .then(() => queue.splice(queue.indexOf([name, url]), 1))
-                .catch(error => console.error('Error loading', name, 'form', url, error));
-            threads.push(thread);
+            // const thread = iainsDivineSVGLibrary.loadVertexFromSVG(url)
+            //     .then(vertices => this.store.set(name, vertices))
+            //     .then(() => queue.splice(queue.indexOf([name, url]), 1))
+            //     .catch(error => console.error('Error loading', name, 'form', url, error));
+            // threads.push(thread);
         }
         const successfullyLoaded = await Promise.all(threads);
         const unsuccessfullyLoaded = this.queue;
 
-        if (unsuccessfullyLoaded.length) throw unsuccessfullyLoaded;
+        // if (unsuccessfullyLoaded.length) throw unsuccessfullyLoaded;
         this.initialized = true;
         return successfullyLoaded;
     }
