@@ -56,7 +56,7 @@ AssetManager.register(['angry-nohat', 'sprites/svg/angry-nohat.svg']);
 
 AssetManager.init() // Loads the assets in that are required for game setup.
     .then(() => {
-        const showOGBirdies = true;
+        const showOGBirdies = false;
 
         if (showOGBirdies) {
             // Creates a new game and player
