@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap');
+
+html {
+    width: 100%;
+    height: 100%;
+    background: #FF7777;
+    -webkit-font-smoothing: antialiased;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.85em;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto Mono', Roboto, sans-serif;
+    margin: 0;
+    background: url('img/backdrop-day.png') no-repeat center fixed;
+    background-size: cover;
+}
+
+.button-container {
+    bottom: 0;
+    overflow: hidden;
+    position: fixed;
+    bottom: 24;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#altitude {
+    position: fixed;
+    top: 20px;
+    left: 24px;
+    font-size: 32px;
+}
+
+/*===== Leaderboard button =====*/
+#leaderboard-button {
+    height: 1.7em;
+    font-size: 32px;
+    cursor: pointer;
+    background-color: aqua;
+    border: none;
+    padding: 4px;
+    margin: 6px;
+    border-radius: 32px;
+}
+.leaderboard-content {
+    display: flex;
+}
+.leaderboard-text {
+    position: relative;
+    font-size: 24px;
+    bottom: 19px;
+    padding: 6px;
+}
+.trophy-icon {
+    position: relative;
+    top: 10px;
+    transform: scale(0.9);
+}
+
+
+/*===== Rules button =====*/
+#rules-button {
+    height: 1.7em;
+    font-size: 32px;
+    cursor: pointer;
+    background-color: goldenrod;
+    border: none;
+    padding: 4px;
+    margin: 6px;
+    border-radius: 32px;
+}
+.rules-content {
+    display: flex;
+}
+.rules-text {
+    position: relative;
+    font-size: 24px;
+    bottom: 19px;
+    padding: 6px;
+}
+.rules-icon {
+    position: relative;
+    top: 11px;
+}
+
+/*===== Bird button =====*/
+#birds-button {
+    height: 1.7em;
+    font-size: 32px;
+    cursor: pointer;
+    background-color: green;
+    border: none;
+    padding: 4px;
+    margin: 6px;
+    border-radius: 32px;
+}
+.birds-content {
+    display: flex;
+}
+.birds-text {
+    position: relative;
+    font-size: 24px;
+    bottom: 19px;
+    padding: 6px;
+}
+
+/*===== MODALS =====*/
+.hidden {
+    display: none;
+    background-color: transparent;
+    transition: none;
+}
+#modal-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.50);
+}
+.modal-header {
+    position: relative;
+    padding: 10px 20px;
+    text-align: center;
+}
+.modal-header h3 {
+    margin: 0;
+    font-size: 28px;
+}
+
+/*===== Birds modal =====*/
+#birds-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.birds-modal-body {
+    padding: 20px;
+    font-size: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.birds-dialog {
+    width: auto;
+    max-width: 400px;
+    min-width: 350px;
+    min-height: 300px;
+    margin: 40px auto;
+    background-color: rgb(16, 143, 22);
+    border-radius: 15px;
+}
+.birds-close-button {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 48px;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+.bird-select:hover {
+    background-color: rgba(0, 0, 0, 0.20);
+}
+.bird-select {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.bird-name {        
+    position: relative;
+    bottom: 20px;
+}
+.player-bird {  /* Birds in the modal */
+    width: 72px;
+    cursor: pointer;
+}
+.show-bird {  /*Bird on the button*/
+    width: 64px;
+}
+
+/*---Input portion---*/
+.name-input-element {
+    position: relative;
+    bottom: 40px;
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+}
+::placeholder {
+    font-family: 'Roboto Mono', Roboto, sans-serif;
+}
+#player-name-input {
+    padding: 4px;
+    margin: 4px 24px;
+    background-color: lightgray;
+    border-radius: 4px;
+    border: none;
+    font-size: 24px;
+    outline: none;
+}
+#play-button {
+    position: absolute;
+    left: 35%;
+    bottom: 9%;
+    width: 30%;
+    height: 40px;
+    border-radius: 32px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    background-color: rgb(255, 36, 36);
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.75);
+}
+#play-button:hover {
+    transform: scale(1.2);
+}
+.play-text {
+    position: relative;
+    bottom: 35px;
+    font-size: 32px;
+    font-family: 'Roboto Mono', Roboto, sans-serif;
+}
+
+/*===== Leaderboard Modal =====*/
+#leaderboard-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: 2s linear all;
+
+}
+.leaderboard-modal-body {
+    padding: 20px;
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+}
+.high-score {
+    display: flex;
+}
+.leaderboard-dialog {
+    width: auto;
+    max-width: 600px;
+    min-width: 350px;
+    min-height: 300px;
+    margin: 40px auto;
+    background-color: rgba(9, 184, 228, 1);
+    border-radius: 15px;
+}
+.lb-close-button {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 32px;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+
+
+
+/*===== Rules Modal =====*/
+#rules-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: 2s linear all;
+}
+.rules-modal-body {
+    padding: 20px;
+    font-size: 24px;
+}
+.rules-dialog {
+    width: auto;
+    max-width: 600px;
+    min-width: 350px;
+    min-height: 300px;
+    margin: 40px auto;
+    background-color: goldenrod;
+    border-radius: 15px;
+    transition: 2s linear all;
+}
+.rules-close-button {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 32px;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+#altitude {
+    position: fixed;
+}
+
+.gone {
+    display: none;
+}
+
+.fill-display {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
