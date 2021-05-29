@@ -4,12 +4,12 @@ let databaseFile = null;
 
 function load(path) {
     databaseFile = path;
-    const data = fs.readFileSync(path, 'utf8');
-    return JSON.parse(data);
+    const dataFile = fs.readFileSync(path, 'utf8');
+    return JSON.parse(dataFile);
 }
 
 function save(data) {
-    const data = JSON.stringify(data);
+    const dataSave = JSON.stringify(data);
     if (!databaseFile) throw 'No database file has been loaded!';
     fs.writeFileSync(databaseFile, data);
 }
