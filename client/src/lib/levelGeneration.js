@@ -14,3 +14,4 @@ export const generateTerrain = ([startX, startY], amount) => range(0,800 * amoun
         .map(x => [x, Math.sin(x * 20) * 150 ]) // (x,f(x))
         .map(([x,y]) => makePlatform([startX - y, startY - x], [200 * Math.random(Math.random(50)) + 50,20]))
         .map(platform => [platform, Body.setStatic(platform, true)].shift())
+        

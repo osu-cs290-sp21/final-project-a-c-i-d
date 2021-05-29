@@ -8,6 +8,7 @@ import { Input, BigBen } from './lib/stateControllers';
 import * as _ from 'lodash';
 import { awakenRickAstley } from './lib/LMAOGOTTEM';
 import { sprite, randomBird } from './lib/sprites';
+import {makeBlock} from './lib/levelObjects';
 const chungus = 'https://purepng.com/public/uploads/large/big-chungus-jkg.png';
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
