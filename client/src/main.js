@@ -5,7 +5,7 @@ import { Player } from './player';
 import { Input } from './lib/stateControllers';
 import { initializeUI } from './ui/webpage';
 
-const debug = false;
+const debug = true;
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
     // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
@@ -52,7 +52,7 @@ function makeRenderer({ element, engine, follows }) {
 
 
 async function main() {
-    const showOGBirdies = false;
+    const showOGBirdies = true;
 
     if (showOGBirdies) {
         // Creates a new game and player
@@ -84,8 +84,6 @@ async function main() {
             engine: gameInstance.engine,
             follows: player.body.position
         });
-
-        window.myVar = undefined;
 
         gameInstance.setup();
         gameInstance.run(); // Starts the game and physics. 

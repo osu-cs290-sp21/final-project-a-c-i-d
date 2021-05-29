@@ -101,7 +101,7 @@ export class Player {
         const body = this.body;
 
         // Jump
-        if (Input.upArrow) {
+        if (Input.upArrow | Input.spaceBar) {
             if (this.isGrounded) {
                 this.isGrounded = false;
                 const hops = 20;
