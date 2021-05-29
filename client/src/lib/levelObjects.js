@@ -2,32 +2,43 @@ import { Bodies, Body, Composite, Events, Vector } from 'matter-js';
 
 const dist = (v1, v2) => Vector.magnitude(Vector.sub(v1, v2));
 const remove = (array, value) => array.splice(array.indexOf(value),1);
+let player = null;
+export const setPlayer = p => { player = p; }
 
-function makeBlock(watches, maxDistance) {
-    const block = Bodies.rectangle(10,10,10,10);
+const platformOptions = {
+    friction: 0,
+    frictionStatic: 0,
+    restitution: 1,
+    isStatic: true
+};
+
+
+export function makeBlock(watches, maxDistance, where) {
+    const block = Bodies.rectangle(...where,platformOptions);
+    block.positionHistory = [];
     block.sparseUpdateEvery(1000/3);
     Events.on(block, 'sparseUpdate', body => {
         if (dist(body.position,watches) > maxDistance) {
-
-            if (body.positionHistory.length < 1) {
-                const getPos = (pos => pos < maxDistance ? pos : getPos(getNextBlockPosition()));
-                const position = getPos();
-
-                body.positionHistory.push(body.position);
-                Body.setPosition(body, position);
-                return;
-            }
-
+            let newPosition = undefined;
             for (const position of body.positionHistory) {
-                if (diff(position, watches) < maxDistance) {
+                if (dist(position, watches) < maxDistance) {
                     remove(body.positionHistory, position);
-                    body.positionHistory.push(body.position);
-                    Body.setPosition(body, position);
+                    newPosition = position;
                     break;
                 }
             }
+            if (!newPosition) {
+                do {
+                    newPosition = getNextBlockPosition();
+                    console.log('max',maxDistance,'generated',newPosition);
+                } while (dist(newPosition,watches) > maxDistance);
+            }
+            body.positionHistory.push(body.position);
+            Body.setPosition(body, newPosition);
+            Events.trigger(body, 'movedTo', newPosition);
         }
     });
+    return block;
 }
 // const getPos = (pos => pos < maxDistance ? pos : getPos(getNextBlockPosition()));
 // const makeBlock = (watches,maxDistance) => (block => 
@@ -56,5 +67,6 @@ function makeBlock(watches, maxDistance) {
 
 
 export function getNextBlockPosition() {
-
+    // return Vector.add(player.position, Vector.mult({x: 1, y: -1},50));
+    return Vector.add(player.position, Vector.mult(Vector.normalise(player.velocity),50));
 }

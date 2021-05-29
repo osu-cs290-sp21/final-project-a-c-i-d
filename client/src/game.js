@@ -1,10 +1,11 @@
-import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin } from 'matter-js';
+import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin, Vector } from 'matter-js';
 import { MatterCollisionEvents } from './lib/matterjs-plugins/matter-collision-events';
 import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-update-events';
 import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump } from './lib/physics';
 import { Input, BigBen } from './lib/stateControllers';
 import { ogBirds, sprite } from './lib/sprites';
+import { makeBlock, setPlayer } from './lib/levelObjects';
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents);
@@ -21,15 +22,19 @@ export class Game {
 
     // Setup the game controller.
     setup() {
+        const player = this.players[0];
+
         // Sets up some sort of scene
         const bouncer = Bodies.rectangle(0,0, 80, 5);
         const ground = Bodies.rectangle(550, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
-        const terrain = generateTerrain([400, 610], 30).concat(generateTerrain([500, 410], 30)).concat(generateTerrain([600, 210], 10)).concat(generateTerrain([700, 10], 30));
+        const terrain_ = generateTerrain([400, 610], 30).concat(generateTerrain([500, 410], 30)).concat(generateTerrain([600, 210], 10)).concat(generateTerrain([700, 10], 30));
+        setPlayer(player.body);
+        const p = Vector.add(Vector.mult(Axes.y,100), player.body.position);
+        const terrain = [makeBlock(player.body.position, 400, [...Object.values(p),90,10]),...terrain_];
 
         Body.set(ground, 'label', 'ground');
         Body.set(bouncer, 'label', 'boing');
 
-        const player = this.players[0];
 
         const passthrough = body => {
             body.collisionFilter.group = -1;
@@ -42,7 +47,7 @@ export class Game {
         pauliExclusion(player.body);
 
         for (const platform of terrain) {
-            if (Math.random() < 0.2) {
+            if (Math.random() < 0.2 && terrain.indexOf(platform) != 0) {
                 const {x, y} = platform.position;
                 const sensor = Bodies.fromVertices(x, y, platform.vertices, {
                     isSensor: true,
@@ -95,6 +100,8 @@ export class Game {
                     }
                 }
             });
+            
+            Events.on(platform, 'movedTo', position => Body.setPosition(sensor, position));
 
             passthrough(platform);
             platform.hard = false;
