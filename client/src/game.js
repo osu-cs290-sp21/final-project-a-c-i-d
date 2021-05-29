@@ -1,20 +1,14 @@
 import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin } from 'matter-js';
-import { MatterCollisionEvents } from './lib/matter-collision-events';
-import { MatterSparseUpdateEvents } from './lib/matter-sparse-update-events';
+import { MatterCollisionEvents } from './lib/matterjs-plugins/matter-collision-events';
+import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-update-events';
 import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump } from './lib/physics';
 import { Input, BigBen } from './lib/stateControllers';
-import { webSource, asset } from './lib/assetManager';
+import { ogBirds, sprite } from './lib/sprites';
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents);
 useMatterPlugin(MatterSparseUpdateEvents);
-
-const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
-const birdNames = [];   // ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'];
-const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-shamathrush', 'monad'];
-const birdAssetNames = [...ogBirds, ...birdNames.map(name => name + '-day')];
-const randomBird = () => choose(birdAssetNames);
 
 export class Game {
 
