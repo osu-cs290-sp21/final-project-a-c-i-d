@@ -15,7 +15,7 @@ html {
 body {
     font-family: 'Roboto Mono', Roboto, sans-serif;
     margin: 0;
-    background: url('http://localhost:9000/img/backdrop-day.png') no-repeat center fixed;
+    background: url('img/backdrop-day.png') no-repeat center fixed;
     background-size: cover;
 }
 
@@ -113,6 +113,8 @@ body {
 /*===== MODALS =====*/
 .hidden {
     display: none;
+    background-color: transparent;
+    transition: none;
 }
 #modal-backdrop {
     position: fixed;
@@ -238,6 +240,8 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: 2s linear all;
+
 }
 .leaderboard-modal-body {
     padding: 20px;
@@ -277,6 +281,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: 2s linear all;
 }
 .rules-modal-body {
     padding: 20px;
@@ -290,6 +295,7 @@ body {
     margin: 40px auto;
     background-color: goldenrod;
     border-radius: 15px;
+    transition: 2s linear all;
 }
 .rules-close-button {
     position: absolute;
@@ -304,4 +310,14 @@ body {
 
 #altitude {
     position: fixed;
+}
+
+.gone {
+    display: none;
+}
+
+.fill-display {
+    width: 100%;
+    height: 100%;
+    margin: 0;
 }

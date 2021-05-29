@@ -1,13 +1,13 @@
 import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin } from 'matter-js';
 import { choose } from 'matter-js/src/core/Common';
-import { MatterCollisionEvents } from './lib/matter-collision-events';
-import { MatterSparseUpdateEvents } from './lib/matter-sparse-update-events';
+import { MatterCollisionEvents } from './lib/matterjs-plugins/matter-collision-events';
+import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-update-events';
 import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump, horizontalMovement } from './lib/physics';
-import { webSource, asset } from './lib/assetManager';
 import { Input, BigBen } from './lib/stateControllers';
 import * as _ from 'lodash';
-
+import { awakenRickAstley } from './lib/LMAOGOTTEM';
+import { sprite, randomBird } from './lib/sprites';
 const chungus = 'https://purepng.com/public/uploads/large/big-chungus-jkg.png';
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
@@ -16,13 +16,6 @@ useMatterPlugin(MatterSparseUpdateEvents);
 
 // Iain read this
 // https://github.com/liabru/matter-js/wiki/Creating-plugins
-
-// Some bird functions
-const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
-const birdNames = [];   // ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'];
-const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-shamathrush'];
-const birdAssetNames = [...ogBirds, ...birdNames.map(name => name + '-day')];
-const randomBird = () => choose(birdAssetNames);
 
 export function newPlayer() {
     const p = add(copy(bluePrint), jumpComponent());
@@ -72,8 +65,6 @@ export class Player {
                     const bounciness = 16;
                     this.isGrounded = false;
                     jump(this.body, bounciness);
-                    this.skin = randomBird();
-                    this.updateSprite();
                 }
             };
             const other = col.other;
@@ -136,11 +127,7 @@ export class Player {
             Body.setVelocity(body, { x: 0, y: 0 });
         }
 
-        // if (!this.isGrounded && Input.downArrow) {
-        //     this.rotationSpeed = 12;
-        // }
         if (this.rotationSpeed > 0) {
-
             const rotation = this.rotationSpeed * dt;
             this.rotationIntegral += rotation;
             Body.setAngle(body, rotation + body.angle);
@@ -157,6 +144,7 @@ export class Player {
         Body.setPosition(this.body, this.spawn);
         this.skin = randomBird();
         this.updateSprite();
+        awakenRickAstley();
     }
 
     flip() {

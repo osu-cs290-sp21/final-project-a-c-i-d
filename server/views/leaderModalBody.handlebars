@@ -1,0 +1,14 @@
+<main class="leaderboard-modal-body">
+
+    {{#unless single}}
+        {{#each leaderArray}}
+            {{> leaderTemplate}}
+        {{/each}}
+
+        </main>
+
+    {{else}}
+        {{> leaderTemplate leaderArray}}
+        </main>
+
+    {{/unless}}
