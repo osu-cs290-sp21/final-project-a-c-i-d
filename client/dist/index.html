@@ -1,188 +1,24 @@
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-    <meta charset="utf-8">
     <title>Foo Flight</title>
-    <link rel="stylesheet" href="./style.css" media="screen">
-    <script src="./polyfills/pathseg.js" defer></script>
-    <script src="./modals.js" defer></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" crossorigin="anonymous">
-</head>
 
-<body>
-
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <h2 id="altitude">Altitude: </h2>
-
-    <div class="button-container">
-
-        <div id="birds-button" class="user-button">
-            <div class="birds-content">
-                <div class="birds-icon">
-                    <img class="show-bird" src="./img/sprites/svg/andy-bluebird-flip.svg"></svg>
-                </div>
-                <div class="birds-text">
-                    <p>Birds</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="leaderboard-button" class="user-button">
-            <div class="leaderboard-content">
-                <div class="trophy-icon">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="leaderboard-text">
-                    <p>Leaderboard</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="rules-button" class="user-button">
-            <div class="rules-content">
-                <div class="rules-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="rules-text">
-                    <p>Rules</p>
-                </div>
-            </div>
-        </div>
-
-
+    <div id="start-container" class="fade">
+      <h1 id="start-title" class="fade">Foo_Flight</h1>
+      <form action="/play" method="post" id="play-form">
+        <input type="text" id="play-nickname" class="fade" placeholder="Nickname" />
+        <input type="submit" id="play-button" class="fade" value="Play" />
+      </form>
     </div>
-
-    <!-- Modals for Leaderboard and Rules buttons -->
-    <div id="modal-backdrop" class="hidden"></div>
-
-    <div id="birds-modal" class="hidden">
-        <!-- Birds modal -->
-        <div class="birds-dialog">
-            <div class="modal-header">
-                <h3>Pick your bird!</h3>
-                <button type="button" class="birds-close-button">&times;</button>
-            </div>
-            <div class="birds-modal-body">
-                <div class="bird-select">
-                    <img class="player-bird" src="img/sprites/svg/andy-bluebird-flip.svg">
-                    <p class="bird-name">Andy</p>
-                </div>
-                <div class="bird-select">
-                    <img class="player-bird" src="img/sprites/svg/cole-kakapo-flip.svg">
-                    <p class="bird-name">Cole</p>
-                </div>
-                <div class="bird-select">
-                    <img class="player-bird" src="img/sprites/svg/david-penguin-flip.svg">
-                    <p class="bird-name">David</p>
-                </div>
-                <div class="bird-select">
-                    <img class="player-bird" src="img/sprites/svg/harry-day-flip.svg">
-                    <p class="bird-name">Harry</p>
-                </div>
-                <div class="bird-select">
-                    <img class="player-bird" src="img/sprites/svg/iain-shamathrush-flip.svg">
-                    <p class="bird-name">Iain</p>
-                </div>
-                <div class="bird-select">
-                    <img class="player-bird" src="img/sprites/svg/olive-day-flip.svg">
-                    <p class="bird-name">Olive</p>
-                </div>
-                <div class="bird-select">
-                    <img class="player-bird" src="img/sprites/svg/perry-day-flip.svg">
-                    <p class="bird-name">Perry</p>
-                </div>
-                <div class="bird-select">
-                    <img class="player-bird" src="img/sprites/svg/sahana-day-flip.svg">
-                    <p class="bird-name">Sahana</p>
-                </div>
-                <div class="bird-select">
-                    <img class="player-bird" src="img/sprites/svg/todd-day-flip.svg">
-                    <p class="bird-name">Todd</p>
-                </div>
-            </div>
-
-
-            <div class="name-input-element">
-                <input type="text" id="player-name-input" placeholder="Your name...">
-            </div>
-            <button type="button" id="play-button"><p class="play-text">PLAY</p></button>
-
-        </div>
-
-
-    </div>
-
-    <div id="leaderboard-modal" class="hidden">
-        <!-- Leaderboard modal-->
-        <div class="leaderboard-dialog">
-
-            <div class="modal-header">
-                <h3>Leaderboard</h3>
-                <button type="button" class="lb-close-button">&times;</button>
-            </div>
-            <!-- Leaderboard positions -->
-            <div class="leaderboard-modal-body">
-                <div class="high-score">
-                    <!-- Leaderboard position 1 -->
-                    <img class="show-bird" src="./img/sprites/svg/cole-kakapo-flip.svg"></img>
-                    <p class="player-score">&ensp;298312 -&ensp;</p>
-                    <p class="player-name">Sirocco the Kakapo</p>
-
-                </div>
-                <div class="high-score">
-                    <!-- Leaderboard position 2 -->
-                    <img class="show-bird" src="./img/sprites/svg/bella-day-flip.svg"></img>
-                    <p class="player-score">&ensp;6123 -&ensp;</p>
-                    <p class="player-name">Parakeet207</p>
-                </div>
-                <div class="high-score">
-                    <!-- Leaderboard position 3 -->
-                    <img class="show-bird" src="./img/sprites/svg/perry-day-flip.svg"></img>
-                    <p class="player-score">&ensp;3214 -&ensp;</p>
-                    <p class="player-name">PogBird711</p>
-                </div>
-                <div class="high-score">
-                    <!-- Leaderboard position 4 -->
-                    <img class="show-bird" src="./img/sprites/svg/sahana-day-flip.svg"></img>
-                    <p class="player-score">&ensp;12 -&ensp;</p>
-                    <p class="player-name">BrownChicken04</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="rules-modal" class="hidden">
-        <!-- Rules modal -->
-        <div class="rules-dialog">
-
-            <div class="modal-header">
-                <h3>Rules</h3>
-                <button type="button" class="rules-close-button">&times;</button>
-            </div>
-
-            <div class="rules-modal-body">
-                <ul>
-                    <!-- list of rules -->
-                    <li>Move with WASD</li>
-                    <li>Jump on platforms to reach as high as possible!</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-        <script src="./build.js" defer></script>
-        
-        <audio id="player" style="display: none;">
-            <source src="./sounds/birdiehypemusic.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-          </audio>
-          <audio id="finale-audio" class="gone">
-            <source src="./sounds/finale.webm" type="audio/webm">
-            Your browser does not support the audio element.
-          </audio>
-          <video id="finale-video" class="gone">
-            <source src="./img/finale.webm" type="video/webm">
-            Your browser does not support the audio element.
-          </video>
-    </body>
-
+    <script src="client.js" defer></script>
+    <script src="build.js" defer></script>
+  </body>
 </html>
