@@ -1,51 +1,18 @@
-/**
- * Server side tasks:
- * - Leaderboard
- * - Avatar selection
- * - Maybe dynamically serve the rules content?
- */
+/* main.js */
 
-/* Variables and constants */
-const db = require("./db");
-const fs = require("fs");
+const express = require('../client/node_modules/express')
+const path    = require('path')
+const app     = express()
+const port    = 9000
 
-const path = require("path");
-const express = require("express");
-const exphbs = require("express-handlebars");
+app.use(express.static(path.join(__dirname, '../client/dist')))
 
-const app = express();
-var portnumber = process.env.PORT || 9000;
-
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
-
-app.use(express.static(path.join(__dirname, "/../client/dist")));
-
-// Add live leaderboard server update
-const hashmap = {};
-app.route("/leaderboard", (req, res) => {
-  hashmap[req.params.name] = req.params.score;
+app.get('/', (req, res) => {
+  res.sendFile('index.html')
 })
 
-// Use handlebars to serve leaderboard
+app.listen(port, () => {
+  console.log(`server listening at http://localhost:${port}`)
+})
 
-// GET / - this would normally get the home page
-app.get("/", (req, res, next) => {
-  res.send("Hello from the express server!");
-});
-
-/* Serve the index.html from handlebar layout */
-app.get('/', function(req, res, next) {
-  res.status(200).render('leaderModalBody', {single: false, leaderArray: leaderboardData})
-});
-
-app.get('/index.html', function(req, res, next) {
-  res.status(200).render('leaderModalBody', {single: false, leaderArray: leaderboardData})
-});
-
-// Serve the path to only the player's score
-
-// Start the server
-app.listen(portnumber, () => {
-  console.log("== Server running on port " + portnumber);
-});
+/* main.js */
