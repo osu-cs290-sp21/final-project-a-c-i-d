@@ -1,5 +1,6 @@
+/* modals.js */
 
-export function initializeUI() {
+function initializeUI() {
     //===== Leaderboard and Rules =====
     //Modals
     const modalFade = document.getElementById('modal-backdrop')
@@ -10,7 +11,6 @@ export function initializeUI() {
     const leaderboardButton = document.getElementById('leaderboard-button')
     const rulesButton = document.getElementById('rules-button')
     const birdButton = document.getElementById('birds-button')
-    
 
     //===== Opening Modals =====
     const showLeaderboard = () => { //Leaderboard modal
@@ -56,3 +56,6 @@ export function initializeUI() {
     closeBirds.addEventListener('click', birdsClose)
 }
 
+initializeUI()
+
+/* modals.js */
