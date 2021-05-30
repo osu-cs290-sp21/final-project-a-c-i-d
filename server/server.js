@@ -11,6 +11,11 @@ app.get('/', (req, res) => {
   res.sendFile('index.html')
 })
 
+app.post('/play', (req, res) => {
+  console.log(req.body)
+  res.sendStatus(200)
+})
+
 app.listen(port, () => {
   console.log(`server listening at http://localhost:${port}`)
 })
