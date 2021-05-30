@@ -16,11 +16,13 @@
 }
 
 body {
-  font-family: var(--monospace)
+  font-family: var(--monospace);
+  background: url('img/backdrop-day.png') no-repeat center fixed;
+  background-size: cover;
 }
 
 input[type=text], input[type=submit] {
-  font-family: var(--monospace)
+  font-family: var(--monospace);
 }
 
 .fade {
@@ -30,15 +32,6 @@ input[type=text], input[type=submit] {
 .fade .end {
   transition: all 1s ease-in-out;
   opacity: 0%;
-}
-
-#start-backdrop {
-  background: var(--pink);
-  bottom: 0;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
 }
 
 #start-container {
