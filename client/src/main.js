@@ -3,7 +3,8 @@ import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'mat
 import { Game, ShowoffScene } from './game';
 import { Player } from './player';
 import { Input } from './lib/stateControllers';
-import { initializeUI } from './ui/webpage';
+// import { initializeUI } from './ui/webpage';
+// ^^^ moved this next to index.html and renamed it modals.js
 
 const debug = false;
 function makeRenderer({ element, engine, follows }) {
@@ -109,5 +110,3 @@ main()
         const audio = document.getElementById('player');
         // audio.play();
     }, 3000));
-
-initializeUI()

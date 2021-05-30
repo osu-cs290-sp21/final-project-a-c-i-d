@@ -1,9 +1,9 @@
 /* main.js */
 
-const express = require('../client/node_modules/express')
-const path    = require('path')
-const app     = express()
-const port    = 9000
+const express = require('../client/node_modules/express'),
+      path    = require('path'),
+      app     = express(),
+      port    = 9000
 
 app.use(express.static(path.join(__dirname, '../client/dist')))
 
