@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Foo Flight</title>
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- <div id="start-backdrop" class="fade"></div> -->
+    <div id="start-container" class="fade">
+      <h1 id="start-title" class="fade">Foo_Flight</h1>
+      <form action="/play" method="post" id="play-form">
+        <input type="text" id="play-nickname" class="fade" placeholder="Nickname" />
+        <input type="submit" id="play-button" class="fade" value="Play" />
+      </form>
+    </div>
+    <script src="Client.js" defer></script>
+    <script src="Build.js" defer></script>
+  </body>
+</html>

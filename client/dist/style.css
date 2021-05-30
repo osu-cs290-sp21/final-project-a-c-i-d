@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap');
+
+:root {
+  --green: #46e09d;
+  --light-green: #77ffc4;
+  --light-pink: #ffc9c9;
+  --monospace: 'Roboto Mono', Courier, monospace, monospace;
+  --pink: #ff7777;
+}
+
+* {
+  border: 0;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--monospace)
+}
+
+input[type=text], input[type=submit] {
+  font-family: var(--monospace)
+}
+
+.fade {
+  opacity: 100%;
+}
+
+.fade .end {
+  transition: all 1s ease-in-out;
+  opacity: 0%;
+}
+
+#start-backdrop {
+  background: var(--pink);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+#start-container {
+  display: flex;
+  flex-direction: column;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+  #start-title {
+    /* border: 1px solid white; */
+    cursor: default;
+    font-size: 100px;
+    text-align: center;
+    min-width: 600px
+  }
+  #play-form {
+    /* border: 1px solid white; */
+    display: flex;
+    flex-direction: column;
+  }
+    #play-nickname {
+      background: var(--light-pink);
+      /* border: 1px solid white; */
+      border-radius: 20px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+      font-size: 50px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 20px;
+      max-width: 400px;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+    #play-button {
+      background: var(--green);
+      /* border: 1px solid white; */
+      border-radius: 20px;
+      color: white;
+      font-size: 50px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 30px;
+      min-width: 150px;
+      padding-bottom: 5px;
+      transition: 0.3s;
+    }
+      #play-button:hover {
+        background: var(--light-green);
+        box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.5);
+      }
+      #play-button:active {
+        background-color: black;
+      }
