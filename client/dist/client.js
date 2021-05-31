@@ -8,5 +8,9 @@ fades = Array.from(fadeClass)
 playButton.addEventListener('click', (event) => {
   console.log('Submit')
   fades.map(f => f.classList.add('end'))
+  setTimeout(() => {
+    fades.map(f => f.classList.add('gone'))
+  }, 1000)
+  
   event.preventDefault()
 })
