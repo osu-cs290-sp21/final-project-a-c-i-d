@@ -89,7 +89,6 @@ async function main() {
         gameInstance.setup();
         gameInstance.run(); // Starts the game and physics. 
         Render.run(render); // Starts the renderer.
-
         window.capture = () => {
             console.table(Object.entries(player.body));
         }
