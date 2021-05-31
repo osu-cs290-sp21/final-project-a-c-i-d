@@ -16,8 +16,8 @@ function makeRenderer({ element, engine, follows }) {
         engine: engine,
         options: {
             background: 'transparent',
-            height: document.body.clientHeight,
-            width: document.body.clientWidth,
+            height: window.innerHeight, // document.body.clientHeight,
+            width: window.innerWidth, // document.body.clientWidth,
             pixelRatio: 'auto',
             showCollisions: debug,
             showAxes: debug,
@@ -89,7 +89,6 @@ async function main() {
         gameInstance.setup();
         gameInstance.run(); // Starts the game and physics. 
         Render.run(render); // Starts the renderer.
-
         window.capture = () => {
             console.table(Object.entries(player.body));
         }
