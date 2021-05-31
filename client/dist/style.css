@@ -25,13 +25,13 @@ input[type=text], input[type=submit] {
   font-family: var(--monospace);
 }
 
-.fade {
-  opacity: 100%;
+.fade .end {
+  opacity: 0%;
+  transition: all 1s ease-in-out;
 }
 
-.fade .end {
-  transition: all 1s ease-in-out;
-  opacity: 0%;
+.fade .gone {
+  display: none;
 }
 
 #altitude {
