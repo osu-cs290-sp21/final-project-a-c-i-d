@@ -16,8 +16,8 @@ function makeRenderer({ element, engine, follows }) {
         engine: engine,
         options: {
             background: 'transparent',
-            height: document.body.clientHeight,
-            width: document.body.clientWidth,
+            height: window.innerHeight, // document.body.clientHeight,
+            width: window.innerWidth, // document.body.clientWidth,
             pixelRatio: 'auto',
             showCollisions: debug,
             showAxes: debug,
