@@ -1,23 +1,14 @@
-/* main.js */
+const express = require('express')
+const path = require('path')
+const app = express()
+const port = process.env.PORT || 9000
 
-const express = require('../client/node_modules/express'),
-      path    = require('path'),
-      app     = express(),
-      port    = 9000
+app.use(express.static(path.join(__dirname, '..', 'client', 'dist')))
 
-app.use(express.static(path.join(__dirname, '../client/dist')))
-
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
   res.sendFile('index.html')
 })
 
-app.post('/play', (req, res) => {
-  console.log(req.body)
-  res.sendStatus(200)
-})
-
 app.listen(port, () => {
-  console.log(`server listening at http://localhost:${port}`)
+  console.log(`listen to ${port}`)
 })
-
-/* main.js */
