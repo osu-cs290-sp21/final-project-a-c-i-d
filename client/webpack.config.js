@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
   mode: 'development',
@@ -28,19 +28,20 @@ module.exports = {
       },
     ],
   },
-  // optimization: {
-  //   minimize: false,
-  //   moduleIds: 'named',
-  //   chunkIds: 'named'
-  // },
+}
 
-//   module: {
-//     rules: [
-//       {
-//         test: /\.tsx?$/,
-//         use: 'ts-loader',
-//         exclude: /node_modules/,
-//       },
-//     ],
-//   },
-};
+// optimization: {
+//   minimize: false,
+//   moduleIds: 'named',
+//   chunkIds: 'named'
+// },
+
+// module: {
+//   rules: [
+//     {
+//       test: /\.tsx?$/,
+//       use: 'ts-loader',
+//       exclude: /node_modules/,
+//     },
+//   ],
+// },

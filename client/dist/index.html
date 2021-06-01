@@ -10,15 +10,16 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="altitude"></div>
-    <script src="build.js" defer></script>
-    <div id="start-container" class="fade">
-      <h1 id="start-title" class="fade">Foo_Flight</h1>
-      <form action="/play" method="post" id="play-form">
-        <input type="text" id="play-nickname" class="fade" placeholder="Nickname" />
-        <input type="submit" id="play-button" class="fade" value="Play" />
-      </form>
+    <h2 id="altitude"></h2>
+
+    <div id="start-backdrop" class="start"></div>
+    <div id="start-container" class="start">
+      <h1 id="start-title" class="start">Foo Flight</h1>
+      <!-- <input type="text" id="play-nickname" class="start" placeholder="Nickname" /> -->
+      <button type="button" id="play-button" class="start">Play</button>
     </div>
-    <script src="client.js" defer></script>
+
+    <script src="build.js" defer></script>
+    <script src="index.js" defer></script>
   </body>
 </html>
