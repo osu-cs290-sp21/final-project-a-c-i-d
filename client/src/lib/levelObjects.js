@@ -1,9 +1,11 @@
 import { Bodies, Body, Composite, Events, Vector } from 'matter-js';
 
+
 const dist = (v1, v2) => Vector.magnitude(Vector.sub(v1, v2));
 const remove = (array, value) => array.splice(array.indexOf(value),1);
 let player = null;
 export const setPlayer = p => { player = p; }
+
 
 const platformOptions = {
     friction: 0,
@@ -40,6 +42,8 @@ export function makeBlock(watches, maxDistance, where) {
     });
     return block;
 }
+
+
 // const getPos = (pos => pos < maxDistance ? pos : getPos(getNextBlockPosition()));
 // const makeBlock = (watches,maxDistance) => (block => 
 //     [block, 
@@ -52,6 +56,7 @@ export function makeBlock(watches, maxDistance, where) {
 //         (body.positionHistory.entries().map((v,k)=>[k,diff(v,body.position)]).sort((a,b)=> a - b).shift()))
 //         :undefined)].shift()
 //     )((() => { const block = Bodies.rectangle(10,10,10,10); block.sparseUpdateEvery(1000/3); return block; })())
+
 
 // function getPos() { return 1; }
 // export const makeBlock = (watches,maxDistance) => (block => 
@@ -70,3 +75,4 @@ export function getNextBlockPosition() {
     // return Vector.add(player.position, Vector.mult({x: 1, y: -1},50));
     return Vector.add(player.position, Vector.mult(Vector.normalise(player.velocity),50));
 }
+
