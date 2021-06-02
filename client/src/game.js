@@ -3,66 +3,78 @@ import { MatterCollisionEvents } from './lib/matterjs-plugins/matter-collision-e
 import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-update-events';
 import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump } from './lib/physics';
-import { Input, BigBen } from './lib/stateControllers';
+import { BigBen } from './lib/stateControllers';
 import { ogBirds, sprite } from './lib/sprites';
 import { makeBlock, setPlayer } from './lib/levelObjects';
+
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents);
 useMatterPlugin(MatterSparseUpdateEvents);
 
+
 export class Game {
+
 
     constructor() {
         this.engine = Engine.create();
         this.runner = Runner.create();
-
         this.players = [];
     }
+
 
     // Setup the game controller.
     setup() {
         const player = this.players[0];
 
         // Sets up some sort of scene
-        const bouncer = Bodies.rectangle(0,0, 80, 5);
-        const ground = Bodies.rectangle(550, 1000, 1, 60, { isStatic: true, friction: 0, frictionStatic: 0 });
-        const terrain_ = generateTerrain([400, 610], 30).concat(generateTerrain([500, 410], 30)).concat(generateTerrain([600, 210], 10)).concat(generateTerrain([700, 10], 30));
-        setPlayer(player.body);
-        const p = Vector.add(Vector.mult(Axes.y,100), player.body.position);
-        const terrain = [makeBlock(player.body.position, 400, [...Object.values(p),90,10]),...terrain_];
+        // const bouncer = Bodies.rectangle(0,0, 80, 5);
+
+        const ground = Bodies.rectangle(550, 1000, 1, 60, {
+            isStatic: true,
+            friction: 0,
+            frictionStatic: 0
+        });
+        const terrain = generateTerrain([400, 610], 30).concat(generateTerrain([500, 410], 30)).concat(generateTerrain([600, 210], 10)).concat(generateTerrain([700, 10], 30));
+
+        // setPlayer(player.body);
+        // const p = Vector.add(Vector.mult(Axes.y,100), player.body.position);
+        // const terrain = [makeBlock(player.body.position, 400, [...Object.values(p),90,10]),...terrain_];
 
         Body.set(ground, 'label', 'ground');
-        Body.set(bouncer, 'label', 'boing');
 
+        // Body.set(bouncer, 'label', 'boing');
 
         const passthrough = body => {
             body.collisionFilter.group = -1;
             body.collisionFilter.category = 0;
         };
+
         const pauliExclusion = body => {
             body.collisionFilter.group = 1;
             body.collisionFilter.category = 1;
-        }
+        };
+
         pauliExclusion(player.body);
 
         for (const platform of terrain) {
-            if (Math.random() < 0.2 && terrain.indexOf(platform) != 0) {
-                const {x, y} = platform.position;
-                const sensor = Bodies.fromVertices(x, y, platform.vertices, {
-                    isSensor: true,
-                    isStatic: true,
-                    render: {
-                        fillStyle: 'transparent'
-                    }
-                });
-                Body.set(sensor, 'label', 'boing');
-                Composite.add(this.engine.world, sensor);
-                passthrough(platform);
-                continue;
-            }
-            Body.set(platform, 'label', 'ground');
+            // if (Math.random() < 0.2 && terrain.indexOf(platform) != 0) {
+            //     const {x, y} = platform.position;
+            //     const sensor = Bodies.fromVertices(x, y, platform.vertices, {
+            //         isSensor: true,
+            //         isStatic: true,
+            //         render: {
+            //             fillStyle: 'transparent'
+            //         }
+            //     });
+            //     Body.set(sensor, 'label', 'boing');
+            //     Composite.add(this.engine.world, sensor);
+            //     passthrough(platform);
+            //     continue;
+            // }
             // Body.set(platform, 'hard', false);
+
+            Body.set(platform, 'label', 'ground');
 
             // const options = {
             //     texture: asset('img/level-objects/dirt-platform.svg'),
@@ -89,6 +101,7 @@ export class Game {
                     }
                 }
             });
+
             Events.on(sensor, 'onCollide', pair => {
                 if (pair.other.label === 'gamer') {
                     if (platform.position.y > pair.other.position.y) {
@@ -106,48 +119,56 @@ export class Game {
             passthrough(platform);
             platform.hard = false;
             pauliExclusion(sensor);
-            
+
             Composite.add(this.engine.world, sensor);
         }
-        Body.set(bouncer, 'isStatic',true);
+        // Body.set(bouncer, 'isStatic',true);
 
-        Composite.add(this.engine.world, bouncer);
         Composite.add(this.engine.world, terrain);
+        // Composite.add(this.engine.world, bouncer);
 
         Events.on(this.runner, 'tick', this.update.bind(this)); // Registers the update functions for each update.
 
-        for (const player of this.players) player.setup();
+        for (const player of this.players) {
+            player.setup()
+        }
     }
 
-    // Adds a player into the game, as well as the players array.
-    addPlayer(player) {
+
+    addPlayer(player) { // Adds a player into the game, as well as the players array.
         Composite.add(this.engine.world, player.body); // Adds the player's physics body into the world.
         Events.on(this.runner, 'tick', player.update.bind(player)); // Registers the player's functions to be called when an update happens.
-
         this.players.push(player); // Adds the player to the array.
     }
 
-    // Called every time a new frame is rendered.
-    update() {
+
+    update() { // Called every time a new frame is rendered.
         BigBen.deltaTime = this.runner.delta; // Updates the global time variable.
     }
 
-    // Runs the game. This is not control blocking.
-    run() {
+
+    run() { // Runs the game. This is not control blocking.
         BigBen.begin(); // Starts Big Ben
         Runner.run(this.runner, this.engine); // Starts the Matter.js physics
-        this.players.map(player => { Events.trigger(player.body, 'awake', {self: player.body}); });
+        this.players.map(player => { 
+            Events.trigger(player.body, 'awake', {
+                self: player.body
+            });
+        });
     }
 
-    // Stops the game.
-    stop() {
+
+    stop() { // Stops the game.
         Runner.stop(this.runner);
     }
 }
 
-export class ShowoffScene {
-    constructor() {
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+export class ShowoffScene {
+
+
+    constructor() {
         this.engine = Engine.create();
         this.runner = Runner.create();
 
@@ -191,6 +212,7 @@ export class ShowoffScene {
             })
             return bird;
         });
+
         Composite.add(this.engine.world, birds);
         this.birds = birds;
 
@@ -198,23 +220,28 @@ export class ShowoffScene {
         Body.set(ground, 'label', 'ground');
         Composite.add(this.engine.world, ground);
         this.ground = ground;
-
     }
+
 
     run() {
         Runner.run(this.runner, this.engine);
         for (const bird of this.birds) Events.trigger(bird, 'awake', { self: bird });
     }
+
+
     stop() {
         Runner.stop(this.runner);
     }
+
+
 }
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 
 // import game from './game';
-
+//
 // function main() {
 //     const sc = new SceneController();
-
 //     add('game', {
 //         initScene: game.setup,
 //         startScene: game.start,
@@ -224,31 +251,30 @@ export class ShowoffScene {
 
 
 // David and Iain's meeting. here you go
-
+//
 // export class StateController {
 //     constructor(table) {
 //         this.table = table;
 //     }
 //     canTransitionTo(requestedState) {
-//         // 
-
+//         //
+//
 //     }
 //     transition(newState) {
-
+//         //
 //     }
 // }
-
+//
 // export function transition(currentState, next) {
-
+//     //
 // }
-
+//
 // class SceneController {
 //     constructor() {
 //         this.transitionTable = [
-            
+//             //
 //         ]
 //     }
-
 //     add(sceneName, { initScene, startScene, updateScene, stopScene })
 // }
 

@@ -41,9 +41,10 @@ input[type=submit], input[type=text] {
 #altitude {
   /* border: 1px solid white; */
   font-size: 20px;
-  left: 10px;
+  left: 20px;
+  line-height: 20px;
   position: fixed;
-  top: 10px;
+  top: 20px;
 }
 
 #start-backdrop {
@@ -69,6 +70,7 @@ input[type=submit], input[type=text] {
     color: black;
     cursor: default;
     font-size: 110px;
+    line-height: 110px;
     text-align: center;
   }
   /* #start-title:hover {} */
@@ -78,17 +80,23 @@ input[type=submit], input[type=text] {
       border-radius: 10px;
       color: white;
       font-size: 35px;
+      line-height: 35px;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 10px;
-      min-width: 160px;
-      padding: 6px;
+      margin-top: 20px;
+      padding-bottom: 10px;
+      padding-left: 30px;
+      padding-right: 30px;
+      padding-top: 10px;
       transition: 0.3s;
     }
     #play-button:hover {
       background: var(--light-green);
       box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.5);
-      padding: 10px;
+      padding-bottom: 15px;
+      padding-left: 35px;
+      padding-right: 35px;
+      padding-top: 15px;
     }
     #play-button:active {
       background-color: var(--dark-green);
