@@ -35,11 +35,11 @@ export class Game {
             friction: 0,
             frictionStatic: 0
         });
-        const terrain = generateTerrain([400, 610], 30).concat(generateTerrain([500, 410], 30)).concat(generateTerrain([600, 210], 10)).concat(generateTerrain([700, 10], 30));
+        const terrain_ = generateTerrain([400, 610], 30).concat(generateTerrain([500, 410], 30)).concat(generateTerrain([600, 210], 10)).concat(generateTerrain([700, 10], 30));
 
-        // setPlayer(player.body);
-        // const p = Vector.add(Vector.mult(Axes.y,100), player.body.position);
-        // const terrain = [makeBlock(player.body.position, 400, [...Object.values(p),90,10]),...terrain_];
+        setPlayer(player.body);
+        const p = Vector.add(Vector.mult(Axes.y,100), player.body.position);
+        const terrain = [makeBlock(player.body.position, 400, [...Object.values(p),90,10]),...terrain_];
 
         Body.set(ground, 'label', 'ground');
 
@@ -72,8 +72,8 @@ export class Game {
             //     passthrough(platform);
             //     continue;
             // }
-            // Body.set(platform, 'hard', false);
 
+            Body.set(platform, 'hard', false);
             Body.set(platform, 'label', 'ground');
 
             // const options = {
