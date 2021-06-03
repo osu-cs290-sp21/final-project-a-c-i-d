@@ -14,30 +14,34 @@ const platformOptions = {
     isStatic: true
 };
 
-
-export function makeBlock(watches, maxDistance, where) {
-    const block = Bodies.rectangle(...where,platformOptions);
+// export function newBlock() {
+//     return makeBlock(
+// }
+export function makeBlock(watches, maxDistance) {
+    const block = Bodies.rectangle(0,0,90,10,platformOptions);
+    Body.setPosition(block, getNextBlockPosition());
     block.positionHistory = [];
-    block.sparseUpdateEvery(1000/3);
+    // block.sparseUpdateEvery(5000);
     Events.on(block, 'sparseUpdate', body => {
         if (dist(body.position,watches) > maxDistance) {
             let newPosition = undefined;
-            for (const position of body.positionHistory) {
-                if (dist(position, watches) < maxDistance) {
-                    remove(body.positionHistory, position);
-                    newPosition = position;
-                    break;
-                }
-            }
-            if (!newPosition) {
-                do {
-                    newPosition = getNextBlockPosition();
-                    console.log('max',maxDistance,'generated',newPosition);
-                } while (dist(newPosition,watches) > maxDistance);
-            }
-            body.positionHistory.push(body.position);
-            Body.setPosition(body, newPosition);
-            Events.trigger(body, 'movedTo', newPosition);
+            // for (const position of body.positionHistory) {
+            //     if (dist(position, watches) < maxDistance) {
+            //         remove(body.positionHistory, position);
+            //         newPosition = position;
+            //         break;
+            //     }
+            // }
+            // if (!newPosition) {
+            //     do {
+            //         newPosition = ;
+            //         console.log('max',maxDistance,'generated',newPosition);
+            //     } while (dist(newPosition,watches) > maxDistance);
+            // }
+            // body.positionHistory.push(body.position);
+            const newPos = getNextBlockPosition();
+            Body.setPosition(body, newPos);
+            Events.trigger(body, 'movedTo', newPos);
         }
     });
     return block;
@@ -70,9 +74,15 @@ export function makeBlock(watches, maxDistance, where) {
 //         :undefined)].shift()
 //     )((() => { const block = Bodies.rectangle(10,10,10,10); block.sparseUpdateEvery(1000/3); return block; })())
 
-let counter = 0;
+let counter = -400;
+// const startingPos = [x,y];
 export function getNextBlockPosition() {
     // return Vector.add(player.position, Vector.mult({x: 1, y: -1},50));
-    return Vector.add(player.position, Vector.mult(Vector.normalise(player.velocity),50));
+    counter += 100;
+    const base = {...player.position};
+    const pos = {x: Math.sin(Math.random() * Math.PI * 2) * 200, y: -counter};
+    const starting = Vector.add(base, pos);
+    return starting;
+    // return Vector.add(position, Vector.mult(Vector.normalise(player.velocity),50));
 }
 

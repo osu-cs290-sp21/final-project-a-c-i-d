@@ -1,7 +1,6 @@
 import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatterPlugin, Vector } from 'matter-js';
 import { MatterCollisionEvents } from './lib/matterjs-plugins/matter-collision-events';
 import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-update-events';
-import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump } from './lib/physics';
 import { BigBen } from './lib/stateControllers';
 import { ogBirds, sprite } from './lib/sprites';
@@ -35,12 +34,11 @@ export class Game {
             friction: 0,
             frictionStatic: 0
         });
-        const terrain_ = generateTerrain([400, 610], 30).concat(generateTerrain([500, 410], 30)).concat(generateTerrain([600, 210], 10)).concat(generateTerrain([700, 10], 30));
 
-        // setPlayer(player.body);
+        setPlayer(player.body);
         // const p = Vector.add(Vector.mult(Axes.y,100), player.body.position);
         // const terrain = [makeBlock(player.body.position, 400, [...Object.values(p),90,10]),...terrain_];
-        const terrain = [...terrain_];
+        const terrain = [... new Array(100)].map(e => makeBlock(player.body.position, 400));
 
         Body.set(ground, 'label', 'ground');
 
