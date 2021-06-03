@@ -1,5 +1,3 @@
-import { choose } from 'matter-js/src/core/Common';
-
 const { protocol, hostname, origin, port } = window.location;
 
 // const ignorePort = port === 8080 || port === 80 || port === 443;
@@ -13,4 +11,5 @@ export const ogBirds = ['andy-bluebird', 'david-penguin', 'cole-kakapo', 'iain-s
 
 export const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
 export const birdAssetNames = [...ogBirds, ...birdNames.map(name => name + '-day')];
+const choose = arr => arr[Math.floor(Math.random() * arr.length)];
 export const randomBird = () => choose(birdAssetNames);
