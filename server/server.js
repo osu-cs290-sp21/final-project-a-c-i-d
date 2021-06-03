@@ -3,12 +3,35 @@ const path = require('path')
 const app = express()
 const port = 3000
 
-app.use(express.static(path.join(__dirname, '..', 'client', 'dist')))
+const dontGame = true;
+// app.get('/build.js', (req,res,next) => {
+//   if (dontGame) {
+//     res.send(404);
+//   } else {
+//     next();
+//   }
+// });
 
+
+app.use(express.static(path.join(__dirname, '..', 'client', 'dist')))
+app.use(express.json());
 app.get('/', (req, res, next) => {
-  res.sendFile('index.html')
+    res.sendFile('index.html')
 })
+
+const leaderboard = new Map();
+
+app.put('/died', (req, res) => {
+    const data = req.body;
+    const { name, altitude } = data;
+    leaderboard.set(name, altitude);
+    res.send(200);
+    console.log(leaderboard.entries());
+});
+
 
 app.listen(port, () => {
-  console.log(`listen to ${port}`)
+    console.log(`listen to ${port}`)
 })
+
+

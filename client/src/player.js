@@ -30,7 +30,7 @@ export class Player {
 
     constructor(spawn) {
         const { x, y } = spawn;
-        this.spawn = { x, y };
+        this.spawn = { x: x+100, y };
         this.skin = randomBird();
         this.isGrounded = false;
         this.orientation = 1; // Bird looking right
@@ -59,6 +59,8 @@ export class Player {
         this.body = Bodies.polygon(x, y, 16, 50, options);
 
         this.body.label = 'gamer';
+        Body.set(this.body, 'highest', this.body.position.y);
+
     }
 
 
@@ -91,6 +93,9 @@ export class Player {
             }
             this.orient();
             // console.log('sparse');
+            if (this.body.position.y - (100 * window.innerHeight) > this.body['highest']) {
+                this.died();
+            }
         };
 
         Events.on(this.body, 'onCollide', onCollisionBegin);
@@ -144,6 +149,11 @@ export class Player {
                 Body.setAngle(this.body, 0);
             }
         }
+        if (this.body['highest'] > this.body.position.y) {
+            const margin = 100;
+            const y = this.body.position.y;
+            this.body['highest'] = y;
+        }
     }
 
 
@@ -152,6 +162,21 @@ export class Player {
         this.skin = randomBird();
         this.updateSprite();
         awakenRickAstley();
+
+        const score = this.body['highest'];
+        this.body['highest'] = this.body.position.y;
+
+        fetch('http://localhost:3000/died', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: '',
+                altitude: -score
+            })
+        });
+
     }
 
 

@@ -39,7 +39,10 @@ function makeRenderer({ element, engine, follows }) {
     if (follows) {
         const cameraScale = 0.5;
         Events.on(render, 'beforeRender', event => {
-            Render.lookAt(event.source, follows, {
+            const margin = 100;
+            const center = {...follows.position};
+            center.y = Math.min(follows.position.y - margin, follows['highest']);
+            Render.lookAt(event.source, center, {
                 x: window.innerWidth  * cameraScale,
                 y: window.innerHeight * cameraScale
             });
@@ -83,12 +86,12 @@ async function main() {
     const render = makeRenderer({
         element: document.body,
         engine: gameInstance.engine,
-        follows: player.body.position
+        follows: player.body
     });
 
-    gameInstance.setup();
-    gameInstance.run(); // Starts the game and physics. 
-    Render.run(render); // Starts the renderer.
+    // gameInstance.setup();
+    // gameInstance.run(); // Starts the game and physics. 
+    // Render.run(render); // Starts the renderer.
     Events.on(player.body, 'sparseUpdate', () => {
         document.getElementById('altitude')
             .innerText
@@ -103,13 +106,51 @@ async function main() {
             gameInstance.stop();
         }
     });
+
+    // initializeUI({
+    //     onPlayButton: (obj) => {
+    //         player.name = obj.name;
+    //         player.skin = obj.skinURL;
+    //         startGame();
+    //     }
+    // });
+
+    document.body.addEventListener('keydown', event => { Input.keys[event.keyCode] = true  })
+    document.body.addEventListener('keyup'  , event => { Input.keys[event.keyCode] = false })
+
+
+    const startClass = document.getElementsByClassName('start')
+    const playButton = document.getElementById('play-button')
+    const playNickname = document.getElementById('play-nickname')
+
+    const starts = Array.from(startClass)
+
+    const callback = (name) => {
+        console.log('Play')
+        playButton.disabled = 'true'
+        starts.map(f => f.classList.add('fade'))
+        setTimeout(() => {
+            starts.map(f => f.classList.add('gone'))
+        }, 1000);
+    };
+
+    playButton.addEventListener('click', () => {
+
+        gameInstance.setup();
+        gameInstance.run();
+        Render.run(render); // Starts the renderer.
+
+        callback('iain');
+    });
+
+
+
 }
 
 
 main()
     .then(() => { // Connects the Input manager to the DOM, once the game is running.
-        document.body.addEventListener('keydown', event => { Input.keys[event.keyCode] = true  })
-        document.body.addEventListener('keyup'  , event => { Input.keys[event.keyCode] = false })
+
     })
     // .then(() => setTimeout(() => {
     //     const audio = document.getElementById('player');

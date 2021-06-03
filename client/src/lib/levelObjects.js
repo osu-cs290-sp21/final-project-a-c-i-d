@@ -70,7 +70,7 @@ export function makeBlock(watches, maxDistance, where) {
 //         :undefined)].shift()
 //     )((() => { const block = Bodies.rectangle(10,10,10,10); block.sparseUpdateEvery(1000/3); return block; })())
 
-
+let counter = 0;
 export function getNextBlockPosition() {
     // return Vector.add(player.position, Vector.mult({x: 1, y: -1},50));
     return Vector.add(player.position, Vector.mult(Vector.normalise(player.velocity),50));

@@ -37,9 +37,10 @@ export class Game {
         });
         const terrain_ = generateTerrain([400, 610], 30).concat(generateTerrain([500, 410], 30)).concat(generateTerrain([600, 210], 10)).concat(generateTerrain([700, 10], 30));
 
-        setPlayer(player.body);
-        const p = Vector.add(Vector.mult(Axes.y,100), player.body.position);
-        const terrain = [makeBlock(player.body.position, 400, [...Object.values(p),90,10]),...terrain_];
+        // setPlayer(player.body);
+        // const p = Vector.add(Vector.mult(Axes.y,100), player.body.position);
+        // const terrain = [makeBlock(player.body.position, 400, [...Object.values(p),90,10]),...terrain_];
+        const terrain = [...terrain_];
 
         Body.set(ground, 'label', 'ground');
 
