@@ -14,9 +14,12 @@ const platformOptions = {
     isStatic: true
 };
 
-
-export function makeBlock(watches, maxDistance, where) {
-    const block = Bodies.rectangle(...where,platformOptions);
+// export function newBlock() {
+//     return makeBlock(
+// }
+export function makeBlock(watches, maxDistance) {
+    const block = Bodies.rectangle(0,0,platformOptions);
+    Body.setPosition(block, getNextBlockPosition());
     block.positionHistory = [];
     block.sparseUpdateEvery(1000/3);
     Events.on(block, 'sparseUpdate', body => {
@@ -71,8 +74,13 @@ export function makeBlock(watches, maxDistance, where) {
 //     )((() => { const block = Bodies.rectangle(10,10,10,10); block.sparseUpdateEvery(1000/3); return block; })())
 
 let counter = 0;
+// const startingPos = [x,y];
 export function getNextBlockPosition() {
     // return Vector.add(player.position, Vector.mult({x: 1, y: -1},50));
-    return Vector.add(player.position, Vector.mult(Vector.normalise(player.velocity),50));
+    counter += 20;
+    const base = {...player.position};
+    const starting = Vector.mult(base, counter);
+    return starting;
+    // return Vector.add(position, Vector.mult(Vector.normalise(player.velocity),50));
 }
 

@@ -2,7 +2,6 @@ import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatte
 import { choose } from 'matter-js/src/core/Common';
 import { MatterCollisionEvents } from './lib/matterjs-plugins/matter-collision-events';
 import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-update-events';
-import { generateTerrain } from './lib/levelGeneration';
 import { Axes, jump, horizontalMovement } from './lib/physics';
 import { Input, BigBen } from './lib/stateControllers';
 import { awakenRickAstley } from './lib/LMAOGOTTEM';
