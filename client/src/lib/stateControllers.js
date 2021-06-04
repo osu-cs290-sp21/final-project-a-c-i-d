@@ -1,29 +1,24 @@
 
 
-// This is just a global variable for the game time.
-// This method is more efficient.
+// This is just a global variable for the game time
+// This method is more efficient
 export const BigBen = {
     delta: 0.0,
     start: null,
-    set deltaTime(delta) {
-        this.delta = delta/1000.0;
-    },
-    get deltaTime() {
-        return this.delta;
-    },
-    begin() {
-        this.start = new Date();
-    }
+    begin()              { this.start = new Date() },
+    set deltaTime(delta) { this.delta = delta/1000.0 },
+    get deltaTime()      { return this.delta },
+}
+
+
+export const Input = { // Global manager for the key presses
+    ks: new Array(256).fill(false), // Array of 256 false values
+    get upArrow   () { return Input.ks[87] | Input.ks[38] | Input.ks[32] },
+    get leftArrow () { return Input.ks[65] | Input.ks[37] },
+    get rightArrow() { return Input.ks[68] | Input.ks[39] },
+    get downArrow () { return Input.ks[83] | Input.ks[30] },
 };
 
-// Global manager for the key presses.
-export const Input = {
-    keys: [...new Array(256)].map(e => false), // Array of 256 false values.
-    get upArrow()    { return Input.keys[87] | Input.keys[38] | Input.keys[32] },
-    get rightArrow() { return Input.keys[68] | Input.keys[39]; },
-    get leftArrow()  { return Input.keys[65] | Input.keys[37]; },
-    get downArrow()  { return Input.keys[83] | Input.keys[30]; },
-};
 
 export const GameStats = {
     score: 0,
@@ -35,4 +30,5 @@ export const GameStats = {
         }
     },
     get playerScore() { return this.score; }
-};
+}
+

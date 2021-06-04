@@ -34,33 +34,9 @@ body {
 
 
 button,
-h1,
-h2,
-input[type=submit],
+h1, h2,
 input[type=text] {
   font-family: var(--monospace);
-}
-
-
-.start-screen {
-  opacity: 100%;
-}
-.start-screen .fade {
-  opacity: 0%;
-  transition: all 1s ease-in-out !important;
-}
-.start-screen .gone {
-  display: none;
-}
-
-
-#altitude {
-  /* border: 1px solid white; */
-  font-size: 20px;
-  left: 20px;
-  line-height: 20px;
-  position: fixed;
-  top: 20px;
 }
 
 
@@ -101,24 +77,56 @@ input[type=text] {
       color: white;
       font-size: 35px;
       line-height: 35px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 20px;
-      padding-bottom: 10px;
-      padding-left: 30px;
-      padding-right: 30px;
-      padding-top: 10px;
+      margin: 20px auto 0px auto; /* trbl */
+      padding: 10px 30px 10px 30px;
       transition: 0.3s;
     }
     #play-button:hover {
       background: var(--light-green);
       box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.5);
-      padding-bottom: 15px;
-      padding-left: 35px;
-      padding-right: 35px;
-      padding-top: 15px;
+      padding: 15px 35px 15px 35px;
     }
     #play-button:active {
       background-color: var(--dark-green);
     }
+
+
+.start-screen {
+  opacity: 1;
+}
+.start-screen.fade {
+  opacity: 0;
+  transition: all 1s ease-in-out !important;
+}
+.start-screen.gone {
+  display:none;
+}
+
+
+#game {
+  border: 1px solid black;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+#altitude {
+  /* border: 1px solid white; */
+  font-size: 20px;
+  left: 20px;
+  line-height: 20px;
+  position: fixed;
+  top: 20px;
+}
+
+
+.game-screen {
+  opacity: 0;
+}
+.game-screen.fade {
+  opacity: 1;
+  transition: all 1s ease-in-out !important;
+}
 
