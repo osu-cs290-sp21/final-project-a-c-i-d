@@ -1,4 +1,4 @@
-import { Render, Events } from 'matter-js'
+import { Matter, Render, Events } from 'matter-js'
 import { Game } from './game'
 import { Player } from './player'
 import { Input } from './lib/stateControllers'
@@ -36,9 +36,10 @@ function makeRenderer({ element, engine, follows }) {
     })
 
     if (follows) { // Centers renderer on the player before every update.
-        const cameraScale = 1
+        const cameraScale = 0.5
         Events.on(render, 'beforeRender', event => {
             const center = { ...follows.position }
+            center.x = 0
             center.y = Math.min(follows.position.y, follows['highest']);
             Render.lookAt(event.source, center, {
                 x: window.innerWidth  * cameraScale,
@@ -52,7 +53,7 @@ function makeRenderer({ element, engine, follows }) {
 
 
 async function main() {
-    const startScreens = [... document.getElementsByClassName('start-screen')]
+    const startScreens = [...document.getElementsByClassName('start-screen')]
     const playButton   = document.getElementById('play-button')
     const gameElem     = document.getElementById('game')
     const altitude     = document.getElementById('altitude')
@@ -76,16 +77,18 @@ async function main() {
             =   `Altitude: `
             +   `${-Math.floor(player.body.position.y * 0.01)}`
             +   ` bds (birdies)`
-            // Debug.
-            +   ` ${Math.floor(player.body.position.y)}`
-            +   ` ${Math.floor(player.body['highest'])}`
-            +   ` ${Math.floor(Math.abs(player.body['highest'] - player.body.position.y))}`
-            +   ` ${Math.floor(window.innerHeight/2)}`
+// Debug.
++   `\ny: ${Math.floor(Math.abs(player.body.position.y))}`
++   `\nh: ${Math.floor(Math.abs(player.body['highest']))}`
++   `\nd: ${Math.floor(Math.abs(player.body['highest'] - player.body.position.y))}`
++       `/${Math.floor(window.innerHeight/2)}`
     })
 
-    document.body.addEventListener('keydown', e => { Input.keys[e.keyCode] = true  })
-    document.body.addEventListener('keyup'  , e => { Input.keys[e.keyCode] = false })
-    document.body.addEventListener('keydown', e => { if (e.code === 'KeyC') gameInstance.stop() })
+    document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true  })
+    document.addEventListener('keyup'  , e => { Input.ks[e.keyCode] = false })
+    document.addEventListener('keydown', e => {
+        if (e.code === 'KeyC') gameInstance.stop()
+    })
 
     playButton.addEventListener('click', () => {
         playButton.disabled = 'true'

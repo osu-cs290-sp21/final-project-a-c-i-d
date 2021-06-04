@@ -9,19 +9,18 @@ export function makeBlock(highest) {
         restitution:    1,
     })
 
-    Body.setPosition(block, {
-        x:           Math.random() * window.innerWidth,
-        y: highest - Math.random() * window.innerHeight
-    })
+    Body.setPosition(block, getNextBlockPosition(highest))
 
     return block;
 }
 
 
-function getNextBlockPosition() {
+export function getNextBlockPosition(p) {
+    const w = window.innerWidth/2 - 50
+    const h = window.innerHeight
     return {
-        x: 0,
-        y: -200
+        x:    ((Math.random() * w*2) - w),
+        y: p - (Math.random() * h*2) - 100
     }
 }
 

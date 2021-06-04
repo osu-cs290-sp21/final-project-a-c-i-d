@@ -31,6 +31,7 @@ export class Player {
         this.orientation      = 1 // Bird looking right.
         this.rotationSpeed    = 0
         this.rotationIntegral = 0
+        this.chunk            = false
         const options = {
             render: {
                 sprite: {
@@ -51,6 +52,7 @@ export class Player {
         // Makes a 16-gon for the player collider.
         this.body = Bodies.polygon(x, y, 16, 50, options)
         this.body.label = 'gamer'
+
         Body.set(this.body, 'highest', this.body.position.y)
     }
 
@@ -80,15 +82,16 @@ export class Player {
         }
 
         const onSparseUpdate = () => {
-            let hasFallen = this.body.position.y > 1000
-            if (hasFallen) {
-                this.died()
-            }
-            this.orient()
-            if (Math.abs(this.body['highest'] - this.body.position.y)
-            >   window.innerHeight/2) {
-                this.died();
-            }
+            const x = this.body.position.x
+            const y = this.body.position.y+50 // even skim the bottom, you die
+            const m = this.body['highest']
+            const w = window.innerWidth /2
+            const h = window.innerHeight/2
+
+            if      (x < -w) { Body.setPosition(this.body, { x:  w, y: y }) }
+            else if (x >  w) { Body.setPosition(this.body, { x: -w, y: y }) }
+
+            if (Math.abs(m - y) > h) { this.died() }
         }
 
         Events.on(this.body, 'onCollide'   , onCollisionBegin)
@@ -114,12 +117,12 @@ export class Player {
             }
         }
 
-        if      (Input.leftArrow ) { if (this.orientation > 0) this.flip() }
-        else if (Input.rightArrow) { if (this.orientation < 0) this.flip() }
+        if      (Input.leftArrow ) { if (this.orientation > 0) { this.flip() } }
+        else if (Input.rightArrow) { if (this.orientation < 0) { this.flip() } }
 
         if (Input.leftArrow || Input.rightArrow) {
             const speed = 200
-            const groundSpeedBoost = 50 // This is because of friction.
+            const groundSpeedBoost = 20 // This is because of friction.
             const zoom = speed + (this.isGrounded ? groundSpeedBoost : 0)
             horizontalMovement(body, zoom * dt * this.orientation)
         } else if (this.isGrounded) {
@@ -131,7 +134,7 @@ export class Player {
             this.rotationIntegral += rotation
             Body.setAngle(body, rotation + body.angle)
 
-            if (this.rotationIntegral >= 2 * Math.PI) {
+            if (this.rotationIntegral >= 2*Math.PI) {
                 this.rotationSpeed     = 0
                 this.rotationIntegral  = 0
                 Body.setAngle(this.body, 0)
@@ -145,12 +148,12 @@ export class Player {
 
 
     died() {
-        Body.setPosition(this.body, this.spawn)
-        this.skin = randomBird()
-        this.updateSprite()
+        console.log('died')
 
-        // const score = this.body['highest']
-        // this.body['highest'] = this.body.position.y
+        Body.setPosition(this.body, this.spawn)
+        const score = this.body['highest']
+        this.body['highest'] = this.body.position.y
+        this.orient()
 
         // fetch('http://localhost:3000/died', {
         //     method: 'PUT',
@@ -175,7 +178,8 @@ export class Player {
 
 
     updateSprite() {
-        this.body.render.sprite.texture = sprite(this.skin, this.orientation > 0)
+        this.body.render.sprite.texture
+            = sprite(this.skin, this.orientation > 0)
     }
 
 

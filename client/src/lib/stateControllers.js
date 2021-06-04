@@ -12,11 +12,11 @@ export const BigBen = {
 
 
 export const Input = { // Global manager for the key presses
-    keys: new Array(256).fill(false), // Array of 256 false values
-    get upArrow   () { return Input.keys[87] | Input.keys[38] | Input.keys[32] },
-    get leftArrow () { return Input.keys[65] | Input.keys[37] },
-    get rightArrow() { return Input.keys[68] | Input.keys[39] },
-    get downArrow () { return Input.keys[83] | Input.keys[30] },
+    ks: new Array(256).fill(false), // Array of 256 false values
+    get upArrow   () { return Input.ks[87] | Input.ks[38] | Input.ks[32] },
+    get leftArrow () { return Input.ks[65] | Input.ks[37] },
+    get rightArrow() { return Input.ks[68] | Input.ks[39] },
+    get downArrow () { return Input.ks[83] | Input.ks[30] },
 };
 
 

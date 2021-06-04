@@ -24,17 +24,16 @@ export class Game {
 
     setup() { // Setup the game controller.
         const player = this.players[0]
-
-        let nest = [Bodies.rectangle(0, 100, 90, 20, {
+        const earth  = [Bodies.rectangle(0, 50, window.innerWidth,  1, {
             friction:       0,
             frictionStatic: 0,
             isStatic:       true,
             restitution:    1,
         })]
 
-        const terrain = nest.concat([... new Array(100)].map(() => {
-            return makeBlock(player.body['highest'])
-        }))
+        const terrain = earth // .concat([... new Array(30)].map(() => {
+        //     return makeBlock(player.body['highest'])
+        // }))
 
         const passthrough    = body => { body.collisionFilter.group    = -1
                                          body.collisionFilter.category =  0 }
@@ -53,10 +52,10 @@ export class Game {
             })
 
             if (Math.random() < 0.2 && terrain.indexOf(platform) != 0) {
-                Body.set(sensor, 'label', 'boing');
-                Composite.add(this.engine.world, sensor);
-                passthrough(platform);
-                continue;
+                Body.set(sensor, 'label', 'boing')
+                Composite.add(this.engine.world, sensor)
+                passthrough(platform)
+                continue
             } else {
                 Body.set(platform, 'hard' , false)
                 Body.set(platform, 'label', 'ground')
@@ -94,9 +93,11 @@ export class Game {
 
             Composite.add(this.engine.world, sensor)
         }
+
         Composite.add(this.engine.world, terrain)
 
-        Events.on(this.runner, 'tick', this.update.bind(this)) // Registers the update functions for each update.
+        // Registers the update functions for each update.
+        Events.on(this.runner, 'tick', this.update.bind(this))
 
         for (const player of this.players) {
             player.setup()
@@ -104,16 +105,20 @@ export class Game {
     }
 
 
-    addPlayer(player) { // Adds a player into the game, as well as the players array.
-        Composite.add(this.engine.world, player.body) // Adds the player's physics body into the world.
-        Events.on(this.runner, 'tick', player.update.bind(player)) // Registers the player's functions to be called when an update happens.
+    // Adds a player into the game, as well as the players array.
+    addPlayer(player) {
+        // Adds the player's physics body into the world.
+        Composite.add(this.engine.world, player.body)
+        // Registers the player's functions to be called when an update happens.
+        Events.on(this.runner, 'tick', player.update.bind(player))
         this.players.push(player) // Adds the player to the array.
     }
 
 
     update() { // Called every time a new frame is rendered.
-        BigBen.deltaTime = this.runner.delta // Updates the global time variable.
-    }
+        BigBen.deltaTime = this.runner.delta
+
+    }   // Updates the global time variable.
 
 
     run() { // Runs the game. This is not control blocking.
@@ -130,5 +135,7 @@ export class Game {
     stop() { // Stops the game.
         Runner.stop(this.runner)
     }
+
+
 }
 
