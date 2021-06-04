@@ -1,7 +1,10 @@
-import { Bodies, Body, Composite, Events, Vector } from 'matter-js';
+import { Bodies, Body } from 'matter-js';
 
 
-export function makeBlock(highest) {
+export const makeTerrain = (h) => [...new Array(30)].map(() => makeBlock(h))
+
+
+function makeBlock(highest) {
     const block = Bodies.rectangle(0, 0, 90, 20, {
         friction:       0,
         frictionStatic: 0,
@@ -15,7 +18,7 @@ export function makeBlock(highest) {
 }
 
 
-export function getNextBlockPosition(p) {
+function getNextBlockPosition(p) {
     const w = window.innerWidth/2 - 50
     const h = window.innerHeight
     return {

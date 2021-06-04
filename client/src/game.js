@@ -4,7 +4,7 @@ import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-u
 import { Axes, jump } from './lib/physics'
 import { BigBen } from './lib/stateControllers'
 import { ogBirds, sprite } from './lib/sprites'
-import { makeBlock } from './lib/levelObjects'
+import { makeTerrain } from './lib/levelObjects'
 
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
@@ -18,12 +18,13 @@ export class Game {
     constructor() {
         this.engine  = Engine.create()
         this.runner  = Runner.create()
-        this.players = []
+        this.player  = undefined
+        this.terrain = []
+        this.height  = -window.innerHeight*2
     }
 
 
     setup() { // Setup the game controller.
-        const player = this.players[0]
         const earth  = [Bodies.rectangle(0, 50, window.innerWidth,  1, {
             friction:       0,
             frictionStatic: 0,
@@ -31,17 +32,25 @@ export class Game {
             restitution:    1,
         })]
 
-        const terrain = earth // .concat([... new Array(30)].map(() => {
-        //     return makeBlock(player.body['highest'])
-        // }))
+        this.terrain = this.terrain.concat(earth)
+        this.terrain = this.terrain.concat(makeTerrain(this.player.body['highest']))
+        this.addTerrain()
 
+        // Registers the update functions for each update.
+        Events.on(this.runner, 'tick', this.update.bind(this))
+
+        this.player.setup()
+    }
+
+
+    addTerrain() {
         const passthrough    = body => { body.collisionFilter.group    = -1
                                          body.collisionFilter.category =  0 }
         const pauliExclusion = body => { body.collisionFilter.group    =  1
                                          body.collisionFilter.category =  1 }
-        pauliExclusion(player.body)
+        pauliExclusion(this.player.body)
 
-        for (const platform of terrain) {
+        for (const platform of this.terrain) {
             const { x, y } = platform.position
             const sensor = Bodies.fromVertices(x, y, platform.vertices, {
                 isSensor: true,
@@ -51,7 +60,7 @@ export class Game {
                 }
             })
 
-            if (Math.random() < 0.2 && terrain.indexOf(platform) != 0) {
+            if (Math.random() < 0.2 && this.terrain.indexOf(platform) != 0) {
                 Body.set(sensor, 'label', 'boing')
                 Composite.add(this.engine.world, sensor)
                 passthrough(platform)
@@ -94,14 +103,7 @@ export class Game {
             Composite.add(this.engine.world, sensor)
         }
 
-        Composite.add(this.engine.world, terrain)
-
-        // Registers the update functions for each update.
-        Events.on(this.runner, 'tick', this.update.bind(this))
-
-        for (const player of this.players) {
-            player.setup()
-        }
+        Composite.add(this.engine.world, this.terrain)
     }
 
 
@@ -111,24 +113,25 @@ export class Game {
         Composite.add(this.engine.world, player.body)
         // Registers the player's functions to be called when an update happens.
         Events.on(this.runner, 'tick', player.update.bind(player))
-        this.players.push(player) // Adds the player to the array.
+        this.player = player // Adds the player to the array.
+        // ^ Used to be `this.players` array intended for multiplayer.
     }
 
 
     update() { // Called every time a new frame is rendered.
-        BigBen.deltaTime = this.runner.delta
-
-    }   // Updates the global time variable.
+        BigBen.deltaTime = this.runner.delta // Updates global time variable.
+        if (this.player.body.position.y < this.height) {
+            this.height -= window.innerHeight*2
+            this.terrain = this.terrain.concat(makeTerrain(this.player.body['highest']))
+            this.addTerrain()
+        }
+    }
 
 
     run() { // Runs the game. This is not control blocking.
         BigBen.begin() // Starts Big Ben.
         Runner.run(this.runner, this.engine) // Starts the Matter.js physics.
-        this.players.map(player => {
-            Events.trigger(player.body, 'awake', {
-                self: player.body
-            })
-        })
+        Events.trigger(this.player.body, 'awake', { self: this.player.body })
     }
 
 

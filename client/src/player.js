@@ -92,6 +92,8 @@ export class Player {
             else if (x >  w) { Body.setPosition(this.body, { x: -w, y: y }) }
 
             if (Math.abs(m - y) > h) { this.died() }
+
+            this.orient()
         }
 
         Events.on(this.body, 'onCollide'   , onCollisionBegin)

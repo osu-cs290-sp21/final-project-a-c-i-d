@@ -15,7 +15,7 @@ function makeRenderer({ element, engine, follows }) {
         element: element,
         engine:  engine,
         options: {
-            background: 'white',
+            background: 'transparent',
             height:     window.innerHeight, // document.body.clientHeight,
             width:      window.innerWidth,  // document.body.clientWidth,
             hasBounds:  true,
@@ -58,18 +58,18 @@ async function main() {
     const gameElem     = document.getElementById('game')
     const altitude     = document.getElementById('altitude')
 
-    const gameInstance = new Game() // Creates new game.
-    const player       = new Player({ x: 0, y: 0 })
+    const game   = new Game() // Creates new game.
+    const player = new Player({ x: 0, y: 0 })
 
     const render = makeRenderer({ // Makes the renderer.
         element: gameElem,
-        engine:  gameInstance.engine,
+        engine:  game.engine,
         follows: player.body
     })
 
-    gameInstance.addPlayer(player)
-    gameInstance.setup()
-    gameInstance.run()
+    game.addPlayer(player)
+    game.setup()
+    game.run()
     Render.run(render) // Starts the renderer.
 
     Events.on(player.body, 'sparseUpdate', () => {
@@ -87,7 +87,7 @@ async function main() {
     document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true  })
     document.addEventListener('keyup'  , e => { Input.ks[e.keyCode] = false })
     document.addEventListener('keydown', e => {
-        if (e.code === 'KeyC') gameInstance.stop()
+        if (e.code === 'KeyC') { game.stop() }
     })
 
     playButton.addEventListener('click', () => {
