@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap');
 
+
 :root {
   --dark-green: rgb(89, 192, 158);
   --green: rgb(46, 223, 164);
@@ -9,6 +10,7 @@
   --pink: rgb(255, 119, 119);
 }
 
+
 * {
   border: 0;
   margin: 0;
@@ -16,27 +18,41 @@
   padding: 0;
 }
 
+
 body {
   background: url('img/backdrop-day.png') no-repeat center fixed;
   background-size: cover;
+  overflow: hidden;
+  /* The `overflow` property specifies whether to clip the content or to add
+   * scrollbars when the content of an element is too big to fit in the
+   * specified area.
+   *
+   *   `hidden` - The overflow is clipped, and the rest of the content will be
+   *              invisible
+   */
 }
 
+
 button,
-h1, h2,
-input[type=submit], input[type=text] {
+h1,
+h2,
+input[type=submit],
+input[type=text] {
   font-family: var(--monospace);
 }
 
-.start {
+
+.start-screen {
   opacity: 100%;
 }
-  .start .fade {
-    opacity: 0%;
-    transition: all 1s ease-in-out !important;
-  }
-  .start .gone {
-    display: none;
-  }
+.start-screen .fade {
+  opacity: 0%;
+  transition: all 1s ease-in-out !important;
+}
+.start-screen .gone {
+  display: none;
+}
+
 
 #altitude {
   /* border: 1px solid white; */
@@ -47,6 +63,7 @@ input[type=submit], input[type=text] {
   top: 20px;
 }
 
+
 #start-backdrop {
   bottom: 0;
   left: 0;
@@ -54,6 +71,7 @@ input[type=submit], input[type=text] {
   position: fixed;
   top: 0;
 }
+
 
 #start-container {
   /* border: 1px solid white; */
@@ -65,6 +83,7 @@ input[type=submit], input[type=text] {
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
   #start-title {
     /* border: 1px solid white; */
     color: black;
@@ -74,6 +93,7 @@ input[type=submit], input[type=text] {
     text-align: center;
   }
   /* #start-title:hover {} */
+
     #play-button {
       /* border: 1px solid white; */
       background: var(--green);
@@ -101,3 +121,4 @@ input[type=submit], input[type=text] {
     #play-button:active {
       background-color: var(--dark-green);
     }
+
