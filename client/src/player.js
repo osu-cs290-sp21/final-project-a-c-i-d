@@ -157,16 +157,16 @@ export class Player {
         this.body['highest'] = this.body.position.y
         this.orient()
 
-        // fetch('http://localhost:3000/died', {
-        //     method: 'PUT',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         name: '',
-        //         altitude: -score
-        //     })
-        // })
+        fetch('http://localhost:3000/died', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: '',
+                altitude: -score
+            })
+        })
     }
 
 
