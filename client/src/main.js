@@ -16,8 +16,8 @@ function makeRenderer({ element, engine, follows }) {
         engine:  engine,
         options: {
             background: 'white',
-            height:     600, // window.innerHeight, // document.body.clientHeight,
-            width:      600, // window.innerWidth,  // document.body.clientWidth,
+            height:     window.innerHeight, // document.body.clientHeight,
+            width:      window.innerWidth,  // document.body.clientWidth,
             hasBounds:  true,
             wireframes: false, // This needs to be false for sprites to show up.
             pixelRatio: 'auto',
@@ -36,9 +36,10 @@ function makeRenderer({ element, engine, follows }) {
     })
 
     if (follows) { // Centers renderer on the player before every update.
-        const cameraScale = 0.5
+        const cameraScale = 1
         Events.on(render, 'beforeRender', event => {
             const center = { ...follows.position }
+            center.y = Math.min(follows.position.y, follows['highest']);
             Render.lookAt(event.source, center, {
                 x: window.innerWidth  * cameraScale,
                 y: window.innerHeight * cameraScale
@@ -57,7 +58,7 @@ async function main() {
     const altitude     = document.getElementById('altitude')
 
     const gameInstance = new Game() // Creates new game.
-    const player       = new Player({ x: 300, y: 100 })
+    const player       = new Player({ x: 0, y: 0 })
 
     const render = makeRenderer({ // Makes the renderer.
         element: gameElem,
@@ -75,6 +76,11 @@ async function main() {
             =   `Altitude: `
             +   `${-Math.floor(player.body.position.y * 0.01)}`
             +   ` bds (birdies)`
+            // Debug.
+            +   ` ${Math.floor(player.body.position.y)}`
+            +   ` ${Math.floor(player.body['highest'])}`
+            +   ` ${Math.floor(Math.abs(player.body['highest'] - player.body.position.y))}`
+            +   ` ${Math.floor(window.innerHeight/2)}`
     })
 
     document.body.addEventListener('keydown', e => { Input.keys[e.keyCode] = true  })

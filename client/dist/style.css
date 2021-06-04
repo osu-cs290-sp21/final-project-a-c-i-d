@@ -77,22 +77,14 @@ input[type=text] {
       color: white;
       font-size: 35px;
       line-height: 35px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 20px;
-      padding-bottom: 10px;
-      padding-left: 30px;
-      padding-right: 30px;
-      padding-top: 10px;
+      margin: 20px auto 0px auto; /* trbl */
+      padding: 10px 30px 10px 30px;
       transition: 0.3s;
     }
     #play-button:hover {
       background: var(--light-green);
       box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.5);
-      padding-bottom: 15px;
-      padding-left: 35px;
-      padding-right: 35px;
-      padding-top: 15px;
+      padding: 15px 35px 15px 35px;
     }
     #play-button:active {
       background-color: var(--dark-green);

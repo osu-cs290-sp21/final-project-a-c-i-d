@@ -4,7 +4,7 @@ import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-u
 import { Axes, jump } from './lib/physics'
 import { BigBen } from './lib/stateControllers'
 import { ogBirds, sprite } from './lib/sprites'
-import { makeBlock, setPlayer } from './lib/levelObjects'
+import { makeBlock } from './lib/levelObjects'
 
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
@@ -25,23 +25,16 @@ export class Game {
     setup() { // Setup the game controller.
         const player = this.players[0]
 
-        setPlayer(player.body)
-        const terrain = 
-        [
-            Bodies.rectangle(300, 400, 90, 10, {
-                friction:       0,
-                frictionStatic: 0,
-                isStatic:       true,
-                restitution:    1,
-            }),
-            Bodies.rectangle(300, -300, 90, 10, {
-                friction:       0,
-                frictionStatic: 0,
-                isStatic:       true,
-                restitution:    1,
-            }),
-        ]
-        // const terrain = [... new Array(100)].map(() => { return makeBlock(player.body.position, 400) })
+        let nest = [Bodies.rectangle(0, 100, 90, 20, {
+            friction:       0,
+            frictionStatic: 0,
+            isStatic:       true,
+            restitution:    1,
+        })]
+
+        const terrain = nest.concat([... new Array(100)].map(() => {
+            return makeBlock(player.body['highest'])
+        }))
 
         const passthrough    = body => { body.collisionFilter.group    = -1
                                          body.collisionFilter.category =  0 }
@@ -50,9 +43,6 @@ export class Game {
         pauliExclusion(player.body)
 
         for (const platform of terrain) {
-            Body.set(platform, 'hard', false)
-            Body.set(platform, 'label', 'ground')
-
             const { x, y } = platform.position
             const sensor = Bodies.fromVertices(x, y, platform.vertices, {
                 isSensor: true,
@@ -61,6 +51,16 @@ export class Game {
                     fillStyle: 'transparent'
                 }
             })
+
+            if (Math.random() < 0.2 && terrain.indexOf(platform) != 0) {
+                Body.set(sensor, 'label', 'boing');
+                Composite.add(this.engine.world, sensor);
+                passthrough(platform);
+                continue;
+            } else {
+                Body.set(platform, 'hard' , false)
+                Body.set(platform, 'label', 'ground')
+            }
 
             Events.on(sensor, 'onCollideEnd', pair => {
                 if (pair.other.label === 'gamer') {
@@ -94,8 +94,8 @@ export class Game {
 
             Composite.add(this.engine.world, sensor)
         }
-
         Composite.add(this.engine.world, terrain)
+
         Events.on(this.runner, 'tick', this.update.bind(this)) // Registers the update functions for each update.
 
         for (const player of this.players) {

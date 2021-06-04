@@ -8,7 +8,7 @@ import { sprite, randomBird } from './lib/sprites'
 import { makeBlock } from './lib/levelObjects'
 
 
-// Iain read this
+// Iain read this.
 // https://github.com/liabru/matter-js/wiki/Creating-plugins
 // Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents)
@@ -25,10 +25,10 @@ export class Player {
 
     constructor(spawn) {
         const { x, y }        = spawn
-        this.spawn            = { x: x+100, y }
+        this.spawn            = { x, y }
         this.skin             = randomBird()
         this.isGrounded       = false
-        this.orientation      = 1 // Bird looking right
+        this.orientation      = 1 // Bird looking right.
         this.rotationSpeed    = 0
         this.rotationIntegral = 0
         const options = {
@@ -48,10 +48,8 @@ export class Player {
             angle:          0,
             mass:           1,
         }
-
-        // Makes an octagon for the player collider
+        // Makes a 16-gon for the player collider.
         this.body = Bodies.polygon(x, y, 16, 50, options)
-
         this.body.label = 'gamer'
         Body.set(this.body, 'highest', this.body.position.y)
     }
@@ -63,13 +61,14 @@ export class Player {
                 'ground': () => { this.isGrounded = true },
                 'boing':  () => {
                     const bounciness = 16
-                    this.isGrounded = false
+                    this.isGrounded  = false
                     jump(this.body, bounciness)
                 }
             }
             const other = col.other
             cases[other.label]?.call()
         }
+
         const onCollisionEnd = (col) => {
             const cases = {
                 'ground': () => { this.isGrounded = false },
@@ -79,36 +78,39 @@ export class Player {
             cases[other.label]?.call()
             this.orient()
         }
+
         const onSparseUpdate = () => {
             let hasFallen = this.body.position.y > 1000
             if (hasFallen) {
                 this.died()
             }
             this.orient()
+            if (Math.abs(this.body['highest'] - this.body.position.y)
+            >   window.innerHeight/2) {
+                this.died();
+            }
         }
 
-        Events.on(this.body, 'onCollide', onCollisionBegin)
-        Events.on(this.body, 'onCollideEnd', onCollisionEnd)
+        Events.on(this.body, 'onCollide'   , onCollisionBegin)
+        Events.on(this.body, 'onCollideEnd', onCollisionEnd  )
 
-        const sparseTime = 1000/15 // 15 fps
+        const sparseTime = 1000/15 // 15 fps.
         this.body.sparseUpdateEvery(sparseTime)
         Events.on(this.body, 'sparseUpdate', onSparseUpdate)
     }
 
 
     update() {
-        const dt = BigBen.deltaTime
+        const dt   = BigBen.deltaTime
         const body = this.body
 
-        // Jump
+        // Jump!
         if (Input.upArrow) {
             if (this.isGrounded) {
                 this.isGrounded = false
                 const hops = 20
                 jump(body, hops)
-                if (Math.random() > 0.2) {
-                    this.rotationSpeed = 20
-                }
+                this.rotationSpeed = 20
             }
         }
 
@@ -117,7 +119,7 @@ export class Player {
 
         if (Input.leftArrow || Input.rightArrow) {
             const speed = 200
-            const groundSpeedBoost = 50 // This is because of friction
+            const groundSpeedBoost = 50 // This is because of friction.
             const zoom = speed + (this.isGrounded ? groundSpeedBoost : 0)
             horizontalMovement(body, zoom * dt * this.orientation)
         } else if (this.isGrounded) {
@@ -136,11 +138,9 @@ export class Player {
             }
         }
 
-        // if (this.body['highest'] > this.body.position.y) {
-        //     const margin = 100
-        //     const y = this.body.position.y
-        //     this.body['highest'] = y
-        // }
+        if (this.body['highest'] > this.body.position.y) {
+            this.body['highest'] = this.body.position.y
+        }
     }
 
 
