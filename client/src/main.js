@@ -1,16 +1,16 @@
-import { Engine, Render, Runner, World, Events, Bodies, Body, Vector } from 'matter-js';
-import { Game } from './game';
-import { Player } from './player';
-import { Input } from './lib/stateControllers';
+import { Render, Events } from 'matter-js'
+import { Game } from './game'
+import { Player } from './player'
+import { Input } from './lib/stateControllers'
 
 
-const debug = false;
+const debug = false
 
 
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer
-    // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
     // https://github.com/liabru/matter-js/wiki/Rendering
+    // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
     const render = Render.create({
         element: element,
         engine:  engine,
@@ -33,14 +33,13 @@ function makeRenderer({ element, engine, follows }) {
                 showBroadphase:     debug,
                 showDebug:          debug,
         }
-    });
+    })
 
-    // Centers renderer on the player before every update
-    if (follows) {
-        const cameraScale = 0.5;
+    if (follows) { // Centers renderer on the player before every update
+        const cameraScale = 0.5
         Events.on(render, 'beforeRender', event => {
-            const margin = 100;
-            const center = {...follows.position};
+            const margin = 100
+            const center = { ...follows.position };
             center.y = Math.min(follows.position.y - margin, follows['highest']);
             Render.lookAt(event.source, center, {
                 x: window.innerWidth  * cameraScale,
@@ -49,111 +48,49 @@ function makeRenderer({ element, engine, follows }) {
         });
     }
 
-    return render;
+    return render
 }
 
 
 async function main() {
-    // const showOGBirdies = false;
-    // if (showOGBirdies) {
-    //     // Creates a new game and player
-    //     const soScene = new ShowoffScene();
-    //     // Makes the renderer
-    //     const render = makeRenderer({
-    //         element: document.body,
-    //         engine: soScene.engine,
-    //         // follows: soScene.ground.position,
-    //     });
-    //     Render.run(render); // Starts the renderer.
-    //     document.body.addEventListener('keydown', event => { if (event.code=='KeyC') { soScene.stop(); } });
-    //     soScene.run();
-    //     const cameraScale = 0.5;
-    //     Render.lookAt(render, {x: 250, y: 100}, {
-    //         x: document.body.clientWidth * cameraScale,
-    //         y: document.body.clientHeight * cameraScale
-    //     });
-    // } else { /**/ }
-
-    // Creates a new game and player
-    const gameInstance = new Game();
-    const player = new Player({
-        x: 300,
-        y: 100
-    });
-    gameInstance.addPlayer(player);
-
-    // Makes the renderer
-    const render = makeRenderer({
-        element: document.body,
-        engine: gameInstance.engine,
-        follows: player.body
-    });
-
-    // gameInstance.setup();
-    // gameInstance.run(); // Starts the game and physics. 
-    // Render.run(render); // Starts the renderer.
-    Events.on(player.body, 'sparseUpdate', () => {
-        document.getElementById('altitude')
-            .innerText
-            =   `Altitude: `
-            +   `${-Math.floor(player.body.position.y * 0.01)}`
-            +   ` bds (birdies)`;
-    });
-
-    // window.capture = () => console.table(Object.entries(player.body));
-    document.body.addEventListener('keydown', event => {
-        if (event.code == 'KeyC') {
-            gameInstance.stop();
-        }
-    });
-
-    // initializeUI({
-    //     onPlayButton: (obj) => {
-    //         player.name = obj.name;
-    //         player.skin = obj.skinURL;
-    //         startGame();
-    //     }
-    // });
-
-    document.body.addEventListener('keydown', event => { Input.keys[event.keyCode] = true  })
-    document.body.addEventListener('keyup'  , event => { Input.keys[event.keyCode] = false })
-
-
-    const startClass = document.getElementsByClassName('start')
+    const starts = Array.from(document.getElementsByClassName('start-screen'))
     const playButton = document.getElementById('play-button')
-    const playNickname = document.getElementById('play-nickname')
-
-    const starts = Array.from(startClass)
-
-    const callback = (name) => {
-        console.log('Play')
-        playButton.disabled = 'true'
-        starts.map(f => f.classList.add('fade'))
-        setTimeout(() => {
-            starts.map(f => f.classList.add('gone'))
-        }, 1000);
-    };
 
     playButton.addEventListener('click', () => {
+        playButton.disabled = 'true'
+        starts.map(s => s.classList.add('fade'))
+        setTimeout(() => { starts.map(s => s.classList.add('gone')) }, 1000)
 
-        gameInstance.setup();
-        gameInstance.run();
-        Render.run(render); // Starts the renderer.
+        const gameInstance = new Game() // Creates new game
+        const player = new Player({ x: 300, y: 100 })
+        gameInstance.addPlayer(player)
 
-        callback('iain');
-    });
+        const render = makeRenderer({ // Makes the renderer
+            element: document.body,
+            engine:  gameInstance.engine,
+            follows: player.body
+        })
 
+        gameInstance.setup()
+        gameInstance.run()
+        Render.run(render) // Starts the renderer
+
+        Events.on(player.body, 'sparseUpdate', () => {
+            document.getElementById('altitude')
+                .innerText
+                =   `Altitude: `
+                +   `${-Math.floor(player.body.position.y * 0.01)}`
+                +   ` bds (birdies)`
+        })
+
+        document.body.addEventListener('keydown', e => { Input.keys[e.keyCode] = true  })
+        document.body.addEventListener('keyup'  , e => { Input.keys[e.keyCode] = false })
+        document.body.addEventListener('keydown', e => { if (e.code === 'KeyC') gameInstance.stop() })
+    })
 
 
 }
 
 
 main()
-    .then(() => { // Connects the Input manager to the DOM, once the game is running.
-
-    })
-    // .then(() => setTimeout(() => {
-    //     const audio = document.getElementById('player');
-    //     // audio.play();
-    // }, 3000));
 
