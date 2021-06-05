@@ -1,7 +1,7 @@
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
-// const exphbs = require('express-handlebars')
+const exphbs = require('express-handlebars')
 const app = express()
 const port = 3000
 const dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
@@ -19,8 +19,8 @@ const dontGame = true;
 
 app.use(express.static(path.join(__dirname, '..', 'client', 'dist')))
 app.use(express.json());
-// app.use(exphbs());
-// app.set('view engine', 'handlebars');
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
 
 
 app.get('/', (req, res) => {
@@ -46,10 +46,10 @@ app.put('/died', (req, res) => {
 
 
 app.get('/leaderboard', function (req, res) {
-    const upperBound = Math.min([...leaderboard.entries()].length, 4)
-    const highest = [...leaderboard.entries()].sort(([k1,v1],[k2,v2]) => v2 - v1).slice(0,upperBound)
-    res.status(200).render('./partials/leaderboardModal', {leaderboardData})
-})
+    const upperBound = Math.min([...leaderboard.entries()].length, 4);
+    const highest = [...leaderboard.entries()].sort(([k1,v1],[k2,v2]) => v2 - v1).slice(0,upperBound).map(([name,score]) => ({ name,score }));
+    res.status(200).render('./partials/leaderboardModal', { leaderboardData: highest });
+});
 
 app.listen(port, () => {
     console.log(`listen to ${port}`)
