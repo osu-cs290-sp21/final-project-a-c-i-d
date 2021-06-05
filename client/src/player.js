@@ -170,7 +170,7 @@ export class Player {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: '',
+                name: 'iain',
                 altitude: -score
             })
         })
