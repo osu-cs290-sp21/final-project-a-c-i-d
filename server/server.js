@@ -25,7 +25,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
     // res.render('main');
-    res.sendFile('index.html')
+    res.status(200).render('main')
 })
 
 app.put('/died', (req, res) => {
@@ -48,8 +48,7 @@ app.put('/died', (req, res) => {
 app.get('/leaderboard', function (req, res) {
     const upperBound = Math.min([...leaderboard.entries()].length, 4)
     const highest = [...leaderboard.entries()].sort(([k1,v1],[k2,v2]) => v2 - v1).slice(0,upperBound)
-    res.status(200).render('leaderboardModal', {leaderboardData})
-    return;
+    res.status(200).render('./partials/leaderboardModal', {leaderboardData})
 })
 
 app.listen(port, () => {

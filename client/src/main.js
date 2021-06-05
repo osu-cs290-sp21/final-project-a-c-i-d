@@ -3,6 +3,7 @@ import { Game } from './game'
 import { Player } from './player'
 import { Input } from './lib/stateControllers'
 // import { leaderboardTemplate } from './ui/hsd'
+import { showLeaderboard } from './ui';
 
 const debug = false
 
@@ -60,6 +61,10 @@ async function main() {
 
     const game   = new Game() // Creates new game.
     const player = new Player({ x: 0, y: 0 })
+
+    player.onDie(() => {
+        showLeaderboard();
+    })
 
     const render = makeRenderer({ // Makes the renderer.
         element: gameElem,
