@@ -1,19 +1,17 @@
-<div id="leaderboard-modal" class="hidden">
-    <!-- Leaderboard modal-->
-    <div class="leaderboard-dialog">
 
-        <div class="modal-header">
-            <h3>Leaderboard</h3>
-            <button type="button" class="lb-close-button">&times;</button>
-        </div>
-        <!-- Leaderboard display -->
-        <div class="leaderboard-modal-body">
+<div class="leaderboard-dialog">
 
-            <!-- leaderboard positions go here -->
-            {{#each leaderboardData}}
-                {{> leaderboardPlayer}}
-            {{/each}}
+    <div class="modal-header">
+        <h3>Leaderboard</h3>
+        <button type="button" class="lb-close-button">&times;</button>
+    </div>
+    <!-- Leaderboard display -->
+    <div class="leaderboard-modal-body">
 
-        </div>
+        <!-- leaderboard positions go here -->
+        {{#each leaderboardData}}
+            {{> leaderboardPlayer}}
+        {{/each}}
+
     </div>
 </div>
