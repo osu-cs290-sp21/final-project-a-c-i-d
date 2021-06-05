@@ -45,44 +45,11 @@ app.put('/died', (req, res) => {
 });
 
 
-// not sure if this works yet...
 app.get('/leaderboard', function (req, res) {
-    const upperBound = Math.min([...leaderboard.entries()].length, 4)
-    const highest = [...leaderboard.entries()].sort(([k1,v1],[k2,v2]) => v2 - v1).slice(0,upperBound).map(([name,score]) => ({ name,score }))
-    console.log(highest)
-    res.status(200).render('./partials/leaderboardModal', { leaderboardData: highest })
-    // for (const [key,value] of leaderboard.entries()) {
-    //     const name = key
-    //     const score = value
-    // }
-
-    // console.log("== req.body:", req.body)
-    // if (req.body && req.body.username && req.body.altitude) {
-
-    //     if (leaderboardData) {
-    //         leaderboardData.push({ 
-    //             username: req.body.username,
-    //             score: req.body.altitude
-    //         })
-    //         console.log("== leaderboardData:", leaderboardData)
-    //         fs.writeFile(
-    //             __dirname + 'leaderboardData.json',
-    //             JSON.stringify(leaderboardData, null, 2),
-    //             function (err) {
-    //                 if (err) {
-    //                     res.status(500).send("Error writing new data. Try again later.")
-    //                 } else {
-    //                     res.status(200).send()
-    //                 }
-    //             }
-    //         )
-    //     } else {
-    //         next()
-    //     }
-    // } else {
-    //     res.status(400).send("Request needs a JSON body with 'url' and 'caption'.")
-    // }
-})
+    const upperBound = Math.min([...leaderboard.entries()].length, 4);
+    const highest = [...leaderboard.entries()].sort(([k1,v1],[k2,v2]) => v2 - v1).slice(0,upperBound).map(([name,score]) => ({ name,score }));
+    res.status(200).render('./partials/leaderboardModal', { leaderboardData: highest });
+});
 
 app.listen(port, () => {
     console.log(`listen to ${port}`)
@@ -95,14 +62,14 @@ app.listen(port, () => {
  * @param {int} key JSON key to use
  * @param {Object}
  */ 
- function sortBy(key, data) {
-    return data.sort((a, b) => {
-        var x = parseInt(a[key]);
-        var y = parseInt(b[key]);
-        return ((x > y) ? -1 : ((x < y) ? 1 : 0))
-    })
-}
-var sortedData = sortBy('score', dataFile)
+//  function sortBy(key, data) {
+//     return data.sort((a, b) => {
+//         var x = parseInt(a[key]);
+//         var y = parseInt(b[key]);
+//         return ((x > y) ? -1 : ((x < y) ? 1 : 0))
+//     })
+// }
+// var sortedData = sortBy('score', dataFile)
 
 
 
