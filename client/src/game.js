@@ -141,6 +141,15 @@ export class Game {
             this.terrain = this.terrain.concat(makeTerrain(this.player.body['highest']))
             this.addTerrain()
         }
+        const last = this.terrain[this.terrain.length-1];
+        if (last) {
+            const dist = Vector.magnitude(Vector.sub(last.position, this.player.body.position));
+            // if (dist > 1) {
+                Composite.remove(this.engine.world, last);
+                this.terrain.pop();
+                console.log('removed')
+            // }
+        }
     }
 
 
@@ -149,6 +158,9 @@ export class Game {
         Runner.run(this.runner, this.engine) // Starts the Matter.js physics.
         Events.trigger(this.player.body, 'awake', { self: this.player.body })
         // Events.trigger(this.gameController, 'awake', { self: this.gameController });
+        // setInterval(() => console.log(this.terrain.length), 1000)
+        setInterval(() => console.log(this.engine.world.bodies.length), 1000)
+
     }
 
 
