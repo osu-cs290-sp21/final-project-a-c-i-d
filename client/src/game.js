@@ -138,17 +138,21 @@ export class Game {
     sparseUpdate() {
         if (this.player.body.position.y < this.height) {
             this.height -= window.innerHeight * 2
-            this.terrain = this.terrain.concat(makeTerrain(this.player.body['highest']))
+            this.terrain = [...this.terrain, ...makeTerrain(this.player.body['highest'])]
             this.addTerrain()
         }
+
+        // const last = this.engine.world.bodies[this.engine.world.bodies-1];
+
         const last = this.terrain[this.terrain.length-1];
         if (last) {
+            if (last.label == 'player') return;
             const dist = Vector.magnitude(Vector.sub(last.position, this.player.body.position));
-            // if (dist > 1) {
-                Composite.remove(this.engine.world, last);
+            if (dist > 100) {
+                World.remove(this.engine.world, last);
                 this.terrain.pop();
                 console.log('removed')
-            // }
+            }
         }
     }
 
