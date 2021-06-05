@@ -2,7 +2,7 @@ import { Matter, Render, Events } from 'matter-js'
 import { Game } from './game'
 import { Player } from './player'
 import { Input } from './lib/stateControllers'
-
+import { leaderboardTemplate } from './ui/hsd'
 
 const debug = false
 
@@ -101,6 +101,10 @@ async function main() {
         setTimeout(() => { gameElem.classList.toggle('fade') },  500)
         setTimeout(() => { altitude.classList.toggle('fade') }, 1000)
     })
+
+    fetch('http://localhost:3000/leaderboard', {
+        method: 'GET',
+    }).then(data => console.log(data))
 }
 
 

@@ -1,9 +1,11 @@
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
+// const exphbs = require('express-handlebars')
 const app = express()
 const port = 3000
-var dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
+const dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
+const leaderboard = new Map(dataFile);
 
 const dontGame = true;
 // app.get('/build.js', (req,res,next) => {
@@ -17,23 +19,43 @@ const dontGame = true;
 
 app.use(express.static(path.join(__dirname, '..', 'client', 'dist')))
 app.use(express.json());
-app.get('/', (req, res, next) => {
+// app.use(exphbs());
+// app.set('view engine', 'handlebars');
+
+
+app.get('/', (req, res) => {
+    // res.render('main');
     res.sendFile('index.html')
 })
-
-const leaderboard = new Map();
 
 app.put('/died', (req, res) => {
     const data = req.body;
     console.log("== req.body:", req.body)
     const { name, altitude } = data;
-    leaderboard.set(name, altitude);
+    if (leaderboard.has(name)) {
+        if (leaderboard.get(name) < altitude) {
+            leaderboard.set(name, altitude);
+        }
+    } else {
+        leaderboard.set(name, altitude);
+    }
+    fs.writeFileSync('leaderboardData.json', JSON.stringify([...leaderboard.entries()]))
     res.send(200);
     console.log(leaderboard.entries());
 });
 
+
 // not sure if this works yet...
-app.post('/leaderboard', function (req, res, next) {
+app.get('/leaderboard', function (req, res) {
+    const upperBound = Math.min([...leaderboard.entries()].length, 4)
+    const highest = [...leaderboard.entries()].sort(([k1,v1],[k2,v2]) => v2 - v1).slice(0,upperBound)
+    res.json(highest);
+    return;
+    // for (const [key,value] of leaderboard.entries()) {
+    //     const name = key
+    //     const score = value
+    // }
+
     console.log("== req.body:", req.body)
     if (req.body && req.body.username && req.body.altitude) {
 
@@ -64,6 +86,7 @@ app.post('/leaderboard', function (req, res, next) {
 
 app.listen(port, () => {
     console.log(`listen to ${port}`)
+    // setInterval(save, 10*1000);
 })
 
 /**
@@ -81,3 +104,8 @@ app.listen(port, () => {
 }
 var sortedData = sortBy('score', dataFile)
 
+
+
+// function save() {
+//     fs.writeFileSync('leaderboardData.json', JSON.stringify([...leaderboard.entries()]))
+// }
