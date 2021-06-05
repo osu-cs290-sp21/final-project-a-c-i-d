@@ -37,21 +37,6 @@ app.put('/died', (req, res) => {
     console.log(leaderboard.entries());
 });
 
-// fill out leaderboard here
-app.post('/leaderboard', function (req, res, next) {
-    console.log("== req.body:", req.body)
-    if (req.body && req.body.username && req.body.score) {
-        leaderboardData.ranking.push({
-            username: req.body.username,
-            score: req.body.score
-        })
-        console.log("== leaderboardData:", leaderboardData)
-        
-    } else {
-        res.status(400).send("Request needs a JSON body with 'url' and 'caption'.")
-    }
-})
-
 app.listen(port, () => {
     console.log(`listen to ${port}`)
 })
