@@ -2,7 +2,7 @@ import { Matter, Render, Events } from 'matter-js'
 import { Game } from './game'
 import { Player } from './player'
 import { Input } from './lib/stateControllers'
-import { leaderboardTemplate } from './ui/hsd'
+// import { leaderboardTemplate } from './ui/hsd'
 
 const debug = false
 
