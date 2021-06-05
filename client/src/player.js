@@ -174,6 +174,14 @@ export class Player {
                 altitude: -score
             })
         })
+
+        if (this.onDiedCallback) {
+            this.onDiedCallback()
+        }
+    }
+
+    onDie(callback) {
+        this.onDiedCallback = callback
     }
 
 
