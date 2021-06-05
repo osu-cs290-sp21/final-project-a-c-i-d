@@ -45,7 +45,7 @@ app.post('/leaderboard', function (req, res, next) {
     if (req.body && req.body.username && req.body.score) {
 
         if (leaderboardData) {
-            leaderboardData.ranking.push({
+            leaderboardData.push({ 
                 username: req.body.username,
                 score: req.body.score
             })
