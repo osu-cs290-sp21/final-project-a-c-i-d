@@ -60,7 +60,7 @@ export class Game {
                 }
             })
 
-            if (Math.random() < 0.2 && this.terrain.indexOf(platform) != 0) {
+            if (false && Math.random() < 0.2 && this.terrain.indexOf(platform) != 0) {
                 Body.set(sensor, 'label', 'boing')
                 Composite.add(this.engine.world, sensor)
                 passthrough(platform)
@@ -72,8 +72,7 @@ export class Game {
 
             Events.on(sensor, 'onCollideEnd', pair => {
                 if (pair.other.label === 'gamer') {
-                    if (platform.position.y > pair.other.position.y
-                    &&  platform.hard) {
+                    if (platform.position.y > pair.other.position.y && platform.hard) {
                         passthrough(platform)
                         platform.hard = false
                     }
@@ -104,6 +103,17 @@ export class Game {
         }
 
         Composite.add(this.engine.world, this.terrain)
+
+
+
+        /* shhhh don't worry about it */
+        const gameController = Bodies.rectangle(-69,69,1,1,{
+            isStatic: true
+        });
+        // gameController.sparseUpdateEvery(2000);
+        // Events.on(gameController, 'sparseUpdate', this.sparseUpdate.bind(this));
+        Composite.add(this.engine.world, this.terrain);
+        this.gameController = gameController
     }
 
 
@@ -120,8 +130,13 @@ export class Game {
 
     update() { // Called every time a new frame is rendered.
         BigBen.deltaTime = this.runner.delta // Updates global time variable.
+        this.sparseUpdate();
+    }
+
+    sparseUpdate() {
+
         if (this.player.body.position.y < this.height) {
-            this.height -= window.innerHeight*2
+            this.height -= window.innerHeight * 2
             this.terrain = this.terrain.concat(makeTerrain(this.player.body['highest']))
             this.addTerrain()
         }
@@ -132,6 +147,7 @@ export class Game {
         BigBen.begin() // Starts Big Ben.
         Runner.run(this.runner, this.engine) // Starts the Matter.js physics.
         Events.trigger(this.player.body, 'awake', { self: this.player.body })
+        // Events.trigger(this.gameController, 'awake', { self: this.gameController });
     }
 
 
