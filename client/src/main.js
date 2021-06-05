@@ -4,7 +4,7 @@ import { Player } from './player'
 import { Input } from './lib/stateControllers'
 
 
-const debug = false
+const debug = true
 
 
 function makeRenderer({ element, engine, follows }) {
