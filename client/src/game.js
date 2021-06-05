@@ -113,6 +113,7 @@ export class Game {
         // gameController.sparseUpdateEvery(2000);
         // Events.on(gameController, 'sparseUpdate', this.sparseUpdate.bind(this));
         Composite.add(this.engine.world, this.terrain);
+
         this.gameController = gameController
     }
 
@@ -133,8 +134,8 @@ export class Game {
         this.sparseUpdate();
     }
 
-    sparseUpdate() {
 
+    sparseUpdate() {
         if (this.player.body.position.y < this.height) {
             this.height -= window.innerHeight * 2
             this.terrain = this.terrain.concat(makeTerrain(this.player.body['highest']))
