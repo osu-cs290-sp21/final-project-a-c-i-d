@@ -55,14 +55,18 @@ function makeRenderer({ element, engine, follows }) {
 
 async function main() {
     const startScreens = [...document.getElementsByClassName('start-screen')]
-    const settScreens  = [...document.getElementsByClassName('sett-screen')]
+    const sttngScreens = [...document.getElementsByClassName('settings-screen')]
+    const sttngButton  = document.getElementById('settings-button')
     const playButton   = document.getElementById('play-button')
-    const settButton   = document.getElementById('sett-button')
+    const saveButton   = document.getElementById('save-button')
     const gameElem     = document.getElementById('game')
     const altitude     = document.getElementById('altitude')
 
     const game   = new Game() // Creates new game.
     const player = new Player({ x: 0, y: 0 })
+
+    startScreens.map(s => s.classList.add('fade-in'))
+    sttngScreens.map(s => s.classList.add('fade-out'))
 
     player.onDie(() => {
         showLeaderboard();
@@ -89,6 +93,7 @@ async function main() {
 +   `\nh: ${Math.floor(Math.abs(player.body['highest']))}`
 +   `\nd: ${Math.floor(Math.abs(player.body['highest'] - player.body.position.y))}`
 +       `/${Math.floor(window.innerHeight/2)}`
++   `\nHi!`
     })
 
     document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true  })
@@ -98,24 +103,28 @@ async function main() {
     })
 
     playButton.addEventListener('click', () => {
-        playButton.disabled = 'true'
-
-        startScreens.map(s => s.classList.toggle('fade'))
-        setTimeout(() => {
-            startScreens.map(s => s.classList.toggle('gone'))
-        }, 1000)
-
-        setTimeout(() => { gameElem.classList.toggle('fade') },  500)
-        setTimeout(() => { altitude.classList.toggle('fade') }, 1000)
+        playButton.disabled = true
+        startScreens.map(s => s.classList.add('fade-out'))
+        setTimeout(() => { gameElem.classList.add('fade-in') },  500)
+        setTimeout(() => { altitude.classList.add('fade-in') }, 1000)
     })
 
-    settButton.addEventListener('click', () => {
-        settButton.disabled = 'true'
+    sttngButton.addEventListener('click', () => {
+        sttngButton.disabled = true
+        startScreens.map(s => s.classList.remove('fade-in'))
+        startScreens.map(s => s.classList.add('fade-out'))
+        sttngScreens.map(s => s.classList.remove('fade-out'))
+        sttngScreens.map(s => s.classList.add('fade-in'))
+        saveButton.disabled = false
+    })
 
-        startScreens.map(s => s.classList.toggle('fade'))
-        setTimeout(() => {
-            startScreens.map(s => s.classList.toggle('gone'))
-        }, 1000)
+    saveButton.addEventListener('click', () => {
+        saveButton.disabled = true
+        sttngScreens.map(s => s.classList.remove('fade-in'))
+        sttngScreens.map(s => s.classList.add('fade-out'))
+        startScreens.map(s => s.classList.remove('fade-out'))
+        startScreens.map(s => s.classList.add('fade-in'))
+        sttngButton.disabled = false
     })
 
     fetch('http://localhost:3000/leaderboard', {

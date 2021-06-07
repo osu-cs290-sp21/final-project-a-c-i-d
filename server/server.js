@@ -10,54 +10,57 @@ const dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
 const leaderboard = new Map(dataFile)
 
 
-const dontGame = true;
+const dontGame = true
 // app.get('/build.js', (req,res,next) => {
 //   if (dontGame) {
-//     res.send(404);
+//     res.send(404)
 //   } else {
-//     next();
+//     next()
 //   }
-// });
+// })
 
 
 app.use(express.static(path.join(__dirname, '..', 'client', 'dist')))
-app.use(express.json());
-app.engine('handlebars', exphbs());
-app.set('view engine', 'handlebars');
+app.use(express.json())
+app.engine('handlebars', exphbs())
+app.set('view engine', 'handlebars')
 
 
 app.get('/', (req, res) => {
-    res.status(200).render('main')
+    res.status(200).render('index')
 })
 
 
 app.put('/died', (req, res) => {
-    const data = req.body;
+    const data = req.body
     console.log("== req.body:", req.body)
-    const { name, altitude } = data;
+    const { name, altitude } = data
     if (leaderboard.has(name)) {
         if (leaderboard.get(name) < altitude) {
-            leaderboard.set(name, altitude);
+            leaderboard.set(name, altitude)
         }
     } else {
-        leaderboard.set(name, altitude);
+        leaderboard.set(name, altitude)
     }
     fs.writeFileSync('leaderboardData.json', JSON.stringify([...leaderboard.entries()]))
-    res.send(200);
-    console.log(leaderboard.entries());
-});
+    res.send(200)
+    console.log(leaderboard.entries())
+})
 
 
 app.get('/leaderboard', function (req, res) {
-    const upperBound = Math.min([...leaderboard.entries()].length, 4);
-    const highest = [...leaderboard.entries()].sort(([k1,v1],[k2,v2]) => v2 - v1).slice(0,upperBound).map(([name,score]) => ({ name,score }));
-    res.status(200).render('./partials/leaderboardModal', { leaderboardData: highest });
-});
+    const upperBound = Math.min([...leaderboard.entries()].length, 4)
+    const highest = [...leaderboard.entries()]
+        .sort(([k1,v1],[k2,v2]) => v2 - v1)
+        .slice(0,upperBound)
+        .map(([name,score]) => ({ name,score }))
+    res.status(200).render('./partials/leaderboardModal', { leaderboardData: highest })
+})
 
 
 app.listen(port, () => {
     console.log(`listen to ${port}`)
-    // setInterval(save, 10*1000);
+    // setInterval(save, 10*1000)
 })
 
 
@@ -70,8 +73,8 @@ app.listen(port, () => {
 
 //  function sortBy(key, data) {
 //     return data.sort((a, b) => {
-//         var x = parseInt(a[key]);
-//         var y = parseInt(b[key]);
+//         var x = parseInt(a[key])
+//         var y = parseInt(b[key])
 //         return ((x > y) ? -1 : ((x < y) ? 1 : 0))
 //     })
 // }
