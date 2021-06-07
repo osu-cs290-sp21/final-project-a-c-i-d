@@ -1,6 +1,6 @@
-
 const show = element => element.classList.remove('hidden');
 const hide = element => element.classList.add('hidden');
+
 
 export function showLeaderboard() {
     const background = document.getElementById('modal-backdrop');
@@ -16,3 +16,4 @@ export function showLeaderboard() {
         })
         .catch(e => console.error(e));
 }
+

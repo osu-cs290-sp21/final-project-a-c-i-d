@@ -16,7 +16,7 @@ module.exports = {
     port: 9000
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
+    extensions: [ '.js' ],
   },
   devtool: "eval-source-map",
   module: {

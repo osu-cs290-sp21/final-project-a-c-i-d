@@ -6,7 +6,7 @@
   --green: rgb(46, 223, 164);
   --light-green: rgb(131, 255, 214);
   --light-pink: rgb(253, 218, 218);
-  --monospace: 'VT323', 'Roboto Mono', Courier, monospace, monospace;
+  --monospace: 'Roboto Mono', Courier, monospace, monospace;
   --pink: rgb(255, 119, 119);
 }
 
@@ -20,7 +20,8 @@
 
 
 body {
-  background: url('img/backdrop-day.png') no-repeat center fixed;
+  background: url('img/day.png') center fixed;
+  background-repeat: no-repeat;
   background-size: cover;
   overflow: hidden;
   /* The `overflow` property specifies whether to clip the content or to add
@@ -40,35 +41,49 @@ input[type=text] {
 }
 
 
-#start-backdrop {
-  bottom: 0;
-  left: 0;
-  right: 0;
-  position: fixed;
-  top: 0;
+/******************************************************************************
+ * Start Screen
+ ******************************************************************************/
+
+.start-screen {
+  opacity: 1;
+}
+.start-screen.fade {
+  opacity: 0;
+  transition: all 1s ease-in-out !important;
+}
+.start-screen.gone {
+  display: none !important;
 }
 
-
-#start-container {
-  /* border: 1px solid white; */
-  display: flex;
-  flex-direction: column;
-  left: 50%;
-  min-width: 700px;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-  #start-title {
-    /* border: 1px solid white; */
-    color: black;
-    cursor: default;
-    font-size: 110px;
-    line-height: 110px;
-    text-align: center;
+  #start-backdrop {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    top: 0;
   }
-  /* #start-title:hover {} */
+
+  #start-container {
+    /* border: 1px solid white; */
+    display: flex;
+    flex-direction: column;
+    left: 50%;
+    min-width: 700px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+    #start-title {
+      /* border: 1px solid white; */
+      color: black;
+      cursor: default;
+      font-size: 110px;
+      line-height: 110px;
+      text-align: center;
+    }
+    /* #start-title:hover {} */
 
     #play-button {
       /* border: 1px solid white; */
@@ -90,37 +105,43 @@ input[type=text] {
       background-color: var(--dark-green);
     }
 
+  #sett-button {
+    /* border: 1px solid white; */
+    background: url('img/sprites/svg/harry-day-flip.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 20px;
+    color: black;
+    font-size: 20px;
+    height: 100px;
+    left: 20px;
+    line-height: 20px;
+    padding-top: 80px;
+    position: fixed;
+    transition: 0.3s;
+  }
+  #sett-button:hover {
+    color: rgba(0, 0, 0, 1);
+    height: 110px;
+    padding-top: 90px;
+  }
+  #sett-button:active {
+    height: 100px;
+    padding-top: 80px;
+  }
 
-.start-screen {
-  opacity: 1;
-}
-.start-screen.fade {
-  opacity: 0;
-  transition: all 1s ease-in-out !important;
-}
-.start-screen.gone {
-  display:none;
-}
+
+/******************************************************************************
+ * Settings Screen
+ ******************************************************************************/
 
 
-#game {
-  border: 1px solid black;
-  left: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
 
 
-#altitude {
-  /* border: 1px solid white; */
-  font-size: 20px;
-  left: 20px;
-  line-height: 20px;
-  position: fixed;
-  top: 20px;
-}
 
+/******************************************************************************
+ * Game Screen
+ ******************************************************************************/
 
 .game-screen {
   opacity: 0;
@@ -130,8 +151,25 @@ input[type=text] {
   transition: all 1s ease-in-out !important;
 }
 
+  #game {
+    border: 1px solid black;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-.hidden {
+  #altitude {
+    /* border: 1px solid white; */
+    font-size: 20px;
+    left: 20px;
+    line-height: 20px;
+    position: fixed;
+    top: 20px;
+  }
+
+
+/* .hidden {
   display: none;
   background-color: transparent;
   transition: none;
@@ -183,4 +221,4 @@ input[type=text] {
   background: none;
   padding: 0;
   cursor: pointer;
-}
+} */

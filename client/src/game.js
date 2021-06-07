@@ -104,8 +104,6 @@ export class Game {
 
         Composite.add(this.engine.world, this.terrain)
 
-
-
         /* shhhh don't worry about it */
         const gameController = Bodies.rectangle(-69,69,1,1,{
             isStatic: true
