@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "dev": "yarn && webpack serve --config webpack.config.js --progress --profile --open --content-base dist"
+    "dev": "yarn && webpack --watch --config webpack.config.js"
   },
   "author": "",
   "license": "ISC",

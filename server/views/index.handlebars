@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Foo Flight</title>
+{{!}}
+  {{!}}
     <div id="game" class="game-screen"></div>
     <h2 id="altitude" class="game-screen"></h2>
-
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-
+    <div id="settings-backdrop" class="settings-screen"></div>
+    <div id="settings-container" class="settings-screen">
+      <h1 id="settings-title" class="settings-screen">
+        Birds
+      </h1>
+      <button type="submit" id="save-button" class="settings-screen">
+        Save
+      </button>
+    </div>
     <div id="start-backdrop" class="start-screen"></div>
     <div id="start-container" class="start-screen">
       <h1 id="start-title" class="start-screen">
@@ -22,10 +20,9 @@
         Play
       </button>
     </div>
-    <button type="submit" id="sett-button" class="start-screen">
+    <button type="submit" id="settings-button" class="start-screen">
       Settings
     </button>
-
     <script src="build.js" defer></script>
-  </body>
-</html>
+  {{!}}
+{{!}}
