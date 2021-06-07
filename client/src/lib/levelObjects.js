@@ -1,7 +1,7 @@
 import { Bodies, Body } from 'matter-js';
 
 
-export const makeTerrain = (h) => [...new Array(30)].map(() => makeBlock(h))
+export const makeTerrain = h => [...new Array(30)].map(() => makeBlock(h))
 
 
 function makeBlock(highest) {

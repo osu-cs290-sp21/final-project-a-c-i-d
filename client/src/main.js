@@ -2,8 +2,8 @@ import { Matter, Render, Events } from 'matter-js'
 import { Game } from './game'
 import { Player } from './player'
 import { Input } from './lib/stateControllers'
-// import { leaderboardTemplate } from './ui/hsd'
 import { showLeaderboard } from './ui';
+
 
 const debug = false
 
@@ -55,7 +55,9 @@ function makeRenderer({ element, engine, follows }) {
 
 async function main() {
     const startScreens = [...document.getElementsByClassName('start-screen')]
+    const settScreens  = [...document.getElementsByClassName('sett-screen')]
     const playButton   = document.getElementById('play-button')
+    const settButton   = document.getElementById('sett-button')
     const gameElem     = document.getElementById('game')
     const altitude     = document.getElementById('altitude')
 
@@ -105,6 +107,15 @@ async function main() {
 
         setTimeout(() => { gameElem.classList.toggle('fade') },  500)
         setTimeout(() => { altitude.classList.toggle('fade') }, 1000)
+    })
+
+    settButton.addEventListener('click', () => {
+        settButton.disabled = 'true'
+
+        startScreens.map(s => s.classList.toggle('fade'))
+        setTimeout(() => {
+            startScreens.map(s => s.classList.toggle('gone'))
+        }, 1000)
     })
 
     fetch('http://localhost:3000/leaderboard', {

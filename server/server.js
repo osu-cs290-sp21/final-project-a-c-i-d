@@ -1,11 +1,14 @@
 const express = require('express')
-const fs = require('fs')
-const path = require('path')
 const exphbs = require('express-handlebars')
+const path = require('path')
+const fs = require('fs')
+
 const app = express()
 const port = 3000
+
 const dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
-const leaderboard = new Map(dataFile);
+const leaderboard = new Map(dataFile)
+
 
 const dontGame = true;
 // app.get('/build.js', (req,res,next) => {
@@ -24,9 +27,9 @@ app.set('view engine', 'handlebars');
 
 
 app.get('/', (req, res) => {
-    // res.render('main');
     res.status(200).render('main')
 })
+
 
 app.put('/died', (req, res) => {
     const data = req.body;
@@ -51,17 +54,20 @@ app.get('/leaderboard', function (req, res) {
     res.status(200).render('./partials/leaderboardModal', { leaderboardData: highest });
 });
 
+
 app.listen(port, () => {
     console.log(`listen to ${port}`)
     // setInterval(save, 10*1000);
 })
+
 
 /**
  * Sort JSON file by particular key
  * Note: Key is the score/altitude of the birdie once they die
  * @param {int} key JSON key to use
  * @param {Object}
- */ 
+ */
+
 //  function sortBy(key, data) {
 //     return data.sort((a, b) => {
 //         var x = parseInt(a[key]);
@@ -71,8 +77,7 @@ app.listen(port, () => {
 // }
 // var sortedData = sortBy('score', dataFile)
 
-
-
 // function save() {
 //     fs.writeFileSync('leaderboardData.json', JSON.stringify([...leaderboard.entries()]))
 // }
+
