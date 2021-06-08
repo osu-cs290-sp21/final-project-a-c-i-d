@@ -44,7 +44,7 @@ app.put('/died', (req, res) => {
     }
     fs.writeFileSync('leaderboardData.json', JSON.stringify([...leaderboard.entries()]))
     res.send(200)
-    console.log(leaderboard.entries())
+    console.log("== Entire leaderboard: " + leaderboard.entries())
 })
 
 
@@ -55,6 +55,7 @@ app.get('/leaderboard', function (req, res) {
         .slice(0,upperBound)
         .map(([name,score]) => ({ name,score }))
     res.status(200).render('./partials/leaderboardModal', { leaderboardData: highest })
+    console.log("== Top 4: " + highest)
 })
 
 
