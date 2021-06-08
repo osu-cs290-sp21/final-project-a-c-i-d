@@ -157,11 +157,11 @@ input[type=text] {
     /* border: 1px solid white; */
     display: flex;
     flex-direction: column;
-    left: 50%;
+    /* left: 50%; */
     min-width: 700px;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    /* position: absolute; */
+    /* top: 50%;
+    transform: translate(-50%, -50%); */
   }
 
     #settings-title {
@@ -195,6 +195,110 @@ input[type=text] {
       transition: 0.3s;
     }
 
+/*===== Birds modal =====*/
+#birds-modal {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.birds-header {
+  position: relative;
+  padding: 10px 20px;
+  text-align: center;
+}
+.birds-modal-body {
+  padding: 20px;
+  font-size: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.birds-dialog {
+  font-family: 'Roboto Mono', Roboto, sans-serif;
+  width: auto;
+  max-width: 400px;
+  min-width: 350px;
+  min-height: 300px;
+  margin: 40px auto;
+  background-color: rgb(16, 143, 22);
+  border-radius: 15px;
+}
+.birds-close-button {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 48px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+.bird-select:hover {
+  background-color: rgba(0, 0, 0, 0.20);
+}
+.bird-select {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.player-bird {  /* Birds in the modal */
+  width: 72px;
+  cursor: pointer;
+}
+.show-bird {  /*Bird on the button*/
+  width: 64px;
+}
+
+/*---Input portion---*/
+.name-input-element {
+  position: relative;
+  bottom: 40px;
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+}
+::placeholder {
+  font-family: 'Roboto Mono', Roboto, sans-serif;
+}
+#player-name-input {
+  padding: 4px;
+  margin: 4px 24px;
+  background-color: lightgray;
+  border-radius: 4px;
+  border: none;
+  font-size: 24px;
+  outline: none;
+}
+#confirm-button {
+  position: absolute;
+  left: 35%;
+  bottom: 9%;
+  width: 30%;
+  height: 40px;
+  border-radius: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  background-color: rgb(255, 36, 36);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.75);
+}
+#confirm-button:hover {
+  transform: scale(1.2);
+}
+.confirm-text {
+  position: relative;
+  bottom: 35px;
+  font-size: 32px;
+  font-family: 'Roboto Mono', Roboto, sans-serif;
+}
+.hidden {
+  display: none;
+}
 
 /******************************************************************************
  * Game Screen
