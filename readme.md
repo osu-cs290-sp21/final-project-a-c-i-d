@@ -10,10 +10,9 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 
 Dev Mode:
 1. Create a local copy of this repo on your machine.
-2. In your command line or terminal, `cd client`
-3. You may have to `npm install webpack webpack-cli --save-dev` and `yarn` if you haven't before.
-4. `yarn && yarn run dev`
-5. Now the game should be loaded at `http://localhost:9000`
+2. In your command line or terminal, `cd client` then `yarn run dev`. This compiles `build.js`.
+3. Still in your terminal, `cd ../server` then `npm run dev`. This starts the server.
+5. Now the game should be loaded at `http://localhost:3000`
 6. Party! 🥳
 
 ## Screenshots and Art
