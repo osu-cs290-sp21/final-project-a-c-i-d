@@ -15,6 +15,12 @@ Dev Mode:
 5. Now the game should be loaded at `http://localhost:3000`
 6. Party! 🥳
 
+Rules of the Game:
+The goal is to get your birdie as high as possible! Scores are tallied by the y value on the screen, aka altitude.
+To navigate from platforms, use WASD or the arrow keys. "W" or up arrow key will let your birdie jump.
+Landing on different platforms is the only way to climb up into the sky. If you miss a platform, you die and restart. 🐣
+Make it onto the leaderboard by being top 4. 😈
+
 ## Screenshots and Art
 
 *Sprites*<br/>
