@@ -75,6 +75,33 @@ input[type=text] {
     }
     /* #start-title:hover {} */
 
+    #name-author-input {
+      color: black;
+      cursor: default;
+      font-size: 25px;
+      line-height: 25px;
+      text-align: center;
+    }
+
+    .name-input-element {
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      margin: 10px 0;
+    }
+
+    .name-input-element label {
+      font-weight: 600;
+      flex: 1 75px;
+      margin-top: 10px;
+    }
+
+    .name-input-element input {
+      flex: 6 200px;
+      padding: 8px;
+      font-size: 20px;
+    }
+
     #play-button {
       /* border: 1px solid white; */
       background: var(--green);
