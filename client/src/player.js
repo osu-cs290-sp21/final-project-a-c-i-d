@@ -6,6 +6,7 @@ import { Axes, jump, horizontalMovement } from './lib/physics'
 import { Input, BigBen } from './lib/stateControllers'
 import { sprite, randomBird } from './lib/sprites'
 import { makeBlock } from './lib/levelObjects'
+import { Game } from './game'
 
 
 // Iain read this.
@@ -88,8 +89,8 @@ export class Player {
             const w = window.innerWidth / 2
             const h = window.innerHeight / 2
 
-            if (x < -w) { Body.setPosition(this.body, { x: w, y: y }) }
-            else if (x > w) { Body.setPosition(this.body, { x: -w, y: y }) }
+            if      (x < -w) { Body.setPosition(this.body, { x:  w, y: y }) }
+            else if (x >  w) { Body.setPosition(this.body, { x: -w, y: y }) }
 
             if (Math.abs(m - y) > h) { this.died() }
 
@@ -157,28 +158,24 @@ export class Player {
 
 
     died() {
-        console.log('died')
-
-        Body.setPosition(this.body, this.spawn)
         const score = this.body['highest']
         this.body['highest'] = this.body.position.y
-        this.orient()
-
-        fetch('http://localhost:3000/died', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: 'iain',
-                altitude: -score
-            })
-        })
+        // fetch('http://localhost:3000/died', {
+        //     method: 'PUT',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         name: 'iain',
+        //         altitude: -score
+        //     })
+        // })
 
         if (this.onDiedCallback) {
             this.onDiedCallback()
         }
     }
+
 
     onDie(callback) {
         this.onDiedCallback = callback

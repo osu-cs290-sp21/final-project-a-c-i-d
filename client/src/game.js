@@ -4,7 +4,7 @@ import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-u
 import { Axes, jump } from './lib/physics'
 import { BigBen } from './lib/stateControllers'
 import { ogBirds, sprite } from './lib/sprites'
-import { makeTerrain } from './lib/levelObjects'
+import { getTerrain, makeTerrain } from './lib/levelObjects'
 
 
 // Loads in a plugin that allows the bodies to execute collision callbacks.
@@ -18,9 +18,12 @@ export class Game {
     constructor() {
         this.engine  = Engine.create()
         this.runner  = Runner.create()
-        this.player  = undefined
-        this.terrain = []
+
         this.height  = -window.innerHeight*2
+        this.player  = undefined
+        this.sensors = []
+        this.terrain = []
+        this.points  = []
     }
 
 
@@ -32,8 +35,10 @@ export class Game {
             restitution:    1,
         })]
 
-        this.terrain = this.terrain.concat(earth)
-        this.terrain = this.terrain.concat(makeTerrain(this.player.body['highest']))
+        this.points  = getTerrain(this.player.body['highest'])
+            .concat(this.points)
+        this.terrain = makeTerrain(this.points).concat(earth)
+            .concat(this.terrain)
         this.addTerrain()
 
         // Registers the update functions for each update.
@@ -50,7 +55,9 @@ export class Game {
                                          body.collisionFilter.category =  1 }
         pauliExclusion(this.player.body)
 
-        for (const platform of this.terrain) {
+        const temp = new Array(this.terrain.length)
+        for (let i = this.terrain.length-1; i >= 0; i--) {
+            const platform = this.terrain[i]
             const { x, y } = platform.position
             const sensor = Bodies.fromVertices(x, y, platform.vertices, {
                 isSensor: true,
@@ -60,9 +67,12 @@ export class Game {
                 }
             })
 
-            if (false && Math.random() < 0.2 && this.terrain.indexOf(platform) != 0) {
+            if (/* false && */
+                Math.random() < 0.2 && this.terrain.indexOf(platform) != 0) {
                 Body.set(sensor, 'label', 'boing')
+                temp[i] = sensor
                 Composite.add(this.engine.world, sensor)
+                Composite.add(this.engine.world, platform)
                 passthrough(platform)
                 continue
             } else {
@@ -99,20 +109,19 @@ export class Game {
             platform.hard = false
             pauliExclusion(sensor)
 
+            temp[i] = sensor
             Composite.add(this.engine.world, sensor)
+            Composite.add(this.engine.world, platform)
         }
-
-        Composite.add(this.engine.world, this.terrain)
+        this.sensors = temp.concat(this.sensors)
 
         /* shhhh don't worry about it */
-        const gameController = Bodies.rectangle(-69,69,1,1,{
-            isStatic: true
-        });
+        // const gameController = Bodies.rectangle(-69,69,1,1,{
+        //     isStatic: true
+        // });
         // gameController.sparseUpdateEvery(2000);
         // Events.on(gameController, 'sparseUpdate', this.sparseUpdate.bind(this));
-        Composite.add(this.engine.world, this.terrain);
-
-        this.gameController = gameController
+        // this.gameController = gameController
     }
 
 
@@ -135,22 +144,21 @@ export class Game {
 
     sparseUpdate() {
         if (this.player.body.position.y < this.height) {
-            this.height -= window.innerHeight * 2
-            this.terrain = [...this.terrain, ...makeTerrain(this.player.body['highest'])]
+            this.height -= window.innerHeight*2
+            this.points  = getTerrain(this.player.body['highest'])
+                .concat(this.points)
+            this.terrain = makeTerrain(this.points)
+                .concat(this.terrain)
             this.addTerrain()
+
+            const density = Math.floor(window.innerWidth * window.innerHeight/25000)
         }
 
-        // const last = this.engine.world.bodies[this.engine.world.bodies-1];
-
-        const last = this.terrain[this.terrain.length-1];
-        if (last) {
-            if (last.label == 'player') return;
-            const dist = Vector.magnitude(Vector.sub(last.position, this.player.body.position));
-            if (dist > 100) {
-                World.remove(this.engine.world, last);
-                this.terrain.pop();
-                console.log('removed')
-            }
+        if (this.player.body.position.y < 
+            this.points[this.points.length-1].y - window.innerHeight/2) {
+            this.points.pop()
+            Composite.remove(this.engine.world, this.terrain.pop())
+            Composite.remove(this.engine.world, this.sensors.pop())
         }
     }
 
@@ -159,10 +167,15 @@ export class Game {
         BigBen.begin() // Starts Big Ben.
         Runner.run(this.runner, this.engine) // Starts the Matter.js physics.
         Events.trigger(this.player.body, 'awake', { self: this.player.body })
-        // Events.trigger(this.gameController, 'awake', { self: this.gameController });
-        // setInterval(() => console.log(this.terrain.length), 1000)
-        setInterval(() => console.log(this.engine.world.bodies.length), 1000)
-
+        // Events.trigger(this.gameController, 'awake', {
+        //     self: this.gameController
+        // })
+        setInterval(() => { 
+            console.log(this.points.length,
+                        this.terrain.length,
+                        this.sensors.length,
+                        this.engine.world.bodies.length
+        )}, 1000)
     }
 
 
