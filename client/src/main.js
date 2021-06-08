@@ -54,13 +54,14 @@ function makeRenderer({ element, engine, follows }) {
 
 
 async function main() {
-    const startScreens = [...document.getElementsByClassName('start-screen')]
-    const sttngScreens = [...document.getElementsByClassName('settings-screen')]
-    const sttngButton  = document.getElementById('settings-button')
-    const playButton   = document.getElementById('play-button')
-    const saveButton   = document.getElementById('save-button')
-    const gameElem     = document.getElementById('game')
-    const altitude     = document.getElementById('altitude')
+    const startScreens    = [...document.getElementsByClassName('start-screen')]
+    const settingsScreens = [...document
+                                    .getElementsByClassName('settings-screen')]
+    const settingsButton  = document.getElementById('settings-button')
+    const playButton      = document.getElementById('play-button')
+    const saveButton      = document.getElementById('save-button')
+    const gameElement     = document.getElementById('game')
+    const altitude        = document.getElementById('altitude')
 
     startScreens.map(s => s.classList.add('there')) // Fade in.
     startScreens.map(s => s.classList.add('fade-in'))
@@ -69,11 +70,12 @@ async function main() {
     const player = new Player({ x: 0, y: 0 })
 
     player.onDie(() => {
-        showLeaderboard();
+        game.stop()
+        console.log("died")
     })
 
     const render = makeRenderer({ // Makes the renderer.
-        element: gameElem,
+        element: gameElement,
         engine:  game.engine,
         follows: player.body
     })
@@ -92,8 +94,7 @@ async function main() {
 +   `\ny: ${Math.floor(Math.abs(player.body.position.y))}`
 +   `\nh: ${Math.floor(Math.abs(player.body['highest']))}`
 +   `\nd: ${Math.floor(Math.abs(player.body['highest'] - player.body.position.y))}`
-+       `/${Math.floor(window.innerHeight/2)}`
-+   `\nHi!`
++   `\ng: ${Math.floor(Math.abs(game.terrain.length))}`
     })
 
     document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true  })
@@ -108,41 +109,41 @@ async function main() {
         setTimeout(() => {
             startScreens.map(s => s.classList.remove('there'))
         }, 1000)
-        gameElem.classList.add('there')
+        gameElement.classList.add('there')
         altitude.classList.add('there')
-        setTimeout(() => { gameElem.classList.add('fade-in') },  500)
+        setTimeout(() => { gameElement.classList.add('fade-in') },  500)
         setTimeout(() => { altitude.classList.add('fade-in') }, 1000)
     })
 
-    sttngButton.addEventListener('click', () => {
-        sttngButton.disabled = true
+    settingsButton.addEventListener('click', () => {
+        settingsButton.disabled = true
         startScreens.map(s => s.classList.remove('fade-in'))
-        sttngScreens.map(s => s.classList.add('there'))
+        settingsScreens.map(s => s.classList.add('there'))
         setTimeout(() => {
             startScreens.map(s => s.classList.remove('there'))
         }, 1000)
         setTimeout(() => {
-            sttngScreens.map(s => s.classList.add('fade-in'))
+            settingsScreens.map(s => s.classList.add('fade-in'))
         }, 500)
         saveButton.disabled = false
     })
 
     saveButton.addEventListener('click', () => {
         saveButton.disabled = true
-        sttngScreens.map(s => s.classList.remove('fade-in'))
+        settingsScreens.map(s => s.classList.remove('fade-in'))
         startScreens.map(s => s.classList.add('there'))
         setTimeout(() => {
-            sttngScreens.map(s => s.classList.remove('there'))
+            settingsScreens.map(s => s.classList.remove('there'))
         }, 1000)
         setTimeout(() => {
             startScreens.map(s => s.classList.add('fade-in'))
         }, 500)
-        sttngButton.disabled = false
+        settingsButton.disabled = false
     })
 
-    fetch('http://localhost:3000/leaderboard', {
-        method: 'GET',
-    }).then(data => console.log(data))
+    // fetch('http://localhost:3000/leaderboard', {
+    //     method: 'GET',
+    // }).then(data => console.log(data))
 }
 
 
