@@ -62,11 +62,11 @@ async function main() {
     const gameElem     = document.getElementById('game')
     const altitude     = document.getElementById('altitude')
 
+    startScreens.map(s => s.classList.add('there')) // Fade in.
+    startScreens.map(s => s.classList.add('fade-in'))
+
     const game   = new Game() // Creates new game.
     const player = new Player({ x: 0, y: 0 })
-
-    startScreens.map(s => s.classList.add('fade-in'))
-    sttngScreens.map(s => s.classList.add('fade-out'))
 
     player.onDie(() => {
         showLeaderboard();
@@ -104,7 +104,12 @@ async function main() {
 
     playButton.addEventListener('click', () => {
         playButton.disabled = true
-        startScreens.map(s => s.classList.add('fade-out'))
+        startScreens.map(s => s.classList.remove('fade-in'))
+        setTimeout(() => {
+            startScreens.map(s => s.classList.remove('there'))
+        }, 1000)
+        gameElem.classList.add('there')
+        altitude.classList.add('there')
         setTimeout(() => { gameElem.classList.add('fade-in') },  500)
         setTimeout(() => { altitude.classList.add('fade-in') }, 1000)
     })
@@ -112,18 +117,26 @@ async function main() {
     sttngButton.addEventListener('click', () => {
         sttngButton.disabled = true
         startScreens.map(s => s.classList.remove('fade-in'))
-        startScreens.map(s => s.classList.add('fade-out'))
-        sttngScreens.map(s => s.classList.remove('fade-out'))
-        sttngScreens.map(s => s.classList.add('fade-in'))
+        sttngScreens.map(s => s.classList.add('there'))
+        setTimeout(() => {
+            startScreens.map(s => s.classList.remove('there'))
+        }, 1000)
+        setTimeout(() => {
+            sttngScreens.map(s => s.classList.add('fade-in'))
+        }, 500)
         saveButton.disabled = false
     })
 
     saveButton.addEventListener('click', () => {
         saveButton.disabled = true
         sttngScreens.map(s => s.classList.remove('fade-in'))
-        sttngScreens.map(s => s.classList.add('fade-out'))
-        startScreens.map(s => s.classList.remove('fade-out'))
-        startScreens.map(s => s.classList.add('fade-in'))
+        startScreens.map(s => s.classList.add('there'))
+        setTimeout(() => {
+            sttngScreens.map(s => s.classList.remove('there'))
+        }, 1000)
+        setTimeout(() => {
+            startScreens.map(s => s.classList.add('fade-in'))
+        }, 500)
         sttngButton.disabled = false
     })
 

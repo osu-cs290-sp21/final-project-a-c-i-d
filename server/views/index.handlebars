@@ -1,8 +1,9 @@
 {{!}}
   {{!}}
+    {{! Game Screen }}
     <div id="game" class="game-screen"></div>
     <h2 id="altitude" class="game-screen"></h2>
-    <div id="settings-backdrop" class="settings-screen"></div>
+    {{! Settings Screen }}
     <div id="settings-container" class="settings-screen">
       <h1 id="settings-title" class="settings-screen">
         Birds
@@ -11,7 +12,7 @@
         Save
       </button>
     </div>
-    <div id="start-backdrop" class="start-screen"></div>
+    {{! Start Screen }}
     <div id="start-container" class="start-screen">
       <h1 id="start-title" class="start-screen">
         Foo Flight
@@ -20,9 +21,12 @@
         Play
       </button>
     </div>
-    <button type="submit" id="settings-button" class="start-screen">
-      Settings
-    </button>
+    {{! Settings Button }}
+    <div id="settings-button-container" class="start-screen">
+      <button type="submit" id="settings-button">
+        Settings
+      </button>
+    </div>
     <script src="build.js" defer></script>
   {{!}}
 {{!}}
