@@ -51,8 +51,8 @@ input[type=text] {
   opacity: 0;
   transition: all 1s;
 }
-.start-screen.fade-in  { opacity:     1; }
-.start-screen.there    { display: block; }
+.start-screen.fade-in { opacity:     1; }
+.start-screen.there   { display: block; }
 
   #start-container {
     /* border: 1px solid white; */
@@ -97,7 +97,7 @@ input[type=text] {
       transition: 0.3s;
     }
 
-  #settings-button-container {
+  #buttons-container {
     /* border: 1px solid white; */
     display: flex;
     flex-direction: column;
@@ -141,8 +141,8 @@ input[type=text] {
   opacity: 0;
   transition: all 1s;
 }
-.settings-screen.fade-in  { opacity:     1; }
-.settings-screen.there    { display: block; }
+.settings-screen.fade-in { opacity:     1; }
+.settings-screen.there   { display: block; }
 
   #settings-backdrop {
     background: rgba(255, 132, 132, 0.25);
@@ -172,7 +172,6 @@ input[type=text] {
       line-height: 110px;
       text-align: center;
     }
-    /* #start-title:hover {} */
 
     #save-button {
       /* border: 1px solid white; */
@@ -206,8 +205,8 @@ input[type=text] {
   opacity: 0;
   transition: all 1s;
 }
-.game-screen.fade-in  { opacity:     1; }
-.game-screen.there    { display: block; }
+.game-screen.fade-in { opacity:     1; }
+.game-screen.there   { display: block; }
 
   #game {
     border: 1px solid black;
