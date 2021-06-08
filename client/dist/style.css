@@ -93,7 +93,9 @@ input[type=text] {
     .name-input-element label {
       font-weight: 600;
       flex: 1 75px;
-      margin-top: 10px;
+      margin-top: 5px;
+      font-size: 25px;
+      line-height: 25px;
     }
 
     .name-input-element input {
