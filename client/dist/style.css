@@ -47,27 +47,12 @@ input[type=text] {
  ******************************************************************************/
 
 .start-screen {
-  opacity: 0;
   display: none;
-}
-.start-screen.fade-in {
-  opacity: 1;
-  transition: all 0.5s;
-  display: block;
-}
-.start-screen.fade-out {
   opacity: 0;
-  transition: all 0.5s;
-  display: none;
+  transition: all 1s;
 }
-
-  #start-backdrop {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    position: fixed;
-    top: 0;
-  }
+.start-screen.fade-in  { opacity:     1; }
+.start-screen.there    { display: block; }
 
   #start-container {
     /* border: 1px solid white; */
@@ -99,61 +84,65 @@ input[type=text] {
       line-height: 35px;
       margin: 20px auto 0px auto; /* trbl */
       padding: 10px 30px 10px 30px;
-      transition: 0.5s;
+      transition: 0.3s;
     }
     #play-button:hover {
       background: var(--light-green);
       box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.5);
       padding: 15px 35px 15px 35px;
+      transition: 0.3s;
     }
     #play-button:active {
       background-color: var(--dark-green);
+      transition: 0.3s;
     }
 
-  #settings-button {
+  #settings-button-container {
     /* border: 1px solid white; */
-    background: url('img/sprites/svg/harry-day-flip.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
+    display: flex;
+    flex-direction: column;
     bottom: 20px;
-    color: black;
-    font-size: 20px;
-    height: 100px;
     left: 20px;
-    line-height: 20px;
-    padding-top: 80px;
     position: fixed;
-    transition: 0.5s;
-  }
-  #settings-button:hover {
-    color: rgba(0, 0, 0, 1);
     height: 110px;
-    padding-top: 90px;
-  }
-  #settings-button:active {
-    height: 100px;
-    padding-top: 80px;
   }
 
+    #settings-button {
+      /* border: 1px solid white; */
+      background: url('img/sprites/svg/harry-day-flip.svg');
+      background-repeat: no-repeat;
+      background-size: contain;
+      color: black;
+      font-size: 20px;
+      line-height: 20px;
+      margin-top: 10px;
+      padding-top: 80px;
+      transition: 0.3s;
+    }
+    #settings-button:hover {
+      color: rgba(0, 0, 0, 1);
+      margin-top: 0px;
+      padding-top: 90px;
+      transition: 0.3s;
+    }
+    #settings-button:active {
+      margin-top: 10px;
+      padding-top: 80px;
+      transition: 0.3s;
+    }
 
-  /******************************************************************************
+
+/******************************************************************************
  * Settings Screen
  ******************************************************************************/
 
 .settings-screen {
-  opacity: 0;
   display: none;
-}
-.settings-screen.fade-in {
-  opacity: 1;
-  transition: all 0.5s;
-  display: block;
-}
-.settings-screen.fade-out {
   opacity: 0;
-  transition: all 0.5s;
-  display: none;
+  transition: all 1s;
 }
+.settings-screen.fade-in  { opacity:     1; }
+.settings-screen.there    { display: block; }
 
   #settings-backdrop {
     background: rgba(255, 132, 132, 0.25);
@@ -194,15 +183,17 @@ input[type=text] {
       line-height: 35px;
       margin: 20px auto 0px auto; /* trbl */
       padding: 10px 30px 10px 30px;
-      transition: 0.5s;
+      transition: 0.3s;
     }
     #save-button:hover {
       background: var(--light-pink);
       box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.5);
       padding: 15px 35px 15px 35px;
+      transition: 0.3s;
     }
     #save-button:active {
       background-color: var(--dark-pink);
+      transition: 0.3s;
     }
 
 
@@ -211,19 +202,12 @@ input[type=text] {
  ******************************************************************************/
 
 .game-screen {
-  opacity: 0;
   display: none;
-}
-.game-screen.fade-in {
-  opacity: 1;
-  transition: all 0.5s;
-  display: block;
-}
-.game-screen.fade-out {
   opacity: 0;
-  transition: all 0.5s;
-  display: none;
+  transition: all 1s;
 }
+.game-screen.fade-in  { opacity:     1; }
+.game-screen.there    { display: block; }
 
   #game {
     border: 1px solid black;
