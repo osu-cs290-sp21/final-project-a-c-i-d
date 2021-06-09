@@ -60,6 +60,8 @@ const saveButton = document.getElementById('save-button')
 const gameElement = document.getElementById('game')
 const altitude = document.getElementById('altitude')
 
+const birds = document.getElementsByClassName('bird-button')
+
 const showMainView = () => {
     startScreens.map(s => s.classList.add('there')) // Fade in.
     startScreens.map(s => s.classList.add('fade-in'))
@@ -181,21 +183,38 @@ async function main() {
         setTimeout(() => {
             settingsScreens.map(s => s.classList.add('fade-in'))
         }, 500)
-        saveButton.disabled = false
+        for (let i = 0; i < birds.length; i++) {
+            birds[i].disabled = false
+        }
     })
 
-    saveButton.addEventListener('click', () => {
-        saveButton.disabled = true
-        settingsScreens.map(s => s.classList.remove('fade-in'))
-        startScreens.map(s => s.classList.add('there'))
-        setTimeout(() => {
-            settingsScreens.map(s => s.classList.remove('there'))
-        }, 1000)
-        setTimeout(() => {
-            startScreens.map(s => s.classList.add('fade-in'))
-        }, 500)
-        settingsButton.disabled = false
-    })
+    for (let i = 0; i < birds.length; i++) {
+        birds[i].addEventListener('click', () => {
+            birds[i].disabled = true
+            settingsScreens.map(s => s.classList.remove('fade-in'))
+            startScreens.map(s => s.classList.add('there'))
+            setTimeout(() => {
+                settingsScreens.map(s => s.classList.remove('there'))
+            }, 1000)
+            setTimeout(() => {
+                startScreens.map(s => s.classList.add('fade-in'))
+            }, 500)
+            settingsButton.disabled = false
+        })
+    }
+
+    // saveButton.addEventListener('click', () => {
+    //     saveButton.disabled = true
+    //     settingsScreens.map(s => s.classList.remove('fade-in'))
+    //     startScreens.map(s => s.classList.add('there'))
+    //     setTimeout(() => {
+    //         settingsScreens.map(s => s.classList.remove('there'))
+    //     }, 1000)
+    //     setTimeout(() => {
+    //         startScreens.map(s => s.classList.add('fade-in'))
+    //     }, 500)
+    //     settingsButton.disabled = false
+    // })
 }
 
 
