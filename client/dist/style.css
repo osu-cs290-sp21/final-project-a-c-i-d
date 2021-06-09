@@ -152,7 +152,7 @@ input[type=text] {
       Settings
      *~~~~~~~~~~~~~~~~~~~*/
     #settings-button {
-      background: url('img/sprites/svg/harry-day-flip.svg');
+      background: url('img/sprites/svg/harry-flip.svg');
       background-repeat: no-repeat;
       background-size: contain;
       color: black;
