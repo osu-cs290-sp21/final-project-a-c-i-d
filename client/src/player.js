@@ -89,10 +89,10 @@ export class Player {
             const w = window.innerWidth / 2
             const h = window.innerHeight / 2
 
-            if      (x < -w) { Body.setPosition(this.body, { x:  w, y: y }) }
-            else if (x >  w) { Body.setPosition(this.body, { x: -w, y: y }) }
+            // if      (x < -w) { Body.setPosition(this.body, { x:  w, y: y }) }
+            // else if (x >  w) { Body.setPosition(this.body, { x: -w, y: y }) }
 
-            if (Math.abs(m - y) > h) { this.died() }
+            if (Math.abs(m - y) > h*2) { this.died() }
 
             this.orient()
         }
@@ -100,7 +100,7 @@ export class Player {
         Events.on(this.body, 'onCollide', onCollisionBegin)
         Events.on(this.body, 'onCollideEnd', onCollisionEnd)
 
-        const sparseTime = 1000 / 5 // 15 fps.
+        const sparseTime = 1000 / 3 // 15 fps.
         this.body.sparseUpdateEvery(sparseTime)
         Events.on(this.body, 'sparseUpdate', onSparseUpdate)
     }
@@ -154,6 +154,14 @@ export class Player {
         if (this.body['highest'] > this.body.position.y) {
             this.body['highest'] = this.body.position.y;
         }
+
+        const x = this.body.position.x
+        const y = this.body.position.y + 50 // even skim the bottom, you die
+        const w = window.innerWidth / 2
+
+        if      (x < -w) { Body.setPosition(body, { x:  w, y: y }) }
+        else if (x >  w) { Body.setPosition(body, { x: -w, y: y }) }
+
     }
 
 

@@ -5,6 +5,10 @@ export function vector([x,y]) {
     return { x: x, y: y };
 }
 
+export function diff(v1,v2) {
+    return Vector.magnitude(Vector.sub(v1,v2));
+}
+
 export const Axes = {
     get x() { return { x: 1, y: 0 }; },
     get y() { return { x: 0, y: -1 }; }
