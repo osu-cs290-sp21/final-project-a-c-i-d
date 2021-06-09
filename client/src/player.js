@@ -7,6 +7,7 @@ import { Input, BigBen } from './lib/stateControllers'
 import { sprite, randomBird } from './lib/sprites'
 import { makeBlock } from './lib/levelObjects'
 import { Game } from './game'
+import { playerName } from './main.js'
 
 
 // Iain read this.
@@ -160,16 +161,16 @@ export class Player {
     died() {
         const score = this.body['highest']
         this.body['highest'] = this.body.position.y
-        // fetch('http://localhost:3000/died', {
-        //     method: 'PUT',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         name: 'iain',
-        //         altitude: -score
-        //     })
-        // })
+        fetch('http://localhost:3000/died', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: playerName,
+                altitude: -score
+            })
+        })
 
         if (this.onDiedCallback) {
             this.onDiedCallback()
