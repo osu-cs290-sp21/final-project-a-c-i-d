@@ -73,7 +73,9 @@ async function setupGame() {
 
 
     if (Cookies.get('player_name')) {
-        document.getElementById('name-author-input').value = Cookies.get('player_name');
+        if (!document.getElementById('name-author-input').value) {
+            document.getElementById('name-author-input').value = Cookies.get('player_name');
+        }
     }
 
     const game = new Game() // Creates new game.
@@ -88,7 +90,7 @@ async function setupGame() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: player.name,
+                name: Cookies.get('player_name'),
                 altitude: `${-score}π`
             })
         }).then(() => {
@@ -104,6 +106,7 @@ async function setupGame() {
                 const event = new Event('click');
                 current_player_unsafe = null;
                 showMainView();
+                showLeaderboard();
                 playButton.disabled = false;
                 // saveButton.dispatchEvent(event);
                 // setupGame();

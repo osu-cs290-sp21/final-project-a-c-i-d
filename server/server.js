@@ -5,7 +5,9 @@ const fs = require('fs')
 
 const app = express()
 const port = 3000 || process.env.PORT
-
+if (!fs.existsSync('leaderboardData.json')) {
+    fs.writeFileSync('leaderboardData.json', '[]')
+}
 const dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
 const leaderboard = new Map(dataFile)
 
@@ -22,6 +24,7 @@ app.get('/', (req, res) => {
 // When birdie dies, transmits scores to leaderboard data json
 app.put('/died', (req, res) => {
     const data = req.body
+    console.log(data)
     const { name, altitude } = data
     if (leaderboard.has(name)) {
         if (leaderboard.get(name) < altitude) {
