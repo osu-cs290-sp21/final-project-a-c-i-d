@@ -238,6 +238,7 @@ input[type=text] {
 }
 .birds-header {
   position: relative;
+  font-size: 24;
   padding: 10px 20px;
   text-align: center;
 }
@@ -386,6 +387,7 @@ input[type=text] {
   left: 50%;
   transform: translate(-50%, -50%); */
   transition: 2s linear all;
+  font-family: 'Roboto Mono', Roboto, sans-serif;
 }
 .leaderboard-modal-body {
   padding: 20px;
@@ -403,7 +405,8 @@ input[type=text] {
   min-width: 350px;
   min-height: 300px;
   margin: 40px auto;
-  background-color: rgba(9, 184, 228, 1);
+  /* background-color: rgba(0, 204, 255, 0.1);
+  background-image: linear-gradient(rgba(0, 200, 255, 1), rgba(255, 255, 255, 0.671)); */
   border-radius: 15px;
   z-index: 1000000;
 }
