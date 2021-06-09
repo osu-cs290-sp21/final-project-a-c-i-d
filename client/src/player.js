@@ -170,7 +170,22 @@ export class Player {
 
 
     died() {
+<<<<<<< HEAD
+        const score = this.body['highest']
+        this.body['highest'] = this.body.position.y
+        // fetch('http://localhost:3000/died', {
+        //     method: 'PUT',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         name: this.name,
+        //         altitude: -score
+        //     })
+        // })
+=======
         // this.body['highest'] = this.body.position.y;
+>>>>>>> main
 
         if (this.onDiedCallback != null) {
             Events.trigger(this.body, 'destroy', {self: this.body});
