@@ -58,7 +58,7 @@ function makeRenderer({ element, engine, follows }) {
 const startScreens    = [...document.getElementsByClassName('start-screen')]
 const settingsScreens = [...document.getElementsByClassName('settings-screen')]
 const settingsButton  = document.getElementById('settings-button')
-const birdButtons           = document.getElementsByClassName('bird-button')
+const birdButtons     = document.getElementsByClassName('bird-button')
 const playButton      = document.getElementById('play-button')
 const gameElement     = document.getElementById('game')
 const altitude        = document.getElementById('altitude')
