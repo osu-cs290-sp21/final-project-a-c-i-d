@@ -105,14 +105,14 @@ async function main() {
 
     playButton.addEventListener('click', () => {
         playerName = document.getElementById('name-author-input').value;
-
         if (playerName) {
             // clear function for name
-            console.log("== Name " + playerName + "is set.")
-            
+            console.log("== Name " + playerName + " is set.")   
         } else {
-            alert('You must name your birdie!');
+            // Default name when nothing is set.
+            playerName = 'Birdie'
         }
+
         playButton.disabled = true
 
         startScreens.map(s => s.classList.remove('fade-in'))
