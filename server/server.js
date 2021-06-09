@@ -9,19 +9,17 @@ const port = 3000
 const dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
 const leaderboard = new Map(dataFile)
 
-const dontGame = true
-
 app.use(express.static(path.join(__dirname, '..', 'client', 'dist')))
 app.use(express.json())
 app.engine('handlebars', exphbs())
 app.set('view engine', 'handlebars')
 
-
+// The start game screen
 app.get('/', (req, res) => {
     res.status(200).render('main')
 })
 
-
+// When birdie dies, transmits scores to leaderboard data json
 app.put('/died', (req, res) => {
     const data = req.body
     console.log("== req.body:", req.body)
@@ -38,7 +36,7 @@ app.put('/died', (req, res) => {
     console.log("== Entire leaderboard: " + leaderboard.entries())
 })
 
-
+// Leaderboard renderer: top 4 scores
 app.get('/leaderboard', function (req, res) {
     const upperBound = Math.min([...leaderboard.entries()].length, 4)
     const highest = [...leaderboard.entries()]
@@ -49,7 +47,7 @@ app.get('/leaderboard', function (req, res) {
     console.log("== Top 4: " + highest)
 })
 
-
+// Listener for ports
 app.listen(port, () => {
     console.log(`listen to ${port}`)
 })
