@@ -145,12 +145,7 @@ input[type=text] {
       Settings
      *~~~~~~~~~~~~~~~~~~~*/
     #settings-button {
-<<<<<<< HEAD
-      /* border: 1px solid white; */
-      background: url('img/sprites/svg/harry-flip.svg');
-=======
       background: url('img/sprites/svg/harry-day-flip.svg');
->>>>>>> main
       background-repeat: no-repeat;
       background-size: contain;
       color: black;
@@ -237,7 +232,6 @@ input[type=text] {
       text-align: center;
     }
 
-<<<<<<< HEAD
     #save-button {
       /* border: 1px solid white; */
       background: var(--pink);
@@ -273,11 +267,9 @@ input[type=text] {
 #sahana-bird { background: url('img/sprites/svg/sahana-flip.svg'); background-repeat: no-repeat; background-size: contain; }
 #todd-bird   { background: url('img/sprites/svg/todd-flip.svg'  ); background-repeat: no-repeat; background-size: contain; }
 
-=======
 /*~~~~~~~~~~~~~~~~~~~*
   Birds box
  *~~~~~~~~~~~~~~~~~~~*/
->>>>>>> main
 #birds-modal {
   font-family: var(--monospace);
 }
@@ -320,8 +312,6 @@ input[type=text] {
   padding-top: 80px;
   transition: 0.3s;
 }
-
-<<<<<<< HEAD
 
 /*===== Input Portion =====*/
 
@@ -371,9 +361,6 @@ input[type=text] {
   display: none;
 }
 
-
-=======
->>>>>>> main
 /******************************************************************************
  * Game Screen
  ******************************************************************************/
@@ -401,8 +388,6 @@ input[type=text] {
     position: fixed;
     top: 20px;
   }
-<<<<<<< HEAD
-
 
 /* .hidden {
   display: none;
@@ -452,5 +437,3 @@ input[type=text] {
   margin: 0;
   font-size: 28px;
 }
-=======
->>>>>>> main
