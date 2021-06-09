@@ -6,7 +6,7 @@ import { showLeaderboard } from './ui'
 
 
 const debug = false
-
+var playerName = 'Birdie'
 
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer.
@@ -129,6 +129,16 @@ async function main() {
     })
 
     saveButton.addEventListener('click', () => {
+        playerName = document.getElementById('name-author-input').value;
+
+        if (playerName) {
+            // clear function for name
+            console.log("== Name " + playerName + "is set.")
+            
+        } else {
+            alert('You must name your birdie!');
+        }
+
         saveButton.disabled = true
         settingsScreens.map(s => s.classList.remove('fade-in'))
         startScreens.map(s => s.classList.add('there'))
