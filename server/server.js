@@ -5,7 +5,9 @@ const fs = require('fs')
 
 const app = express()
 const port = 3000 || process.env.PORT
-
+if (!fs.existsSync('leaderboardData.json')) {
+    fs.writeFileSync('leaderboadData.json', '[]')
+}
 const dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
 const leaderboard = new Map(dataFile)
 
