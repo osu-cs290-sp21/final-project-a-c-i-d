@@ -64,6 +64,9 @@ const gameElement     = document.getElementById('game')
 const altitude        = document.getElementById('altitude')
 
 
+const MAX_CHARS = 15
+
+
 const showMainView = () => {
     startScreens.map(s => s.classList.add('there')) // Fade in.
     startScreens.map(s => s.classList.add('fade-in'))
@@ -180,7 +183,11 @@ async function main() {
         playButton.disabled = true;
 
         // Name the player after entered name.
-        const playerName = document.getElementById('name-input').value || 'Birdie';
+        const playerName = document.getElementById('name-input').value
+            .substr(0, MAX_CHARS)
+            .trim()
+            .replace(/[!"#$%&\\'()\*+,\-\.\/:;<=>?@\[\\\]\^_`{|}~]/g, '')
+        || 'Birdie';
         if (playerName != 'Birdie') { Cookies.set('player_name', playerName); }
         current_player_unsafe.name = playerName;
 
