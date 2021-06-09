@@ -138,7 +138,7 @@ export class Game {
             isStatic: true
         });
         gameController.label = 'gamecontroller'
-        gameController.sparseUpdateEvery(500);
+        gameController.sparseUpdateEvery(300);
         Events.on(gameController, 'sparseUpdate', this.sparseUpdate.bind(this));
         this.gameController = gameController
         Composite.add(this.engine.world, gameController);
@@ -159,12 +159,8 @@ export class Game {
     update() { // Called every time a new frame is rendered.
         BigBen.deltaTime = this.runner.delta // Updates global time variable.
         // this.sparseUpdate();
-    }
-
-
-    sparseUpdate() {
         if (this.player.body.position.y < this.height) {
-            this.height -= window.innerHeight*2
+            this.height -= window.innerHeight
             // this.points  = getTerrain(this.player.body['highest'])
             //     .concat(this.points)
             // this.terrain = makeTerrain(this.points)
@@ -175,6 +171,22 @@ export class Game {
 
             const density = Math.floor(window.innerWidth * window.innerHeight/25000)
         }
+    }
+
+
+    sparseUpdate() {
+        // if (this.player.body.position.y < this.height) {
+        //     this.height -= window.innerHeight*2
+        //     // this.points  = getTerrain(this.player.body['highest'])
+        //     //     .concat(this.points)
+        //     // this.terrain = makeTerrain(this.points)
+        //     //     .concat(this.terrain)
+        //     const points  = getTerrain(this.player.body['highest'])
+            
+        //     this.addTerrain(makeTerrain(points))
+
+        //     const density = Math.floor(window.innerWidth * window.innerHeight/25000)
+        // }
 
         // if (this.player.body.position.y < 
         //     this.points[this.points.length-1].y - (window.innerHeight/2)) {
