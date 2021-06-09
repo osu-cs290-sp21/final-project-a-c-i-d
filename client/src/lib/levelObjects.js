@@ -18,7 +18,7 @@ export const makeTerrain = points => {
     return terrain
 }
 
-
+let lastHeight = 0;
 export const getTerrain = highest => {
     const density = Math.floor(window.innerWidth * window.innerHeight/25000),
           width   = Math.floor(window.innerWidth/2-50),
@@ -34,7 +34,8 @@ export const getTerrain = highest => {
         }
         count -= Math.floor(Math.random() * height)
     }
-
+    lastHeight = highest;
+    
     return points
 }
 

@@ -81,40 +81,6 @@ async function setupGame() {
     const game = new Game() // Creates new game.
     const player = new Player({ x: 0, y: 0 })
 
-    player.onDiedCallback = () => {
-        console.log('died')
-        const score = player.body['highest']
-        fetch('http://localhost:3000/died', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: Cookies.get('player_name'),
-                altitude: `${-score}π`
-            })
-        }).then(() => {
-            const deathDelay = 1;
-            setTimeout(() => {
-                game.stop();
-                game.destroy();
-                const canvs = [...document.getElementsByTagName('canvas')]
-                // console.log(canvs)
-                canvs.forEach(element => {
-                    element.remove();
-                });
-                const event = new Event('click');
-                current_player_unsafe = null;
-                showMainView();
-                showLeaderboard();
-                playButton.disabled = false;
-                // saveButton.dispatchEvent(event);
-                // setupGame();
-            }, deathDelay);
-        })
-
-    }
-
     const render = makeRenderer({ // Makes the renderer.
         element: gameElement,
         engine: game.engine,
@@ -135,6 +101,42 @@ async function setupGame() {
     Render.run(render) // Starts the renderer.
     current_player_unsafe = null;
     current_player_unsafe = player;
+
+
+    player.onDiedCallback = () => {
+        console.log('died')
+        const score = player.body['highest']
+        fetch('http://localhost:3000/died', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: Cookies.get('player_name'),
+                altitude: `${-score}π`
+            })
+        }).then(() => {
+            const deathDelay = 1;
+            setTimeout(() => {
+                Render.stop(render);
+                game.stop();
+                game.destroy();
+                const canvs = [...document.getElementsByTagName('canvas')]
+                // console.log(canvs)
+                canvs.forEach(element => {
+                    element.remove();
+                });
+                const event = new Event('click');
+                current_player_unsafe = null;
+                showMainView();
+                showLeaderboard();
+                playButton.disabled = false;
+                // saveButton.dispatchEvent(event);
+                // setupGame();
+            }, deathDelay);
+        })
+
+    }
 
     return { game, render, player }
 }
