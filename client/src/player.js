@@ -4,9 +4,8 @@ import { MatterCollisionEvents } from './lib/matterjs-plugins/matter-collision-e
 import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-update-events'
 import { Axes, jump, horizontalMovement } from './lib/physics'
 import { Input, BigBen } from './lib/stateControllers'
-import { sprite, randomBird } from './lib/sprites'
-import { makeBlock } from './lib/levelObjects'
-import { Game } from './game'
+import { sprite } from './lib/sprites'
+
 
 // Iain read this.
 // https://github.com/liabru/matter-js/wiki/Creating-plugins
@@ -84,20 +83,9 @@ export class Player {
         }
 
         const onSparseUpdate = () => {
-            // const x = this.body.position.x
-            const y = this.body.position.y // even skim the bottom, you die
+            const y = this.body.position.y
             const highest = this.body['highest']
-            // const w = window.innerWidth / 2
-            // const h = window.innerHeight / 2
-
-            // if      (x < -w) { Body.setPosition(this.body, { x:  w, y: y }) }
-            // else if (x >  w) { Body.setPosition(this.body, { x: -w, y: y }) }
-
-            if (y - highest > 500) {
-                // alert('died');
-                this.died();
-            }
-
+            if (y - highest > 500) { this.died(); }
             this.orient()
         }
 
@@ -165,23 +153,14 @@ export class Player {
 
         if      (x < -w) { Body.setPosition(body, { x:  w, y: y }) }
         else if (x >  w) { Body.setPosition(body, { x: -w, y: y }) }
-
     }
 
 
     died() {
-        // this.body['highest'] = this.body.position.y;
-
         if (this.onDiedCallback != null) {
             Events.trigger(this.body, 'destroy', {self: this.body});
             this.onDiedCallback()
-            
         }
-    }
-
-    destroy() {
-        // this.body = null;
-        // this.onDiedCallback = null;
     }
 
 
@@ -204,5 +183,7 @@ export class Player {
         Body.setAngularVelocity(this.body, 0)
         Body.setInertia(this.body, Infinity)
     }
+
+
 }
 
