@@ -8,7 +8,7 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 
 ## How to Install and Use
 
-1. Download repository and `cd` into directory.
+1. `clone` repository and `cd` into directory.
 2. Compile scripts and start server by running the following.
 ```bash
 npm start
