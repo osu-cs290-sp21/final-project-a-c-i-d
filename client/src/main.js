@@ -177,7 +177,7 @@ async function main() {
         current_player_unsafe.name = playerName;
 
         // Get the skin selected in settings
-        const playerSkin = document.getElementById(spriteName + '-bird').value || 'Harry';
+        // const playerSkin = document.getElementById(spriteName + '-bird').value || 'Harry';
         
 
         startScreens.map((s) => s.classList.remove('fade-in'));
