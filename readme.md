@@ -9,7 +9,8 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 ## How to Install and Use
 
 1. Download repository and `cd` into directory.
-2. ```bash
+2.
+```bash
 npm start
 ```
 3. Navigate to `http://localhost:5000`.
