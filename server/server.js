@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('fs')
 
 const app = express()
-const port = 3000 || process.env.PORT
+const port = process.env.PORT ? process.env.PORT : 3000
 if (!fs.existsSync('leaderboardData.json')) {
     fs.writeFileSync('leaderboardData.json', '[]')
 }
