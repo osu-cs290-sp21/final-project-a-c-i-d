@@ -8,15 +8,12 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 
 ## How to Install and Use
 
-1. Server:
+1. `clone` repository and `cd` into directory.
+2. Compile scripts and start server by running the following.
 ```bash
-yarn run server
+npm start
 ```
-2. Client:
-```bash
-yarn run client
-```
-3. Navigate to `http://localhost:3000`.
+3. Navigate to `http://localhost:5000`.
 4. Party! 🥳
 
 Rules of the Game:
@@ -34,13 +31,6 @@ Rules of the Game:
 
 *Screenshots*<br/>
 <img src="https://user-images.githubusercontent.com/29801241/120048083-0b131b80-bfcb-11eb-9928-4bd8cd5af2f1.png" width="800">
-
-
-## hess pls help
-```haskell
-poggers :: PogMonad m => m a -> (a -> m b) -> m b
-poggers = (>>=)
-```
 
 ## Contributors
 

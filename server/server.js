@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('fs')
 
 const app = express()
-const port = 3000 || process.env.PORT
+const port = (process.env.PORT || 5000)
 if (!fs.existsSync('leaderboardData.json')) {
     fs.writeFileSync('leaderboardData.json', '[]')
 }
@@ -34,7 +34,7 @@ app.put('/died', (req, res) => {
         leaderboard.set(name, altitude)
     }
     fs.writeFileSync('leaderboardData.json', JSON.stringify([...leaderboard.entries()]))
-    res.send(200)
+    res.sendStatus(200)
 })
 
 // Leaderboard renderer: top 4 scores

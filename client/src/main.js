@@ -4,9 +4,11 @@ import { Player } from './player'
 import { Input } from './lib/stateControllers'
 import { showLeaderboard } from './ui'
 import Cookies, { set } from 'js-cookie';
-import { birdNames, birdSkin } from './lib/sprites'
+import { birdNames, birdButtonskin } from './lib/sprites'
+
 
 const debug = false
+
 
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer.
@@ -53,36 +55,38 @@ function makeRenderer({ element, engine, follows }) {
 }
 
 
-const startScreens = [...document.getElementsByClassName('start-screen')]
+const startScreens    = [...document.getElementsByClassName('start-screen')]
 const settingsScreens = [...document.getElementsByClassName('settings-screen')]
-const settingsButton = document.getElementById('settings-button')
-const playButton = document.getElementById('play-button')
-const saveButton = document.getElementById('save-button')
-const gameElement = document.getElementById('game')
-const altitude = document.getElementById('altitude')
+const settingsButton  = document.getElementById('settings-button')
+const birdButtons     = document.getElementsByClassName('bird-button')
+const playButton      = document.getElementById('play-button')
+const gameElement     = document.getElementById('game')
+const altitude        = document.getElementById('altitude')
 
-const birds = document.getElementsByClassName('bird-button')
+
+const MAX_CHARS = 15
+
 
 const showMainView = () => {
     startScreens.map(s => s.classList.add('there')) // Fade in.
     startScreens.map(s => s.classList.add('fade-in'))
 }
 
+
 let current_player_unsafe = null;
 let next_skin = null;
 
+
 async function setupGame() {
-
-
     if (Cookies.get('player_name')) {
-        if (!document.getElementById('name-author-input').value) {
-            document.getElementById('name-author-input').value = Cookies.get('player_name');
+        if (!document.getElementById('name-input').value) {
+             document.getElementById('name-input').value = Cookies.get('player_name');
         }
     }
 
     const game = new Game() // Creates new game.
     const player = new Player({ x: 0, y: 0 })
-    console.log('bird skin',next_skin);
+
     if (next_skin) {
         player.skin = next_skin;
     }
@@ -108,11 +112,11 @@ async function setupGame() {
     current_player_unsafe = null;
     current_player_unsafe = player;
 
-
     player.onDiedCallback = () => {
         console.log('died')
         const score = player.body['highest']
-        fetch('http://localhost:3000/died', {
+        const { protocol, hostname, origin, port } = window.location;
+        fetch(origin + '/died', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -127,21 +131,23 @@ async function setupGame() {
                 Render.stop(render);
                 game.stop();
                 game.destroy();
-                const canvs = [...document.getElementsByTagName('canvas')]
-                // console.log(canvs)
-                canvs.forEach(element => {
+
+                const cnvs = [...document.getElementsByTagName('canvas')]
+                cnvs.forEach(element => {
                     element.remove();
                 });
-                const event = new Event('click');
                 current_player_unsafe = null;
+
                 showMainView();
                 showLeaderboard();
+
                 playButton.disabled = false;
-                // saveButton.dispatchEvent(event);
-                // setupGame();
+                gameElement.classList.remove('fade-in');
+                gameElement.classList.remove('there');
+                altitude.classList.remove('fade-in');
+                altitude.classList.remove('there');
             }, deathDelay);
         })
-
     }
 
     return { game, render, player }
@@ -156,13 +162,13 @@ async function main() {
     const isNight = 20
     const isDay = 5
 
-    if (currentTime >= isDay && currentTime < isNight) { // In daytime, request light mode.
-        // document.body.classList.add("day")
+    // In daytime, request light mode.
+    if (currentTime >= isDay && currentTime < isNight) {
+        document.body.classList.add("day")
     } else { 
         document.body.classList.add("night")
     }
 
-    // const { game, player, render} = await setupGame();
     showMainView();
 
     document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true })
@@ -177,13 +183,13 @@ async function main() {
         playButton.disabled = true;
 
         // Name the player after entered name.
-        const playerName = document.getElementById('name-author-input').value || 'Birdie';
+        const playerName = document.getElementById('name-input').value
+            .substr(0, MAX_CHARS)
+            .trim()
+            .replace(/[!"#$%&\\'()\*+,\-\.\/:;<=>?@\[\\\]\^_`{|}~]/g, '')
+        || 'Birdie';
         if (playerName != 'Birdie') { Cookies.set('player_name', playerName); }
         current_player_unsafe.name = playerName;
-
-        // Get the skin selected in settings
-        // const playerSkin = document.getElementById(spriteName + '-bird').value || 'Harry';
-        
 
         startScreens.map((s) => s.classList.remove('fade-in'));
         setTimeout(() => {
@@ -209,18 +215,18 @@ async function main() {
         setTimeout(() => {
             settingsScreens.map(s => s.classList.add('fade-in'))
         }, 500)
-        for (let i = 0; i < birds.length; i++) {
-            birds[i].disabled = false
+        for (let i = 0; i < birdButtons.length; i++) {
+            birdButtons[i].disabled = false
         }
     })
 
-    console.log('hi hi')
+    for (let i = 0; i < birdButtons.length; i++) {
+        birdButtons[i].addEventListener('click', () => {
+            birdButtons[i].disabled = true
 
-    for (let i = 0; i < birds.length; i++) {
-        birds[i].addEventListener('click', () => {
-            birds[i].disabled = true
             const birdSelected = i
             next_skin = birdNames[birdSelected]
+
             settingsScreens.map(s => s.classList.remove('fade-in'))
             startScreens.map(s => s.classList.add('there'))
             setTimeout(() => {
@@ -232,19 +238,6 @@ async function main() {
             settingsButton.disabled = false
         })
     }
-
-    // saveButton.addEventListener('click', () => {
-    //     saveButton.disabled = true
-    //     settingsScreens.map(s => s.classList.remove('fade-in'))
-    //     startScreens.map(s => s.classList.add('there'))
-    //     setTimeout(() => {
-    //         settingsScreens.map(s => s.classList.remove('there'))
-    //     }, 1000)
-    //     setTimeout(() => {
-    //         startScreens.map(s => s.classList.add('fade-in'))
-    //     }, 500)
-    //     settingsButton.disabled = false
-    // })
 }
 
 
