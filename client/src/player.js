@@ -7,7 +7,7 @@ import { Input, BigBen } from './lib/stateControllers'
 import { sprite, randomBird } from './lib/sprites'
 import { makeBlock } from './lib/levelObjects'
 import { Game } from './game'
-import { playerName } from './main.js'
+// import { playerName } from './main.js'
 
 
 // Iain read this.
