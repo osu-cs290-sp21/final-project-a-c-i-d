@@ -195,8 +195,7 @@ export class Player {
 
 
     updateSprite() {
-        this.body.render.sprite.texture
-            = sprite(this.skin, this.orientation > 0)
+        this.body.render.sprite.texture = sprite(this.skin, this.orientation > 0)
     }
 
 
