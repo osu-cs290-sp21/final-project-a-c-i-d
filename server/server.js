@@ -22,7 +22,6 @@ app.get('/', (req, res) => {
 // When birdie dies, transmits scores to leaderboard data json
 app.put('/died', (req, res) => {
     const data = req.body
-    console.log("== req.body:", req.body)
     const { name, altitude } = data
     if (leaderboard.has(name)) {
         if (leaderboard.get(name) < altitude) {
@@ -33,7 +32,6 @@ app.put('/died', (req, res) => {
     }
     fs.writeFileSync('leaderboardData.json', JSON.stringify([...leaderboard.entries()]))
     res.send(200)
-    console.log("== Entire leaderboard: " + leaderboard.entries())
 })
 
 // Leaderboard renderer: top 4 scores
@@ -44,7 +42,6 @@ app.get('/leaderboard', function (req, res) {
         .slice(0,upperBound)
         .map(([name,score]) => ({ name,score }))
     res.status(200).render('./partials/leaderboard', { leaderboardData: highest })
-    console.log("== Top 4: " + highest)
 })
 
 // Listener for ports
