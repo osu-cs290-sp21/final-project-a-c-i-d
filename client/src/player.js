@@ -184,7 +184,7 @@ export class Player {
         // this.onDiedCallback = null;
     }
 
-    
+
     flip() {
         this.orientation *= -1
         Body.setAngle(this.body, 0)
