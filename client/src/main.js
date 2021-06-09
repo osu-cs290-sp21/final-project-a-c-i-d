@@ -6,7 +6,6 @@ import { showLeaderboard } from './ui'
 
 
 const debug = false
-var playerName = 'Birdie'
 
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer.
@@ -104,25 +103,30 @@ async function main() {
     })
 
     playButton.addEventListener('click', () => {
-        playerName = document.getElementById('name-author-input').value;
-        if (playerName) {
-            // clear function for name
-            console.log("== Name " + playerName + " is set.")   
-        } else {
-            // Default name when nothing is set.
-            playerName = 'Birdie'
-        }
+      // Name the player after entered name
+      var playerName = document.getElementById("name-author-input").value;
+      if (playerName) {
+        console.log("== Name " + playerName + " is set.");
+      } else {
+        playerName = "Birdie";
+      }
 
-        playButton.disabled = true
+      player.name = playerName;
 
-        startScreens.map(s => s.classList.remove('fade-in'))
-        setTimeout(() => {
-            startScreens.map(s => s.classList.remove('there'))
-        }, 1000)
-        gameElement.classList.add('there')
-        altitude.classList.add('there')
-        setTimeout(() => { gameElement.classList.add('fade-in') },  500)
-        setTimeout(() => { altitude.classList.add('fade-in') }, 1000)
+      playButton.disabled = true;
+
+      startScreens.map((s) => s.classList.remove("fade-in"));
+      setTimeout(() => {
+        startScreens.map((s) => s.classList.remove("there"));
+      }, 1000);
+      gameElement.classList.add("there");
+      altitude.classList.add("there");
+      setTimeout(() => {
+        gameElement.classList.add("fade-in");
+      }, 500);
+      setTimeout(() => {
+        altitude.classList.add("fade-in");
+      }, 1000);
     })
 
     settingsButton.addEventListener('click', () => {
