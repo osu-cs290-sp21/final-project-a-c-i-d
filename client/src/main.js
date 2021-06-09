@@ -7,6 +7,7 @@ import { showLeaderboard } from './ui'
 
 const debug = false
 
+
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer.
     // https://github.com/liabru/matter-js/wiki/Rendering
@@ -69,9 +70,10 @@ async function main() {
     const game   = new Game() // Creates new game.
     const player = new Player({ x: 0, y: 0 })
 
+    let bird = undefined
+
     player.onDie(() => {
-        game.stop()
-        console.log("died")
+        console.log('died')
     })
 
     const render = makeRenderer({ // Makes the renderer.
@@ -88,13 +90,8 @@ async function main() {
     Events.on(player.body, 'sparseUpdate', () => {
         altitude.innerText
             =   `Altitude: `
-            +   `${-Math.floor(player.body.position.y * 0.01)}`
+            +   `${-Math.floor(player.body.position.y*.01)}`
             +   ` bds (birdies)`
-// Debug.
-+   `\ny: ${Math.floor(Math.abs(player.body.position.y))}`
-+   `\nh: ${Math.floor(Math.abs(player.body['highest']))}`
-+   `\nd: ${Math.floor(Math.abs(player.body['highest'] - player.body.position.y))}`
-+   `\ng: ${Math.floor(Math.abs(game.terrain.length))}`
     })
 
     document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true  })
@@ -104,30 +101,29 @@ async function main() {
     })
 
     playButton.addEventListener('click', () => {
-      // Name the player after entered name
-      var playerName = document.getElementById("name-author-input").value;
-      if (playerName) {
-        console.log("== Name " + playerName + " is set.");
-      } else {
-        playerName = "Birdie";
-      }
+        playButton.disabled = true;
 
-      player.name = playerName;
+        // Name the player after entered name.
+        const playerName = document.getElementById('name-author-input').value;
+        if (playerName) {
+            console.log('== Name ' + playerName + ' is set.');
+        } else {
+            playerName = 'Birdie';
+        }
+        player.name = playerName;
 
-      playButton.disabled = true;
-
-      startScreens.map((s) => s.classList.remove("fade-in"));
-      setTimeout(() => {
-        startScreens.map((s) => s.classList.remove("there"));
-      }, 1000);
-      gameElement.classList.add("there");
-      altitude.classList.add("there");
-      setTimeout(() => {
-        gameElement.classList.add("fade-in");
-      }, 500);
-      setTimeout(() => {
-        altitude.classList.add("fade-in");
-      }, 1000);
+        startScreens.map((s) => s.classList.remove('fade-in'));
+        setTimeout(() => {
+            startScreens.map((s) => s.classList.remove('there'));
+        }, 1000);
+        gameElement.classList.add('there');
+        altitude.classList.add('there');
+        setTimeout(() => {
+            gameElement.classList.add('fade-in');
+        }, 500);
+        setTimeout(() => {
+            altitude.classList.add('fade-in');
+        }, 1000);
     })
 
     settingsButton.addEventListener('click', () => {
