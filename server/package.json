@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm install && nodemon server.js"
+    "dev": "yarn && nodemon server.js"
   },
   "author": "",
   "license": "ISC",

@@ -8,6 +8,15 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 
 ## How to Install and Use
 
+Server:
+```bash
+yarn run server
+```
+Client:
+```bash
+yarn run client
+```
+
 Dev Mode:
 1. Create a local copy of this repo on your machine.
 2. In your command line or terminal, `cd client` then `yarn run dev`. This compiles `build.js`.
