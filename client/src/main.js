@@ -3,10 +3,9 @@ import { Game } from './game'
 import { Player } from './player'
 import { Input } from './lib/stateControllers'
 import { showLeaderboard } from './ui'
-
+import Cookies, { set } from 'js-cookie';
 
 const debug = false
-
 
 function makeRenderer({ element, engine, follows }) {
     // Creates the renderer.
@@ -14,25 +13,25 @@ function makeRenderer({ element, engine, follows }) {
     // https://github.com/liabru/matter-js/blob/master/src/render/Render.js#L66
     const render = Render.create({
         element: element,
-        engine:  engine,
+        engine: engine,
         options: {
             background: 'transparent',
-            height:     window.innerHeight, // document.body.clientHeight,
-            width:      window.innerWidth,  // document.body.clientWidth,
-            hasBounds:  true,
+            height: window.innerHeight, // document.body.clientHeight,
+            width: window.innerWidth,  // document.body.clientWidth,
+            hasBounds: true,
             wireframes: false, // This needs to be false for sprites to show up.
             pixelRatio: 'auto',
-                showVelocity:       debug,
-                showAxes:           debug,
-                showCollisions:     debug,
-                showIds:            debug,
-                showAngleIndicator: debug,
-                showVertexNumbers:  debug,
-                showInternalEdges:  debug,
-                showPositions:      debug,
-                showBounds:         debug,
-                showBroadphase:     debug,
-                showDebug:          debug,
+            showVelocity: debug,
+            showAxes: debug,
+            showCollisions: debug,
+            showIds: debug,
+            showAngleIndicator: debug,
+            showVertexNumbers: debug,
+            showInternalEdges: debug,
+            showPositions: debug,
+            showBounds: debug,
+            showBroadphase: debug,
+            showDebug: debug,
         }
     })
 
@@ -43,7 +42,7 @@ function makeRenderer({ element, engine, follows }) {
             center.x = 0
             center.y = Math.min(follows.position.y, follows['highest']);
             Render.lookAt(event.source, center, {
-                x: window.innerWidth  * cameraScale,
+                x: window.innerWidth * cameraScale,
                 y: window.innerHeight * cameraScale
             })
         })
@@ -53,65 +52,111 @@ function makeRenderer({ element, engine, follows }) {
 }
 
 
-async function main() {
-    await showLeaderboard()
+const startScreens = [...document.getElementsByClassName('start-screen')]
+const settingsScreens = [...document.getElementsByClassName('settings-screen')]
+const settingsButton = document.getElementById('settings-button')
+const playButton = document.getElementById('play-button')
+const saveButton = document.getElementById('save-button')
+const gameElement = document.getElementById('game')
+const altitude = document.getElementById('altitude')
 
-    const startScreens    = [...document.getElementsByClassName('start-screen')]
-    const settingsScreens = [...document
-                                    .getElementsByClassName('settings-screen')]
-    const settingsButton  = document.getElementById('settings-button')
-    const playButton      = document.getElementById('play-button')
-    const saveButton      = document.getElementById('save-button')
-    const gameElement     = document.getElementById('game')
-    const altitude        = document.getElementById('altitude')
-
+const showMainView = () => {
     startScreens.map(s => s.classList.add('there')) // Fade in.
     startScreens.map(s => s.classList.add('fade-in'))
+}
 
-    const game   = new Game() // Creates new game.
+let current_player_unsafe = null;
+
+async function setupGame() {
+
+
+    if (Cookies.get('player_name')) {
+        document.getElementById('name-author-input').value = Cookies.get('player_name');
+    }
+
+    const game = new Game() // Creates new game.
     const player = new Player({ x: 0, y: 0 })
 
-    let bird = undefined
-
-    player.onDie(() => {
+    player.onDiedCallback = () => {
         console.log('died')
-    })
+        const score = player.body['highest']
+        fetch('http://localhost:3000/died', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: player.name,
+                altitude: `${-score}π`
+            })
+        }).then(() => {
+            const deathDelay = 3000;
+            setTimeout(() => {
+                game.stop();
+                player.destroy();
+                game.destroy();
+                const canvs = [...document.getElementsByTagName('canvas')]
+                console.log(canvs)
+                canvs.forEach(element => {
+                    element.remove();
+                });
+                const event = new Event('click');
+                current_player_unsafe = null;
+                showMainView();
+                playButton.disabled = false;
+                // saveButton.dispatchEvent(event);
+                // setupGame();
+            }, deathDelay);
+        })
+
+    }
 
     const render = makeRenderer({ // Makes the renderer.
         element: gameElement,
-        engine:  game.engine,
+        engine: game.engine,
         follows: player.body
     })
 
     game.addPlayer(player)
     game.setup()
-    game.run()
-    Render.run(render) // Starts the renderer.
 
     Events.on(player.body, 'sparseUpdate', () => {
         altitude.innerText
-            =   `Altitude: `
-            +   `${-Math.floor(player.body.position.y*.01)}`
-            +   ` bds (birdies)`
+            = `Altitude: `
+            + `${-Math.floor(player.body.position.y * .01)}`
+            + ` bds (birdies)`
     })
 
-    document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true  })
-    document.addEventListener('keyup'  , e => { Input.ks[e.keyCode] = false })
-    document.addEventListener('keydown', e => {
-        if (e.code === 'KeyC') { game.stop() }
-    })
+    game.run()
+    Render.run(render) // Starts the renderer.
+    current_player_unsafe = null;
+    current_player_unsafe = player;
+
+    return { game, render, player }
+}
+
+
+async function main() {
+    await showLeaderboard()
+
+    // const { game, player, render} = await setupGame();
+    showMainView();
+
+    document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true })
+    document.addEventListener('keyup', e => { Input.ks[e.keyCode] = false })
+    // document.addEventListener('keydown', e => {
+    //     if (e.code === 'KeyC') { game.stop() }
+    // })
 
     playButton.addEventListener('click', () => {
+        setupGame();
+
         playButton.disabled = true;
 
         // Name the player after entered name.
-        const playerName = document.getElementById('name-author-input').value;
-        if (playerName) {
-            console.log('== Name ' + playerName + ' is set.');
-        } else {
-            playerName = 'Birdie';
-        }
-        player.name = playerName;
+        const playerName = document.getElementById('name-author-input').value || 'Birdie';
+        if (playerName != 'Birdie') { Cookies.set('player_name', playerName); }
+        current_player_unsafe.name = playerName;
 
         startScreens.map((s) => s.classList.remove('fade-in'));
         setTimeout(() => {

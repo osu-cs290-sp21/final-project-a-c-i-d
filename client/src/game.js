@@ -191,6 +191,7 @@ export class Game {
             const pp = this.player.body.position;
             for (const body of this.engine.world.bodies) {
                 if (diff(body.position, pp) > 500) {
+                    Events.trigger(body, 'destroy', {self: body});
                     Composite.remove(this.engine.world, body);
                 }
             }
@@ -199,6 +200,7 @@ export class Game {
 
 
     run() { // Runs the game. This is not control blocking.
+        console.log('game started');
         BigBen.begin() // Starts Big Ben.
         Runner.run(this.runner, this.engine) // Starts the Matter.js physics.
         Events.trigger(this.player.body, 'awake', { self: this.player.body })
@@ -216,6 +218,15 @@ export class Game {
 
     stop() { // Stops the game.
         Runner.stop(this.runner)
+    }
+
+    destroy() {
+        Events.trigger(this.gameController, 'destroy', {self: this.gameController});
+        this.player.destroy();
+        this.gameController = null;
+        this.runner = null;
+        this.engine = null;
+        this.player = null;
     }
 
 

@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('fs')
 
 const app = express()
-const port = 3000
+const port = 3000 || process.env.PORT
 
 const dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
 const leaderboard = new Map(dataFile)
