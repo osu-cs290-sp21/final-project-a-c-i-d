@@ -266,6 +266,7 @@ input[type=text] {
 }
 .birds-header {
   position: relative;
+  font-size: 24;
   padding: 10px 20px;
   text-align: center;
 }
@@ -392,3 +393,54 @@ input[type=text] {
     top: 20px;
   }
 
+
+/* .hidden {
+  display: none;
+  background-color: transparent;
+  transition: none;
+}
+
+#modal-backdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.50);
+  z-index:0;
+}
+*/
+#leaderboard-modal {
+  /* position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  transition: 2s linear all;
+  font-family: 'Roboto Mono', Roboto, sans-serif;
+}
+.leaderboard-modal-body {
+  padding: 20px;
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+ 
+}
+.high-score {
+  display: flex;
+}
+.leaderboard-dialog {
+  width: auto;
+  max-width: 600px;
+  min-width: 350px;
+  min-height: 300px;
+  margin: 40px auto;
+  /* background-color: rgba(0, 204, 255, 0.1);
+  background-image: linear-gradient(rgba(0, 200, 255, 1), rgba(255, 255, 255, 0.671)); */
+  border-radius: 15px;
+  z-index: 1000000;
+}
+.modal-header h3 {
+  text-align: center;
+  margin: 0;
+  font-size: 28px;
+}
