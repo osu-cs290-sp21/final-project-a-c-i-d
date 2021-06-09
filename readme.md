@@ -8,21 +8,16 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 
 ## How to Install and Use
 
-Server:
+1. Server:
 ```bash
 yarn run server
 ```
-Client:
+2. Client:
 ```bash
 yarn run client
 ```
-
-Dev Mode:
-1. Create a local copy of this repo on your machine.
-2. In your command line or terminal, `cd client` then `yarn run dev`. This compiles `build.js`.
-3. Still in your terminal, `cd ../server` then `npm run dev`. This starts the server.
-5. Now the game should be loaded at `http://localhost:3000`
-6. Party! 🥳
+3. Navigate to `http://localhost:3000`.
+4. Party! 🥳
 
 Rules of the Game:
 - The goal is to get your birdie as high as possible! Scores are tallied by the y value on the screen, aka altitude.
