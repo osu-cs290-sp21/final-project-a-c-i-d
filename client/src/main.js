@@ -209,11 +209,8 @@ async function main() {
         }
     })
 
-<<<<<<< HEAD
-=======
     console.log('hi hi')
 
->>>>>>> main
     for (let i = 0; i < birds.length; i++) {
         birds[i].addEventListener('click', () => {
             birds[i].disabled = true
