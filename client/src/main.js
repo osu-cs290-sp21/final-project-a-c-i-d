@@ -157,7 +157,7 @@ async function main() {
     const isDay = 5
 
     if (currentTime >= isDay && currentTime < isNight) { // In daytime, request light mode.
-        document.body.classList.add("day")
+        // document.body.classList.add("day")
     } else { 
         document.body.classList.add("night")
     }
