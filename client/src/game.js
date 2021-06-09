@@ -49,16 +49,18 @@ export class Game {
 
 
     addTerrain(terrain) {
+        if (!this.engine) {return;}
+        if (this.engine.world.bodies.length > 100) {
+            console.log('Hess, your beard is hot.')
+            return;
+        }
         console.log('terrain added')
         const passthrough    = body => { body.collisionFilter.group    = -1
                                          body.collisionFilter.category =  0 }
         const pauliExclusion = body => { body.collisionFilter.group    =  1
                                          body.collisionFilter.category =  1 }
         pauliExclusion(this.player.body)
-        if (this.engine.world.bodies.length > 100) {
-            console.log('too many bodies!')
-            return;
-        }
+
         // const temp = new Array(this.terrain.length)
         for (let i = terrain.length-1; i >= 0; i--) {
             const platform = terrain[i]
@@ -78,7 +80,9 @@ export class Game {
             Events.on(platform, 'sparseUpdate', o => {
                 if (diff(platform.position, this.player.body.position) > 500 && platform.label != 'gamecontroller') {
                     console.log('before', this.engine.world.bodies.length);
+                    Events.trigger(platform, 'destroy', {self:platform})
                     Composite.remove(this.engine.world, platform);
+                    Events.trigger(sensor, 'destroy', {self:sensor})
                     Composite.remove(this.engine.world, sensor);
                     console.log('after', this.engine.world.bodies.length);
                 }
@@ -129,7 +133,7 @@ export class Game {
             Composite.add(this.engine.world, platform)
 
             Events.trigger(platform, 'awake', { self: platform })
-
+            Events.trigger(sensor, 'awake', { self: sensor });
         }
         // this.sensors = temp.concat(this.sensors)
 
@@ -138,10 +142,10 @@ export class Game {
             isStatic: true
         });
         gameController.label = 'gamecontroller'
-        gameController.sparseUpdateEvery(300);
-        Events.on(gameController, 'sparseUpdate', this.sparseUpdate.bind(this));
+        // gameController.sparseUpdateEvery(300);
+        // Events.on(gameController, 'sparseUpdate', this.sparseUpdate.bind(this));
         this.gameController = gameController
-        Composite.add(this.engine.world, gameController);
+        // Composite.add(this.engine.world, gameController);
     }
 
 
@@ -159,17 +163,14 @@ export class Game {
     update() { // Called every time a new frame is rendered.
         BigBen.deltaTime = this.runner.delta // Updates global time variable.
         // this.sparseUpdate();
-        if (this.player.body.position.y < this.height) {
-            this.height -= window.innerHeight
+        if (this.player.body.position.y < this.height * 0.33) {
+            this.height -= window.innerHeight*0.33
             // this.points  = getTerrain(this.player.body['highest'])
             //     .concat(this.points)
             // this.terrain = makeTerrain(this.points)
             //     .concat(this.terrain)
             const points  = getTerrain(this.player.body['highest'])
-            
             this.addTerrain(makeTerrain(points))
-
-            const density = Math.floor(window.innerWidth * window.innerHeight/25000)
         }
     }
 

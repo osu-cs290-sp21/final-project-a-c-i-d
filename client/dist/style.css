@@ -133,6 +133,7 @@ input[type=text] {
       background: var(--light-green);
       box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.5);
       transition: 0.3s;
+      cursor: pointer;
     }
     #play-button:active {
       background-color: var(--dark-green);
@@ -152,7 +153,7 @@ input[type=text] {
       Settings
      *~~~~~~~~~~~~~~~~~~~*/
     #settings-button {
-      background: url('img/sprites/svg/harry-day-flip.svg');
+      background: url('img/sprites/svg/harry-flip.svg');
       background-repeat: no-repeat;
       background-size: contain;
       color: black;
@@ -166,6 +167,7 @@ input[type=text] {
       margin-top: 0px;
       padding-top: 90px;
       transition: 0.3s;
+      cursor: pointer;
     }
     #settings-button:active {
       margin-top: 10px;
@@ -187,6 +189,13 @@ input[type=text] {
 }
 .high-score {
   display: flex;
+  justify-content: space-between;
+}
+.player-name {
+  text-align: left;
+}
+.player-score {
+  align-items: right;
 }
 .leaderboard-dialog {
   width: auto;
@@ -282,7 +291,7 @@ input[type=text] {
 }
 #birds-header {
   position: relative;
-  font-size: 20;
+  font-size: 20px;
   padding-bottom: 20px;
   padding-top: 20px;
   text-align: center;
@@ -313,6 +322,7 @@ input[type=text] {
   margin-top: 0px;
   padding-top: 90px;
   transition: 0.3s;
+  cursor: pointer;
 }
 .bird-button:active {
   margin-top: 10px;

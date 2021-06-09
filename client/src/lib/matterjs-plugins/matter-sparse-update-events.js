@@ -52,6 +52,7 @@ export const MatterSparseUpdateEvents = {
                 if (body._sparseUpdateThread !== undefined) {
                     clearInterval(body._sparseUpdateThread);
                     body._sparseUpdateThread = undefined;
+                    body._sparseUpdateDeltaTime = undefined;
                 }
             });
         });
