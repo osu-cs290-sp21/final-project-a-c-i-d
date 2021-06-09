@@ -34,7 +34,7 @@ app.put('/died', (req, res) => {
         leaderboard.set(name, altitude)
     }
     fs.writeFileSync('leaderboardData.json', JSON.stringify([...leaderboard.entries()]))
-    res.send(200)
+    res.sendStatus(200)
 })
 
 // Leaderboard renderer: top 4 scores
