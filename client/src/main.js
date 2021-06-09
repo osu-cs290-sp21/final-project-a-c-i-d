@@ -177,7 +177,7 @@ async function main() {
         current_player_unsafe.name = playerName;
 
         // Get the skin selected in settings
-        const playerSkin = document.getElementById(spriteName + '-bird').value || 'Harry';
+        // const playerSkin = document.getElementById(spriteName + '-bird').value || 'Harry';
         
 
         startScreens.map((s) => s.classList.remove('fade-in'));
@@ -215,7 +215,7 @@ async function main() {
         birds[i].addEventListener('click', () => {
             birds[i].disabled = true
             const birdSelected = i
-            player.skin = birdNames[birdSelected]
+            current_player_unsafe.skin = birdNames[birdSelected]
             settingsScreens.map(s => s.classList.remove('fade-in'))
             startScreens.map(s => s.classList.add('there'))
             setTimeout(() => {
