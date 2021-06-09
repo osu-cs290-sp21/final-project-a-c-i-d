@@ -71,12 +71,12 @@ export class Game {
 
             Events.on(platform, 'sparseUpdate', o => {
                 if (diff(platform.position, this.player.body.position) > 500 && platform.label != 'gamecontroller') {
-                    console.log('before', this.engine.world.bodies.length);
+                    // console.log('before', this.engine.world.bodies.length);
                     Events.trigger(platform, 'destroy', {self:platform})
                     Composite.remove(this.engine.world, platform);
                     Events.trigger(sensor, 'destroy', {self:sensor})
                     Composite.remove(this.engine.world, sensor);
-                    console.log('after', this.engine.world.bodies.length);
+                    // console.log('after', this.engine.world.bodies.length);
                 }
             })
 
@@ -111,15 +111,10 @@ export class Game {
                 }
             })
 
-            // Events.on(platform, 'movedTo', position => {
-            //     return Body.setPosition(sensor, position)
-            // })
-
             passthrough(platform)
             platform.hard = false
             pauliExclusion(sensor)
 
-            // temp[i] = sensor
             Composite.add(this.engine.world, sensor)
             Composite.add(this.engine.world, platform)
 
@@ -174,7 +169,6 @@ export class Game {
 
 
     run() { // Runs the game. This is not control blocking.
-        console.log('game started');
         BigBen.begin() // Starts Big Ben.
         Runner.run(this.runner, this.engine) // Starts the Matter.js physics.
         Events.trigger(this.player.body, 'awake', { self: this.player.body })
