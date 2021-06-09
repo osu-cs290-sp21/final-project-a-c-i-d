@@ -55,6 +55,7 @@ function makeRenderer({ element, engine, follows }) {
 
 async function main() {
     await showLeaderboard()
+
     const startScreens    = [...document.getElementsByClassName('start-screen')]
     const settingsScreens = [...document
                                     .getElementsByClassName('settings-screen')]
@@ -151,10 +152,6 @@ async function main() {
         }, 500)
         settingsButton.disabled = false
     })
-
-    // fetch('http://localhost:3000/leaderboard', {
-    //     method: 'GET',
-    // }).then(data => console.log(data))
 }
 
 
