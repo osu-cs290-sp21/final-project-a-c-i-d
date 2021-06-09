@@ -90,13 +90,12 @@ async function setupGame() {
                 altitude: `${-score}π`
             })
         }).then(() => {
-            const deathDelay = 3000;
+            const deathDelay = 1;
             setTimeout(() => {
                 game.stop();
-                player.destroy();
                 game.destroy();
                 const canvs = [...document.getElementsByTagName('canvas')]
-                console.log(canvs)
+                // console.log(canvs)
                 canvs.forEach(element => {
                     element.remove();
                 });

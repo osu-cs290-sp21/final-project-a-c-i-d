@@ -173,14 +173,15 @@ export class Player {
         // this.body['highest'] = this.body.position.y;
 
         if (this.onDiedCallback != null) {
-            this.onDiedCallback()
             Events.trigger(this.body, 'destroy', {self: this.body});
+            this.onDiedCallback()
+            
         }
     }
 
     destroy() {
-        this.body = null;
-        this.onDiedCallback = null;
+        // this.body = null;
+        // this.onDiedCallback = null;
     }
 
 

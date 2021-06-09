@@ -190,7 +190,7 @@ export class Game {
         if (this.engine.world.bodies.length > 100) {
             const pp = this.player.body.position;
             for (const body of this.engine.world.bodies) {
-                if (diff(body.position, pp) > 500) {
+                if (diff(body.position, pp) > 1000) {
                     Events.trigger(body, 'destroy', {self: body});
                     Composite.remove(this.engine.world, body);
                 }
@@ -207,12 +207,12 @@ export class Game {
         Events.trigger(this.gameController, 'awake', {
             self: this.gameController
         })
-        setInterval(() => { 
-            console.log(this.points.length,
-                        this.terrain.length,
-                        this.sensors.length,
-                        this.engine.world.bodies.length
-        )}, 1000)
+        // setInterval(() => { 
+        //     console.log(this.points.length,
+        //                 this.terrain.length,
+        //                 this.sensors.length,
+        //                 this.engine.world.bodies.length
+        // )}, 1000)
     }
 
 
@@ -221,7 +221,10 @@ export class Game {
     }
 
     destroy() {
-        Events.trigger(this.gameController, 'destroy', {self: this.gameController});
+        for (const body of this.engine.world.bodies) {
+            Events.trigger(body, 'destroy', {self:body});
+        }
+        // Events.trigger(this.gameController, 'destroy', {self: this.gameController});
         this.player.destroy();
         this.gameController = null;
         this.runner = null;
