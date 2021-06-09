@@ -27,7 +27,7 @@ app.set('view engine', 'handlebars')
 
 
 app.get('/', (req, res) => {
-    res.status(200).render('index')
+    res.status(200).render('main')
 })
 
 
