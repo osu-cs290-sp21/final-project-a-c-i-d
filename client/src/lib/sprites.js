@@ -6,11 +6,12 @@ export const asset = name => [root, name].join('/');
 
 const root = origin;
 
-export const birdNames = ['bella', 'harry', 'olive', 'perry', 'sahana', 'todd'];
-export const ogBirds = ['andy', 'david', 'cole', 'iain'];
+export const birdNames = ['andy', 'cole', 'david', 'harry', 'iain', 'olive', 'perry', 'sahana', 'todd', 'bella'];
 
 // export const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
 export const sprite = (name, flipped = false) => asset(['img', 'sprites', 'svg', name + (flipped ? '-flip' : '') + '.svg'].join('/'));
-export const birdAssetNames = [...ogBirds, ...birdNames.map(name => name)];
-const choose = arr => arr[Math.floor(Math.random() * arr.length)];
-export const randomBird = () => choose(birdAssetNames);
+export const birdAssetNames = [...birdNames.map(name => name)];
+// const choose = arr => arr[Math.floor(Math.random() * arr.length)];
+
+// Select the bird within the index array
+// export const birdSkin = (x) => birdAssetNames[x];

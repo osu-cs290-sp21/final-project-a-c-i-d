@@ -27,7 +27,7 @@ export class Player {
         this.name = undefined;
         const { x, y } = spawn;
         this.spawn = { x, y };
-        this.skin = randomBird();
+        this.skin = 'bella';
         this.isGrounded = false;
         this.orientation = 1; // Bird looking right.
         this.rotationSpeed = 0;

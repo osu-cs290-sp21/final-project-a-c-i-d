@@ -4,6 +4,7 @@ import { Player } from './player'
 import { Input } from './lib/stateControllers'
 import { showLeaderboard } from './ui'
 import Cookies, { set } from 'js-cookie';
+import { birdNames, birdSkin } from './lib/sprites'
 
 const debug = false
 
@@ -173,6 +174,10 @@ async function main() {
         if (playerName != 'Birdie') { Cookies.set('player_name', playerName); }
         current_player_unsafe.name = playerName;
 
+        // Get the skin selected in settings
+        const playerSkin = document.getElementById(spriteName + '-bird').value || 'Harry';
+        
+
         startScreens.map((s) => s.classList.remove('fade-in'));
         setTimeout(() => {
             startScreens.map((s) => s.classList.remove('there'));
@@ -203,9 +208,12 @@ async function main() {
     })
 
     console.log('hi hi')
+
     for (let i = 0; i < birds.length; i++) {
         birds[i].addEventListener('click', () => {
             birds[i].disabled = true
+            const birdSelected = i
+            player.skin = birdNames[birdSelected]
             settingsScreens.map(s => s.classList.remove('fade-in'))
             startScreens.map(s => s.classList.add('there'))
             setTimeout(() => {
