@@ -86,7 +86,7 @@ async function setupGame() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: player.name,
+                name: Cookies.get('player_name'),
                 altitude: `${-score}π`
             })
         }).then(() => {
