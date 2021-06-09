@@ -187,6 +187,13 @@ input[type=text] {
 }
 .high-score {
   display: flex;
+  justify-content: space-between;
+}
+.player-name {
+  text-align: left;
+}
+.player-score {
+  align-items: right;
 }
 .leaderboard-dialog {
   width: auto;
