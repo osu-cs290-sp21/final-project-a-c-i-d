@@ -112,7 +112,8 @@ async function setupGame() {
     player.onDiedCallback = () => {
         console.log('died')
         const score = player.body['highest']
-        fetch('http://localhost:3000/died', {
+        const { protocol, hostname, origin, port } = window.location;
+        fetch(origin + '/died', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
