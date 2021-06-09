@@ -165,6 +165,34 @@ input[type=text] {
       transition: 0.3s;
     }
 
+#leaderboard {
+  font-family: var(--monospace);
+}
+.leaderboard-modal-body {
+  padding: 20px;
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+}
+.high-score {
+  display: flex;
+}
+.leaderboard-dialog {
+  width: auto;
+  /* max-width: 600px;
+  min-width: 350px;
+  min-height: 300px; */
+  margin: 40px auto;
+  /* background-color: rgba(9, 184, 228, 1); */
+  border-radius: 15px;
+  z-index: 1000000;
+}
+.modal-header h3 {
+  text-align: center;
+  margin: 0;
+  font-size: 28px;
+}
+
 
 /******************************************************************************
  * Settings Screen
@@ -334,6 +362,7 @@ input[type=text] {
   display: none;
 }
 
+
 /******************************************************************************
  * Game Screen
  ******************************************************************************/
@@ -363,31 +392,3 @@ input[type=text] {
     top: 20px;
   }
 
-
-#leaderboard {
-  font-family: var(--monospace);
-}
-.leaderboard-modal-body {
-  padding: 20px;
-  font-size: 24px;
-  display: flex;
-  flex-direction: column;
-}
-.high-score {
-  display: flex;
-}
-.leaderboard-dialog {
-  width: auto;
-  /* max-width: 600px;
-  min-width: 350px;
-  min-height: 300px; */
-  margin: 40px auto;
-  /* background-color: rgba(9, 184, 228, 1); */
-  border-radius: 15px;
-  z-index: 1000000;
-}
-.modal-header h3 {
-  text-align: center;
-  margin: 0;
-  font-size: 28px;
-}
