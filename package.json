@@ -1,0 +1,15 @@
+{
+    "name": "Foo-Flight",
+    "version": "420.69.8",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+      "client": "cd client; yarn run dev",
+      "server": "cd server; yarn run dev"
+    },
+    "author": "ACID",
+    "license": "ISC",
+    "dependencies": {},
+    "devDependencies": {}
+  }
+  
