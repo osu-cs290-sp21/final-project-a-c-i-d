@@ -7,8 +7,6 @@ import { Input, BigBen } from './lib/stateControllers'
 import { sprite, randomBird } from './lib/sprites'
 import { makeBlock } from './lib/levelObjects'
 import { Game } from './game'
-// import { playerName } from './main.js'
-
 
 // Iain read this.
 // https://github.com/liabru/matter-js/wiki/Creating-plugins
@@ -26,6 +24,7 @@ export class Player {
 
 
     constructor(spawn) {
+        this.name = undefined;
         const { x, y } = spawn;
         this.spawn = { x, y };
         this.skin = randomBird();
@@ -175,7 +174,7 @@ export class Player {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: playerName,
+                name: this.name,
                 altitude: -score
             })
         })
