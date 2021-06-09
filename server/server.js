@@ -54,7 +54,7 @@ app.get('/leaderboard', function (req, res) {
         .sort(([k1,v1],[k2,v2]) => v2 - v1)
         .slice(0,upperBound)
         .map(([name,score]) => ({ name,score }))
-    res.status(200).render('./partials/leaderboardModal', { leaderboardData: highest })
+    res.status(200).render('./partials/leaderboard', { leaderboardData: highest })
     console.log("== Top 4: " + highest)
 })
 

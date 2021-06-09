@@ -58,12 +58,12 @@ input[type=text] {
     /* border: 1px solid white; */
     display: flex;
     flex-direction: column;
-    /* left: 50%; */
+    left: 50%;
     min-width: 700px;
     align-items: center;
-    /* position: absolute;
+    position: absolute;
     top: 50%;
-    transform: translate(-50%, -50%); */
+    transform: translate(-50%, -50%);
   }
 
     #start-title {
@@ -123,7 +123,7 @@ input[type=text] {
     #play-button:hover {
       background: var(--light-green);
       box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.5);
-      padding: 15px 35px 15px 35px;
+      /* padding: 15px 35px 15px 35px; */
       transition: 0.3s;
     }
     #play-button:active {
@@ -191,11 +191,11 @@ input[type=text] {
     /* border: 1px solid white; */
     display: flex;
     flex-direction: column;
-    /* left: 50%; */
+    left: 50%;
     min-width: 700px;
-    /* position: absolute; */
-    /* top: 50%;
-    transform: translate(-50%, -50%); */
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 
     #settings-title {
@@ -221,7 +221,7 @@ input[type=text] {
     #save-button:hover {
       background: var(--light-pink);
       box-shadow: 0px 0px 40px rgba(255, 255, 255, 0.5);
-      padding: 15px 35px 15px 35px;
+      /* padding: 15px 35px 15px 35px; */
       transition: 0.3s;
     }
     #save-button:active {
@@ -255,7 +255,7 @@ input[type=text] {
   min-width: 350px;
   min-height: 300px;
   margin: 40px auto;
-  background-color: rgb(16, 143, 22);
+  /* background-color: rgb(16, 143, 22); */
   border-radius: 15px;
 }
 .birds-close-button {
@@ -364,46 +364,25 @@ input[type=text] {
   }
 
 
-/* .hidden {
-  display: none;
-  background-color: transparent;
-  transition: none;
-}
-
-#modal-backdrop {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.50);
-  z-index:0;
-}
-*/
-#leaderboard-modal {
-  /* position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); */
-  transition: 2s linear all;
+#leaderboard {
+  font-family: var(--monospace);
 }
 .leaderboard-modal-body {
   padding: 20px;
   font-size: 24px;
   display: flex;
   flex-direction: column;
- 
 }
 .high-score {
   display: flex;
 }
 .leaderboard-dialog {
   width: auto;
-  max-width: 600px;
+  /* max-width: 600px;
   min-width: 350px;
-  min-height: 300px;
+  min-height: 300px; */
   margin: 40px auto;
-  background-color: rgba(9, 184, 228, 1);
+  /* background-color: rgba(9, 184, 228, 1); */
   border-radius: 15px;
   z-index: 1000000;
 }
