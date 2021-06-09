@@ -69,6 +69,7 @@ const showMainView = () => {
 }
 
 let current_player_unsafe = null;
+let next_skin = null;
 
 async function setupGame() {
 
@@ -81,7 +82,11 @@ async function setupGame() {
 
     const game = new Game() // Creates new game.
     const player = new Player({ x: 0, y: 0 })
-
+    console.log('bird skin',next_skin);
+    if (next_skin) {
+        player.skin = next_skin;
+    }
+    player.updateSprite()
     const render = makeRenderer({ // Makes the renderer.
         element: gameElement,
         engine: game.engine,
@@ -215,7 +220,7 @@ async function main() {
         birds[i].addEventListener('click', () => {
             birds[i].disabled = true
             const birdSelected = i
-            current_player_unsafe.skin = birdNames[birdSelected]
+            next_skin = birdNames[birdSelected]
             settingsScreens.map(s => s.classList.remove('fade-in'))
             startScreens.map(s => s.classList.add('there'))
             setTimeout(() => {
