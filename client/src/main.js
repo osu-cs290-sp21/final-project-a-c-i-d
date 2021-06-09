@@ -91,7 +91,7 @@ async function setupGame() {
             },
             body: JSON.stringify({
                 name: Cookies.get('player_name'),
-                altitude: `${-score}π`
+                altitude: -Math.floor(score * .01)
             })
         }).then(() => {
             const deathDelay = 1;
