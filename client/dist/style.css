@@ -34,6 +34,13 @@ body {
    */
 }
 
+.day {
+  background: url('img/day.png') center fixed;
+}
+
+.night {
+  background: url('img/night.png') center fixed;
+}
 
 button,
 h1, h2, h3,

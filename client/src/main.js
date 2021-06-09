@@ -140,6 +140,17 @@ async function setupGame() {
 async function main() {
     await showLeaderboard()
 
+    const date = new Date()
+    const currentTime = date.getHours()
+    const isNight = 20
+    const isDay = 5
+
+    if (currentTime >= isDay && currentTime < isNight) { // In daytime, request light mode.
+        document.body.classList.add("day")
+    } else { 
+        document.body.classList.add("night")
+    }
+
     // const { game, player, render} = await setupGame();
     showMainView();
 
