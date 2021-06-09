@@ -77,10 +77,10 @@ export class Game {
 
             Events.on(platform, 'sparseUpdate', o => {
                 if (diff(platform.position, this.player.body.position) > 500 && platform.label != 'gamecontroller') {
-                    console.log('before', this.engine.world.bodies.length);
+                    // console.log('before', this.engine.world.bodies.length);
                     Composite.remove(this.engine.world, platform);
                     Composite.remove(this.engine.world, sensor);
-                    console.log('after', this.engine.world.bodies.length);
+                    // console.log('after', this.engine.world.bodies.length);
                 }
             })
 
@@ -185,6 +185,7 @@ export class Game {
 
         // this.cleanUpBodies();
     }
+
 
     cleanUpBodies() {
         if (this.engine.world.bodies.length > 100) {

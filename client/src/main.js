@@ -61,17 +61,16 @@ async function main() {
                                     .getElementsByClassName('settings-screen')]
     const settingsButton  = document.getElementById('settings-button')
     const playButton      = document.getElementById('play-button')
-    const saveButton      = document.getElementById('save-button')
     const gameElement     = document.getElementById('game')
     const altitude        = document.getElementById('altitude')
+
+    const andy = document.getElementById('andy-bird')
 
     startScreens.map(s => s.classList.add('there')) // Fade in.
     startScreens.map(s => s.classList.add('fade-in'))
 
     const game   = new Game() // Creates new game.
     const player = new Player({ x: 0, y: 0 })
-
-    let bird = undefined
 
     player.onDie(() => {
         console.log('died')
@@ -137,11 +136,13 @@ async function main() {
         setTimeout(() => {
             settingsScreens.map(s => s.classList.add('fade-in'))
         }, 500)
-        saveButton.disabled = false
+        andy.disabled = false
     })
 
-    saveButton.addEventListener('click', () => {
-        saveButton.disabled = true
+
+
+    andy.addEventListener('click', () => {
+        andy.disabled = true
         settingsScreens.map(s => s.classList.remove('fade-in'))
         startScreens.map(s => s.classList.add('there'))
         setTimeout(() => {

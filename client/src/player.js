@@ -168,16 +168,16 @@ export class Player {
     died() {
         const score = this.body['highest']
         this.body['highest'] = this.body.position.y
-        fetch('http://localhost:3000/died', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: this.name,
-                altitude: -score
-            })
-        })
+        // fetch('http://localhost:3000/died', {
+        //     method: 'PUT',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         name: this.name,
+        //         altitude: -score
+        //     })
+        // })
 
         if (this.onDiedCallback) {
             this.onDiedCallback()
