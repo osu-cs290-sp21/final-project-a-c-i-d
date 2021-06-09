@@ -36,7 +36,7 @@ body {
 
 
 button,
-h1, h2,
+h1, h2, h3,
 input[type=text] {
   font-family: var(--monospace);
 }
@@ -154,7 +154,6 @@ input[type=text] {
       transition: 0.3s;
     }
     #settings-button:hover {
-      color: rgba(0, 0, 0, 1);
       margin-top: 0px;
       padding-top: 90px;
       transition: 0.3s;
@@ -257,63 +256,44 @@ input[type=text] {
       transition: 0.3s;
     }
 
-/*===== Birds modal =====*/
+/*===== Birds Modal =====*/
+
 #birds-modal {
-  position: fixed;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  font-family: var(--monospace);
 }
-.birds-header {
+#birds-header {
   position: relative;
   font-size: 24;
   padding: 10px 20px;
   text-align: center;
 }
 .birds-modal-body {
-  padding: 20px;
-  font-size: 24px;
   display: flex;
   flex-wrap: wrap;
+  max-width: 390px;
+  margin-left: auto;
+  margin-right: auto;
   justify-content: space-around;
 }
-.birds-dialog {
-  font-family: 'Roboto Mono', Roboto, sans-serif;
-  width: auto;
-  max-width: 400px;
-  min-width: 350px;
-  min-height: 300px;
-  margin: 40px auto;
-  /* background-color: rgb(16, 143, 22); */
-  border-radius: 15px;
-}
-.birds-close-button {
-  position: absolute;
-  right: 10px;
-  top: 5px;
-  font-size: 48px;
-  border: none;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-}
-.bird-select:hover {
-  background-color: rgba(0, 0, 0, 0.20);
-}
 .bird-select {
-  width: 100px;
-  height: 100px;
+  font-size: 20px;
+  line-height: 20px;
+  margin: 10px;
+  width: 110px;
+  height: 110px;
+}
+.player-bird {
+  cursor: pointer;
+  height: 80px;
+  transition: 0.3s;
+  padding-top: 10px;
+}
+.player-bird:hover {
+  padding-top: 0px;
+}
+.bird-name {
+  cursor: pointer;
   text-align: center;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 50%;
-}
-.player-bird {  /* Birds in the modal */
-  width: 72px;
-  cursor: pointer;
-}
-.show-bird {  /*Bird on the button*/
-  width: 64px;
 }
 
 /*---Input portion---*/
