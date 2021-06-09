@@ -139,8 +139,6 @@ async function main() {
         andy.disabled = false
     })
 
-
-
     andy.addEventListener('click', () => {
         andy.disabled = true
         settingsScreens.map(s => s.classList.remove('fade-in'))
