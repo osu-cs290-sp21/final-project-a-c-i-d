@@ -54,6 +54,7 @@ function makeRenderer({ element, engine, follows }) {
 
 
 async function main() {
+    await showLeaderboard()
     const startScreens    = [...document.getElementsByClassName('start-screen')]
     const settingsScreens = [...document
                                     .getElementsByClassName('settings-screen')]
