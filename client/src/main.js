@@ -164,7 +164,7 @@ async function main() {
 
     // In daytime, request light mode.
     if (currentTime >= isDay && currentTime < isNight) {
-        document.body.classList.add("day")
+        // document.body.classList.add("day")
     } else { 
         document.body.classList.add("night")
     }
