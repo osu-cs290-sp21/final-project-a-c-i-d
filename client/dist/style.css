@@ -84,6 +84,10 @@ input[type=text] {
       text-align: center;
     }
 
+    #name-author-input:hover {
+      cursor: auto;
+    }
+
     #name-input-element {
       display: flex;
       align-items: center;
@@ -403,13 +407,8 @@ input[type=text] {
   border-radius: 15px;
   z-index: 1000000;
 }
-.lb-close-button {
-  position: absolute;
-  right: 10px;
-  top: 5px;
-  font-size: 32px;
-  border: none;
-  background: none;
-  padding: 0;
-  cursor: pointer;
+.modal-header h3 {
+  text-align: center;
+  margin: 0;
+  font-size: 28px;
 }
