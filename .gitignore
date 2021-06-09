@@ -4,4 +4,3 @@ package-lock.json
 yarn.lock
 server/leaderboardData.json
 leaderboardData.json
-_build.js
