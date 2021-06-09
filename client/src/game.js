@@ -21,7 +21,7 @@ export class Game {
 
         this.height  = -window.innerHeight*2
         this.player  = undefined
-        this.sensors = []
+
         this.terrain = []
         this.points  = []
     }
@@ -36,9 +36,6 @@ export class Game {
         })
 
         const points  = getTerrain(this.player.body['highest'])
-            // .concat(this.points)
-        // this.terrain = makeTerrain(this.points).concat(earth)
-        //     .concat(this.terrain)
         this.addTerrain([earth, ...makeTerrain(points)])
 
         // Registers the update functions for each update.
@@ -61,7 +58,6 @@ export class Game {
                                          body.collisionFilter.category =  1 }
         pauliExclusion(this.player.body)
 
-        // const temp = new Array(this.terrain.length)
         for (let i = terrain.length-1; i >= 0; i--) {
             const platform = terrain[i]
             const { x, y } = platform.position
@@ -88,7 +84,7 @@ export class Game {
                 }
             })
 
-            if (false && 
+            if (false &&
                 Math.random() < 0.2) {
                 Body.set(sensor, 'label', 'boing')
                 // temp[i] = sensor
@@ -135,7 +131,6 @@ export class Game {
             Events.trigger(platform, 'awake', { self: platform })
             Events.trigger(sensor, 'awake', { self: sensor });
         }
-        // this.sensors = temp.concat(this.sensors)
 
         /* shhhh don't worry about it */
         const gameController = Bodies.rectangle(-69,69,1,1,{

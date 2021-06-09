@@ -9,7 +9,7 @@ export function showLeaderboard() {
     return fetch(origin + '/leaderboard', { method: 'GET' })
         .then(response => response.text())
         .then(html => {
-            console.log(html)
+            // console.log(html)
             lb.innerHTML = html;
             // show(background);
             // show(lb);
