@@ -8,15 +8,11 @@ We created this project with an ambitious idea for a fun game that Rob Hess coul
 
 ## How to Install and Use
 
-1. Server:
-```bash
-yarn run server
+1. Download repository and `cd` into directory.
+2. ```bash
+npm start
 ```
-2. Client:
-```bash
-yarn run client
-```
-3. Navigate to `http://localhost:3000`.
+3. Navigate to `http://localhost:5000`.
 4. Party! 🥳
 
 Rules of the Game:
