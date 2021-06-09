@@ -9,16 +9,7 @@ const port = 3000
 const dataFile = JSON.parse(fs.readFileSync('leaderboardData.json'))
 const leaderboard = new Map(dataFile)
 
-
 const dontGame = true
-// app.get('/build.js', (req,res,next) => {
-//   if (dontGame) {
-//     res.send(404)
-//   } else {
-//     next()
-//   }
-// })
-
 
 app.use(express.static(path.join(__dirname, '..', 'client', 'dist')))
 app.use(express.json())
@@ -61,27 +52,4 @@ app.get('/leaderboard', function (req, res) {
 
 app.listen(port, () => {
     console.log(`listen to ${port}`)
-    // setInterval(save, 10*1000)
 })
-
-
-/**
- * Sort JSON file by particular key
- * Note: Key is the score/altitude of the birdie once they die
- * @param {int} key JSON key to use
- * @param {Object}
- */
-
-//  function sortBy(key, data) {
-//     return data.sort((a, b) => {
-//         var x = parseInt(a[key])
-//         var y = parseInt(b[key])
-//         return ((x > y) ? -1 : ((x < y) ? 1 : 0))
-//     })
-// }
-// var sortedData = sortBy('score', dataFile)
-
-// function save() {
-//     fs.writeFileSync('leaderboardData.json', JSON.stringify([...leaderboard.entries()]))
-// }
-
