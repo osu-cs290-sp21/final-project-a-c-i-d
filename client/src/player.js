@@ -33,6 +33,7 @@ export class Player {
         this.rotationSpeed = 0;
         this.rotationIntegral = 0;
         this.chunk = false;
+        this.onDiedCallback = null;
         const options = {
             render: {
                 sprite: {
@@ -53,7 +54,7 @@ export class Player {
         // Makes a 16-gon for the player collider.
         this.body = Bodies.polygon(x, y, 16, 50, options);
         this.body.label = 'gamer';
-
+        this.body['highest'] = 0;
         Body.set(this.body, 'highest', this.body.position.y)
     }
 
@@ -83,16 +84,19 @@ export class Player {
         }
 
         const onSparseUpdate = () => {
-            const x = this.body.position.x
-            const y = this.body.position.y + 50 // even skim the bottom, you die
-            const m = this.body['highest']
-            const w = window.innerWidth / 2
-            const h = window.innerHeight / 2
+            // const x = this.body.position.x
+            const y = this.body.position.y // even skim the bottom, you die
+            const highest = this.body['highest']
+            // const w = window.innerWidth / 2
+            // const h = window.innerHeight / 2
 
             // if      (x < -w) { Body.setPosition(this.body, { x:  w, y: y }) }
             // else if (x >  w) { Body.setPosition(this.body, { x: -w, y: y }) }
 
-            if (Math.abs(m - y) > h*2) { this.died() }
+            if (y - highest > 500) {
+                // alert('died');
+                this.died();
+            }
 
             this.orient()
         }
@@ -166,27 +170,18 @@ export class Player {
 
 
     died() {
-        const score = this.body['highest']
-        this.body['highest'] = this.body.position.y
-        fetch('http://localhost:3000/died', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: this.name,
-                altitude: -score
-            })
-        })
+        // this.body['highest'] = this.body.position.y;
 
-        if (this.onDiedCallback) {
+        if (this.onDiedCallback != null) {
+            Events.trigger(this.body, 'destroy', {self: this.body});
             this.onDiedCallback()
+            
         }
     }
 
-
-    onDie(callback) {
-        this.onDiedCallback = callback
+    destroy() {
+        // this.body = null;
+        // this.onDiedCallback = null;
     }
 
 
@@ -210,7 +205,5 @@ export class Player {
         Body.setAngularVelocity(this.body, 0)
         Body.setInertia(this.body, Infinity)
     }
-
-
 }
 

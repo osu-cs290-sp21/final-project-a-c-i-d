@@ -47,6 +47,13 @@ export const MatterSparseUpdateEvents = {
                     // body._sparseUpdateThread.main();
                 }
             });
+            matter.Events.on(this, 'destroy', function (event) {
+                let body = event.self;
+                if (body._sparseUpdateThread !== undefined) {
+                    clearInterval(body._sparseUpdateThread);
+                    body._sparseUpdateThread = undefined;
+                }
+            });
         });
         matter.after('Composite.create', function () {
             matter.Events.on(this, 'awake', function (event) {
