@@ -6,8 +6,7 @@
   "scripts": {
     "client": "cd client; yarn run dev",
     "server": "cd server; yarn run dev",
-    "start": "yarn; cd client; yarn; webpack; cd ../server; yarn; yarn run start;",
-    "heroku-postbuild": "cd client; webpack"
+    "start": "yarn; cd client; yarn; webpack; cd ../server; yarn; yarn run start;"
   },
   "author": "ACID",
   "license": "ISC",
