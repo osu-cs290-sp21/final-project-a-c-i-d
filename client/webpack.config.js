@@ -8,7 +8,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '_build.js'
+    filename: 'build.js'
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
