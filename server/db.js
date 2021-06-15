@@ -10,9 +10,10 @@ const sheets = {
 
 async function init() {
     const docId = process.env.GOOGLE_API_SHEETS_DOCUMENT_ID || '1Ba5RSg3QBAaN1sRQ0NNQTnU1Fd84zd9bXWbQCKMTMaQ';
-    const creds = process.env.GOOGLE_API_AUTH_JSON || require('./credentials/creds.json');
+    const auth = process.env.GOOGLE_API_AUTH_JSON;
+    const creds = auth ? JSON.parse(auth) : require('./credentials/creds.json');
     sheets.doc = new GoogleSpreadsheet(docId)
-    sheets.doc.useServiceAccountAuth(creds);
+    await sheets.doc.useServiceAccountAuth(creds);
     await sheets.doc.loadInfo();
     sheets.main = sheets.doc.sheetsByTitle['leaderboard'];
     await sync();
