@@ -1,11 +1,9 @@
 
-let maxdelta = 0;
 // This is just a global variable for the game time
 // This method is more efficient
 export const BigBen = {
     delta: 0.0,
     deltams: 0.0,
-    elapsed: 0.0,
     start: null,
     last: null,
     begin() {
@@ -22,10 +20,7 @@ export const BigBen = {
         this.deltaTime = now - this.last;
         this.last = now;
     }
-
 }
-setInterval(() => console.log('md',BigBen.deltams), 1000);
-
 
 export const Input = { // Global manager for the key presses
     ks: new Array(256).fill(false), // Array of 256 false values
