@@ -40,8 +40,8 @@ export class Game {
         this.addTerrain([earth, ...makeTerrain(points)])
 
         // Registers the update functions for each update.
-        // Events.on(this.runner, 'tick', this.update.bind(this))
-        Events.on(this.engine, 'beforeUpdate', this.update.bind(this))
+        Events.on(this.runner, 'tick', this.update.bind(this))
+        // Events.on(this.engine, 'beforeUpdate', this.update.bind(this))
 
         this.player.setup()
     }
@@ -142,8 +142,8 @@ export class Game {
         // Adds the player's physics body into the world.
         Composite.add(this.engine.world, player.body)
         // Registers the player's functions to be called when an update happens.
-        // Events.on(this.runner, 'tick', player.update.bind(player))
-        Events.on(this.engine, 'beforeUpdate', player.update.bind(player))
+        Events.on(this.runner, 'tick', player.update.bind(player))
+        // Events.on(this.engine, 'beforeUpdate', player.update.bind(player))
 
         this.player = player // Adds the player to the array.
         // ^ Used to be `this.players` array intended for multiplayer.
@@ -153,7 +153,7 @@ export class Game {
     update() { // Called every time a new frame is rendered.
         // BigBen.deltaTime = this.runner.delta // Updates global time variable.
         BigBen.tick();
-        BigBen.elapsed = this.engine.timing.lastElapsed;
+        // BigBen.elapsed = this.engine.timing.lastElapsed;
         // Engine.update(this.engine, BigBen.deltams, BigBen.deltaTime * (1000))
         // BigBen.tock(event.timestamp);
         if (this.player.body.position.y < this.height * 0.33) {
