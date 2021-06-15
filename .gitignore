@@ -4,3 +4,4 @@ package-lock.json
 server/leaderboardData.json
 leaderboardData.json
 server/credentials/
+yarn-error.log
