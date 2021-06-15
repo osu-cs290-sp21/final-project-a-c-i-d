@@ -2,9 +2,10 @@ import { Engine, Runner, World, Events, Bodies, Body, Composite, use as useMatte
 import { choose } from 'matter-js/src/core/Common'
 import { MatterCollisionEvents } from './lib/matterjs-plugins/matter-collision-events'
 import { MatterSparseUpdateEvents } from './lib/matterjs-plugins/matter-sparse-update-events'
-import { Axes, jump, horizontalMovement } from './lib/physics'
+import { Axes, jump, horizontalMovement, stop } from './lib/physics'
 import { Input, BigBen } from './lib/stateControllers'
 import { sprite } from './lib/sprites'
+import { BetterBody } from './lib/matterjs-plugins/matter-better-body'
 
 
 // Iain read this.
@@ -12,8 +13,10 @@ import { sprite } from './lib/sprites'
 // Loads in a plugin that allows the bodies to execute collision callbacks.
 useMatterPlugin(MatterCollisionEvents)
 useMatterPlugin(MatterSparseUpdateEvents)
+useMatterPlugin(BetterBody);
 
-
+var ax = null;
+// setInterval( () => console.log('ignoreme', ax.shift()), 4000);
 export function newPlayer() {
     const p = add(copy(bluePrint), jumpComponent())
 }
@@ -106,7 +109,7 @@ export class Player {
         if (Input.upArrow) {
             if (this.isGrounded) {
                 this.isGrounded = false
-                const hops = 20
+                const hops = 6 * 100
                 jump(body, hops)
                 this.rotationSpeed = 20
             }
@@ -122,13 +125,23 @@ export class Player {
             }
         }
 
+        if (Input.get('KeyV')) {
+            console.log(body.velocity.y, body.force.y);
+        }
+        if (Input.get('KeyG')) {
+            this.isGrounded = true;
+        }
+        // const a = [... new Array(100000)].map(e => 1);
+        // ax = [...a].reverse();
+
         if (Input.leftArrow || Input.rightArrow) {
             const speed = 200
             const groundSpeedBoost = 20 // This is because of friction.
             const zoom = speed + (this.isGrounded ? groundSpeedBoost : 0)
-            horizontalMovement(body, zoom * dt * this.orientation)
+            horizontalMovement(body, zoom * this.orientation)
         } else if (this.isGrounded) {
-            Body.setVelocity(body, { x: 0, y: 0 })
+            stop(body);
+            Body.setForce(body, body.position, {x: body.force.x, y: 0});
         }
 
         if (this.rotationSpeed > 0) {

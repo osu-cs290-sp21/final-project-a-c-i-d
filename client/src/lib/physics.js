@@ -11,12 +11,21 @@ export function diff(v1,v2) {
 
 export const Axes = {
     get x() { return { x: 1, y: 0 }; },
-    get y() { return { x: 0, y: -1 }; }
+    get y() { return { x: 0, y: -1 }; },
+    get zero() { return { x: 0, y: 0 }; },
+    get ex() { return { x: 1, y: 0 }; },
+    get ey() { return { x: 0, y: 1 }; },
+    get one() { return { x: 1, y: 1 }; }
+
 };
 
 export function jump(body, magnitude) {
     const velocity = { x: body.velocity.x, y: -magnitude };
     Body.setVelocity(body, velocity);
+}
+export function stop(body) {
+    Body.setVelocity(body, Axes.zero);
+    Body.setForce(body, Axes.zero, false);
 }
 
 export function horizontalMovement(body, magnitude) {
