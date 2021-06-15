@@ -1,7 +1,6 @@
 node_modules/
 package-lock.json
 .DS_Store
-yarn.lock
 server/leaderboardData.json
 leaderboardData.json
 server/credentials/
