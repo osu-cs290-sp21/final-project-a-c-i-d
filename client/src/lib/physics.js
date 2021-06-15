@@ -15,8 +15,8 @@ export const Axes = {
     get zero() { return { x: 0, y: 0 }; },
     get ex() { return { x: 1, y: 0 }; },
     get ey() { return { x: 0, y: 1 }; },
-    get one() { return { x: 1, y: 1 }; }
-
+    get one() { return { x: 1, y: 1 }; },
+    get infinity() { return Vector.create(Infinity, Infinity); }
 };
 
 export function jump(body, magnitude) {
@@ -25,7 +25,7 @@ export function jump(body, magnitude) {
 }
 export function stop(body) {
     Body.setVelocity(body, Axes.zero);
-    Body.setForce(body, Axes.zero, false);
+    // Body.setForce(body, Axes.zero, false);
 }
 
 export function horizontalMovement(body, magnitude) {

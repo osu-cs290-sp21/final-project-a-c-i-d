@@ -116,6 +116,7 @@ async function setupGame() {
         console.log('died')
         const score = player.body['highest']
         const { protocol, hostname, origin, port } = window.location;
+        if (Cookies.get('player_name') == 'Birdie') { Cookies.set('player_name', 'UnnamedBirdie' + Math.floor(Math.random() * 1000))}
         fetch(origin + '/died', {
             method: 'PUT',
             headers: {

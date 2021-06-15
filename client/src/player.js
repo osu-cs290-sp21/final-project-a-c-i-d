@@ -102,6 +102,8 @@ export class Player {
 
 
     update() {
+        BigBen.tick();
+
         const dt = BigBen.deltaTime
         const body = this.body
 
@@ -126,7 +128,7 @@ export class Player {
         }
 
         if (Input.get('KeyV')) {
-            console.log(body.velocity.y, body.force.y);
+            console.log('velocity, force',[body.velocity.y, body.force.y]);
         }
         if (Input.get('KeyG')) {
             this.isGrounded = true;
@@ -141,7 +143,7 @@ export class Player {
             horizontalMovement(body, zoom * this.orientation)
         } else if (this.isGrounded) {
             stop(body);
-            Body.setForce(body, body.position, {x: body.force.x, y: 0});
+            Body.setForce(body, {x: body.force.x, y: 0}, false);
         }
 
         if (this.rotationSpeed > 0) {
