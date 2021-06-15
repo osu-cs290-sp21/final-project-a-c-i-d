@@ -1,8 +1,8 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
 const path = require('path')
-const fs = require('fs')
 const db = require('./db');
+const ss = require('./safespace');
 
 const app = express()
 const port = (process.env.PORT || 5000)
@@ -20,8 +20,12 @@ app.get('/', (req, res) => {
 // When birdie dies, transmits scores to leaderboard data json
 app.put('/died', async (req, res) => {
     const data = req.body
-    console.log(data)
+    console.log(new Date(), data)
     const { name, altitude } = data
+    if (!ss.acceptable(name)) {
+        res.sendStatus(403);
+        return;
+    }
     if (db.has(name)) {
         if (db.get(name) < altitude) {
             await db.set(name, altitude)
@@ -34,9 +38,8 @@ app.put('/died', async (req, res) => {
 
 // Leaderboard renderer: top 4 scores
 app.get('/leaderboard', async (req, res) => {
-    // const entries = leaderboard.entries();
     const entries = db.entries();
-    const upperBound = Math.min([...entries].length, 4)
+    const upperBound = Math.min(entries.length, 4)
     const highest = [...entries]
         .sort(([k1,v1],[k2,v2]) => v2 - v1)
         .slice(0,upperBound)
