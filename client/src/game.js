@@ -17,7 +17,7 @@ export class Game {
 
     constructor() {
         this.engine  = Engine.create();
-        this.engine.gravity.scale = 20;
+        this.engine.gravity.scale = 5;
         this.runner  = Runner.create();
 
         this.height  = -window.innerHeight*2
@@ -143,7 +143,7 @@ export class Game {
         Composite.add(this.engine.world, player.body)
         // Registers the player's functions to be called when an update happens.
         // Events.on(this.runner, 'tick', player.update.bind(player))
-        // Events.on(this.engine, 'beforeUpdate', player.update.bind(player))
+        Events.on(this.engine, 'beforeUpdate', player.update.bind(player))
 
         this.player = player // Adds the player to the array.
         // ^ Used to be `this.players` array intended for multiplayer.
@@ -162,7 +162,7 @@ export class Game {
             this.addTerrain(makeTerrain(points))
         }
         // console.log(this.engine)
-        this.player.update();
+        // this.player.update();
     }
 
 
@@ -186,18 +186,15 @@ export class Game {
         Events.trigger(this.gameController, 'awake', {
             self: this.gameController
         });
-        // setInterval( () => {
-        //     console.table(this.player.body.bosi);
-        // }, 10000);
     }
-    run2(render) {
-        Events.on(render, 'beforeRender', () => {
-            // const delta = BigBen.deltams;
-            // Runner.tick(this.runner, delta);
-            // this.update();
-        });
-        this.run();
-    }
+    // run2(render) {
+    //     Events.on(render, 'beforeRender', () => {
+    //         // const delta = BigBen.deltams;
+    //         // Runner.tick(this.runner, delta);
+    //         // this.update();
+    //     });
+    //     this.run();
+    // }
 
 
     stop() { // Stops the game.

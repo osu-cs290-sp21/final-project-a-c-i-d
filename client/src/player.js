@@ -109,7 +109,7 @@ export class Player {
         if (Input.upArrow) {
             if (this.isGrounded) {
                 this.isGrounded = false
-                const hops = 200
+                const hops = 6 * 100
                 jump(body, hops)
                 this.rotationSpeed = 20
             }
@@ -126,7 +126,7 @@ export class Player {
         }
 
         if (Input.get('KeyV')) {
-            console.log(body.velocity, {...body.force}, body.speed, body.mass);
+            console.log(body.velocity.y, body.force.y);
         }
         if (Input.get('KeyG')) {
             this.isGrounded = true;
@@ -141,6 +141,7 @@ export class Player {
             horizontalMovement(body, zoom * this.orientation)
         } else if (this.isGrounded) {
             stop(body);
+            Body.setForce(body, body.position, {x: body.force.x, y: 0});
         }
 
         if (this.rotationSpeed > 0) {

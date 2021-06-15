@@ -7,7 +7,7 @@ import Cookies, { set } from 'js-cookie';
 import { birdNames, birdButtonskin } from './lib/sprites'
 
 
-const debug = true
+const debug = false
 
 
 function makeRenderer({ element, engine, follows }) {
@@ -22,7 +22,7 @@ function makeRenderer({ element, engine, follows }) {
             height: window.innerHeight, // document.body.clientHeight,
             width: window.innerWidth,  // document.body.clientWidth,
             hasBounds: true,
-            wireframes: true, // This needs to be false for sprites to show up.
+            wireframes: false, // This needs to be false for sprites to show up.
             pixelRatio: 'auto',
             showVelocity: debug,
             showAxes: debug,
