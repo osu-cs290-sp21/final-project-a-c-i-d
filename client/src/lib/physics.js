@@ -18,6 +18,11 @@ export function jump(body, magnitude) {
     const velocity = { x: body.velocity.x, y: -magnitude };
     Body.setVelocity(body, velocity);
 }
+export function stop(body) {
+    const zero = { x: 0, y: 0 };
+    Body.setVelocity(body, zero);
+    Body.setForce(body, body.position, zero);
+}
 
 export function horizontalMovement(body, magnitude) {
     const velocity = { x: magnitude, y: body.velocity.y };

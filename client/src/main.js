@@ -1,4 +1,4 @@
-import { Matter, Render, Events } from 'matter-js'
+import { Matter, Render, Events, Runner } from 'matter-js'
 import { Game } from './game'
 import { Player } from './player'
 import { Input } from './lib/stateControllers'
@@ -7,7 +7,7 @@ import Cookies, { set } from 'js-cookie';
 import { birdNames, birdButtonskin } from './lib/sprites'
 
 
-const debug = false
+const debug = true
 
 
 function makeRenderer({ element, engine, follows }) {
@@ -22,7 +22,7 @@ function makeRenderer({ element, engine, follows }) {
             height: window.innerHeight, // document.body.clientHeight,
             width: window.innerWidth,  // document.body.clientWidth,
             hasBounds: true,
-            wireframes: false, // This needs to be false for sprites to show up.
+            wireframes: true, // This needs to be false for sprites to show up.
             pixelRatio: 'auto',
             showVelocity: debug,
             showAxes: debug,
@@ -34,7 +34,7 @@ function makeRenderer({ element, engine, follows }) {
             showPositions: debug,
             showBounds: debug,
             showBroadphase: debug,
-            showDebug: debug,
+            showDebug: true,
         }
     })
 
@@ -106,8 +106,8 @@ async function setupGame() {
             + `${-Math.floor(player.body.position.y * .01)}`
             + ` bds (birdies)`
     })
-
     game.run()
+    // game.run2(render)
     Render.run(render) // Starts the renderer.
     current_player_unsafe = null;
     current_player_unsafe = player;
@@ -171,8 +171,8 @@ async function main() {
 
     showMainView();
 
-    document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true })
-    document.addEventListener('keyup', e => { Input.ks[e.keyCode] = false })
+    document.addEventListener('keydown', e => { Input.ks[e.keyCode] = true; Input.down(e.code); })
+    document.addEventListener('keyup', e => { Input.ks[e.keyCode] = false; Input.up(e.code); })
     // document.addEventListener('keydown', e => {
     //     if (e.code === 'KeyC') { game.stop() }
     // })
