@@ -65,7 +65,6 @@ function get(key) {
 function entries() {
     const acum = []
     for (const row of sheets.rows) {
-        console.log(row);
         const [name,score] = [row['nickname'], row['score']];
         acum.push([name,score]);
     }
