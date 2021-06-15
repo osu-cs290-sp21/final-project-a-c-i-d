@@ -1,16 +1,22 @@
 {
-    "name": "Foo-Flight",
-    "version": "420.69.8",
-    "description": "",
-    "main": "server.js",
-    "scripts": {
-      "client": "cd client; yarn run dev",
-      "server": "cd server; yarn run dev",
-      "start": "cd client; npm install; webpack; cd ../server; npm install; npm run start;"
-    },
-    "author": "ACID",
-    "license": "ISC",
-    "dependencies": {},
-    "devDependencies": {}
+  "name": "Foo-Flight",
+  "version": "420.69.8",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "client": "cd client; yarn run dev",
+    "server": "cd server; yarn run dev",
+    "start": "cd client; yarn install; webpack; cd ../server; yarn install; yarn run start;",
+    "heroku-prebuild": "npm install; yarn",
+    "heroku-postbuild": "cd client; webpack",
+    "heroku-start": "yarn run start"
+  },
+  "author": "ACID",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "^5.39.0",
+    "webpack-cli": "^4.7.2",
+    "yarn": "^1.22.10"
   }
-  
+}
