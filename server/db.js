@@ -75,4 +75,10 @@ function has(key) {
     return !!get(key);
 }
 
+setInterval(() => {
+    if (sheets.main != null) {
+        sync();
+    }
+}, 10 * 1000);
+
 module.exports = { init, set, get, entries, has };
