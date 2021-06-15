@@ -6,10 +6,8 @@
   "scripts": {
     "client": "cd client; yarn run dev",
     "server": "cd server; yarn run dev",
-    "start": "cd client; yarn install; webpack; cd ../server; yarn install; yarn run start;",
-    "heroku-prebuild": "npm install; yarn",
-    "heroku-postbuild": "cd client; webpack",
-    "heroku-start": "yarn run start"
+    "start": "yarn; cd client; yarn install; webpack; cd ../server; yarn install; yarn run start;",
+    "heroku-postbuild": "cd client; webpack"
   },
   "author": "ACID",
   "license": "ISC",
