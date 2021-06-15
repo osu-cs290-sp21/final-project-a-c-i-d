@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "yarn && nodemon --ignore '*.json' server.js"
+    "dev": "yarn && nodemon --ignore '*.json' server.js",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
