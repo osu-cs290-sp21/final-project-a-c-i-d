@@ -34,7 +34,7 @@ function makeRenderer({ element, engine, follows }) {
             showPositions: debug,
             showBounds: debug,
             showBroadphase: debug,
-            showDebug: true,
+            showDebug: debug,
         }
     })
 
